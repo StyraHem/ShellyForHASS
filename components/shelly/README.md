@@ -47,3 +47,10 @@ Shelly will discover all devices on your LAN and show them as light, switch and 
 
 ## Feedback
 Please give us feedback on info@styrahem.se or Facebook groups: [Shelly group (Swedish)](https://www.facebook.com/groups/ShellySweden) or [Shelly support group (English)](https://www.facebook.com/groups/ShellyIoTCommunitySupport/)
+
+## Screen shots
+![](https://raw.githubusercontent.com/StyraHem/hass/master/screenshots/List.PNG)
+![](https://raw.githubusercontent.com/StyraHem/hass/master/screenshots/RGB.PNG)
+![](https://raw.githubusercontent.com/StyraHem/hass/master/screenshots/Effects.PNG)
+![](https://raw.githubusercontent.com/StyraHem/hass/master/screenshots/White.PNG)
+
