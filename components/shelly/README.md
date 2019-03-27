@@ -1,4 +1,5 @@
 ![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg?style=for-the-badge)
+![stability-wip](https://img.shields.io/badge/version-0.0.2-green.svg?style=for-the-badge)
 
 # Shelly smart home platform for HASS
 This platform add components for Shelly smart home devices to Home Assistant.
