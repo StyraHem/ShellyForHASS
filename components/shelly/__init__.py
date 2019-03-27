@@ -19,7 +19,7 @@ DEFAULT_IGMPFIX = False
 CONFIG_SHOW_ID_IN_NAME = 'showIdInName'
 DEFAULT_SHOW_ID_IN_NAME = True
 CONFIG_OBJECT_ID_PREFIX = 'objectIdPrefix'
-DEFAULT_OBJECT_ID_PREFIX = 'shelly_xxx_'
+DEFAULT_OBJECT_ID_PREFIX = 'shelly_'
 
 __version__ = "0.0.2"
 VERSION = __version__
