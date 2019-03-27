@@ -1,0 +1,15 @@
+{
+    "shelly": {
+        "version": "0.0.2",
+        "local_location": "/custom_components/shelly/__init__.py",
+        "remote_location": "https://raw.githubusercontent.com/StyraHem/hass/master/components/shelly/__init__.py",
+        "visit_repo": "https://github.com/StyraHem/hass/tree/master/components/shelly",
+        "changelog": "https://github.com/StyraHem/hass/tree/master/components/shelly",
+        "resources": [
+            "https://raw.githubusercontent.com/StyraHem/hass/master/components/shelly/cover.py",
+            "https://raw.githubusercontent.com/StyraHem/hass/master/components/shelly/light.py",
+            "https://raw.githubusercontent.com/StyraHem/hass/master/components/shelly/sensor.py",
+            "https://raw.githubusercontent.com/StyraHem/hass/master/components/shelly/switch.py",
+        ]
+    }
+}
