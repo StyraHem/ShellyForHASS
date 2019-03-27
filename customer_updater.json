@@ -9,7 +9,7 @@
             "https://raw.githubusercontent.com/StyraHem/hass/master/components/shelly/cover.py",
             "https://raw.githubusercontent.com/StyraHem/hass/master/components/shelly/light.py",
             "https://raw.githubusercontent.com/StyraHem/hass/master/components/shelly/sensor.py",
-            "https://raw.githubusercontent.com/StyraHem/hass/master/components/shelly/switch.py",
+            "https://raw.githubusercontent.com/StyraHem/hass/master/components/shelly/switch.py"
         ]
     }
 }
