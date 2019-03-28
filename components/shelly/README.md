@@ -43,7 +43,7 @@ shelly:
 ## Restart Home Assistant
 Now yot should restar Home Assistant to load shelly
 
-Shelly will discover all devices on your LAN and show them as light, switch and cover in Home Assistant.
+Shelly will discover all devices on your LAN and show them as light, switch, sensor and cover in Home Assistant.
 
 ## Feedback
 Please give us feedback on info@styrahem.se or Facebook groups: [Shelly grupp (Swedish)](https://www.facebook.com/groups/ShellySweden) or [Shelly support group (English)](https://www.facebook.com/groups/ShellyIoTCommunitySupport/)
