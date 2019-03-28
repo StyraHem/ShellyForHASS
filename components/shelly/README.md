@@ -7,7 +7,7 @@ This platform add components for Shelly smart home devices to Home Assistant.
 ## Features
 - Discover devices
 - Monitor status (state, temperature, humidity, power etc.)
-- Control (turn on/off, dim, color, etc)
+- Control (turn on/off, dim, color, effects, etc.)
 
 ## Devices supported
 - Shelly 1
