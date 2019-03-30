@@ -2,7 +2,7 @@
 ![stability-wip](https://img.shields.io/badge/version-0.0.2-green.svg?style=for-the-badge)
 
 # Shelly smart home platform for HASS
-This platform add components for Shelly smart home devices to Home Assistant. There is no configuration needed it will find all devices on your LAN and add it to Home Assistant. All communivation is locally in your home. If you using Shelly app in your mobile you can continue to do that togheter with this plugin. 
+This platform add components for Shelly smart home devices to Home Assistant. There is no configuration needed it will find all devices on your LAN and add them to Home Assistant. All communivation is locally in your home. You can use this plugin and continue to use Shelly Cloud and Shelly app in your mobile if you want.
 
 ## Features
 - Automaticlly discover all Shelly devices
