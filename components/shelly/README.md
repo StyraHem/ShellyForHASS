@@ -5,9 +5,15 @@
 This platform add components for Shelly smart home devices to Home Assistant.
 
 ## Features
-- Discover devices
+- Automaticly discover all Shelly devices
 - Monitor status (state, temperature, humidity, power etc.)
-- Control (turn on/off, dim, color, effects, etc.)
+- Control (turn on/off, dim, color, effects, up/down etc.)
+- Works with Shelly default settings, no extra configuration
+- Run locally, you dont have to add the device to Shelly Cloud
+- Coexist with Shelly Cloud so you can continut to use Shelly Cloud also
+- Using CoAP and REST for communication (not MQTT)
+- Working with both static or dynamic ip addresses on your devices
+- Using events so very fast response (no polling)
 
 ## Devices supported
 - Shelly 1
