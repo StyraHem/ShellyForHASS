@@ -57,6 +57,9 @@ Shelly will discover all devices on your LAN and show them as light, switch, sen
 ## Feedback
 Please give us feedback on info@styrahem.se or Facebook groups: [Shelly grupp (Swedish)](https://www.facebook.com/groups/ShellySweden) or [Shelly support group (English)](https://www.facebook.com/groups/ShellyIoTCommunitySupport/)
 
+## Founder
+This plugin is created by the StyraHem.se, the Swedish distributor of Shelly. In Sweden you can by Shellies from [StyraHem.se](https://www.styrahem.se/c/126/shelly) or any of the retailers like Kjell&Company.
+
 ## Screen shots
 ![](https://raw.githubusercontent.com/StyraHem/hass/master/screenshots/List.PNG)
 ![](https://raw.githubusercontent.com/StyraHem/hass/master/screenshots/RGB.PNG)
