@@ -12,7 +12,7 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Monitor status (state, temperature, humidity, power etc.)
 - Control (turn on/off, dim, color, effects, up/down etc.)
 - Works with Shelly default settings, no extra configuration
-- Run locally, you dont have to add the device to Shelly Cloud
+- Run locally, you don't have to add the device to Shelly Cloud
 - Coexist with Shelly Cloud so you can continue to use Shelly Cloud and Shelly apps
 - Using CoAP and REST for communication (not MQTT)
 - Working with both static or dynamic ip addresses on your devices
