@@ -55,6 +55,7 @@ class ShellySensor(ShellyDevice, Entity):
         self.entity_id += "_" + sensorName
         self._type = type
         self._sensorName = sensorName
+        self._battery = None
         
         self._state = None
         self.update()
@@ -102,6 +103,15 @@ class ShellySensor(ShellyDevice, Entity):
         """
         try:
             self._state = self._dev.sensorValues[self._sensorName]
+            self._battery = self._dev.sensorValues.get('battery',None)
         except:
             pass
+            
+    @property
+    def device_state_attributes(self):
+        attr = super(ShellySensor, self).device_state_attributes
+        if self._battery is not None:
+            attr["battery"] = str(self._battery) + '%'
+        return attr
+
     

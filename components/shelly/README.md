@@ -1,7 +1,7 @@
 [![founder-wip](https://img.shields.io/badge/founder-StyraHem.se-green.svg?style=for-the-badge)](https://www.styrahem.se)
 
 ![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg?style=for-the-badge)
-![version-wip](https://img.shields.io/badge/version-0.0.2-green.svg?style=for-the-badge)
+![version-wip](https://img.shields.io/badge/version-0.0.3-green.svg?style=for-the-badge)
 
 
 # Shelly smart home platform for HASS

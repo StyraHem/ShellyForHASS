@@ -8,7 +8,7 @@ from homeassistant.const import (EVENT_HOMEASSISTANT_START, EVENT_HOMEASSISTANT_
 
 _LOGGER = logging.getLogger(__name__)
 
-REQUIREMENTS = ['pyShelly==0.0.19']
+REQUIREMENTS = ['pyShelly==0.0.21']  
 
 DOMAIN = 'shelly'
 SHELLY_DATA = 'shellyData'
@@ -19,9 +19,13 @@ DEFAULT_IGMPFIX = False
 CONFIG_SHOW_ID_IN_NAME = 'showIdInName'
 DEFAULT_SHOW_ID_IN_NAME = True
 CONFIG_OBJECT_ID_PREFIX = 'objectIdPrefix'
-DEFAULT_OBJECT_ID_PREFIX = 'shelly_'
+DEFAULT_OBJECT_ID_PREFIX = 'shelly'
+CONFIG_USERNAME = 'username'
+DEFAULT_USERNAME = None
+CONFIG_PASSWORD = 'password'
+DEFAULT_PASSWORD = None
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 VERSION = __version__
 
 CONFIG_SCHEMA = vol.Schema({
@@ -29,6 +33,8 @@ CONFIG_SCHEMA = vol.Schema({
         vol.Optional(CONFIG_IGMPFIX, default=DEFAULT_IGMPFIX): vol.Coerce(bool),
         vol.Optional(CONFIG_SHOW_ID_IN_NAME, default=DEFAULT_SHOW_ID_IN_NAME): vol.Coerce(bool),
         vol.Optional(CONFIG_OBJECT_ID_PREFIX, default=DEFAULT_OBJECT_ID_PREFIX): vol.Coerce(str),
+        vol.Optional(CONFIG_USERNAME, default=DEFAULT_USERNAME): vol.Coerce(str),
+        vol.Optional(CONFIG_PASSWORD, default=DEFAULT_PASSWORD): vol.Coerce(str),
     }),
 }, extra=vol.ALLOW_EXTRA)
 
@@ -70,6 +76,8 @@ def setup(hass, config):
     _LOGGER.info("pyShelly, " + pys.version())
     pys.cb_deviceAdded = _deviceAdded
     pys.cb_deviceRemoved = _deviceRemoved
+    pys.username = conf.get(CONFIG_USERNAME)
+    pys.password = conf.get(CONFIG_PASSWORD)
     pys.igmpFixEnabled = igmpfix
     pys.open()
     pys.discover()
@@ -81,8 +89,8 @@ class ShellyDevice(object):
     def __init__(self, dev, hass):
         config = hass.data[SHELLY_CONFIG]
         idPrefix = config.get(CONFIG_OBJECT_ID_PREFIX)
-        self._unique_id = idPrefix + dev.type + "_" + dev.id                        
-        self.entity_id = "." + idPrefix + dev.type + "_" + dev.id        
+        self._unique_id = idPrefix + "_" + dev.type + "_" + dev.id                        
+        self.entity_id = "." + idPrefix + "_" + dev.type + "_" + dev.id        
         self._name = dev.typeName()
         if config.get(CONFIG_SHOW_ID_IN_NAME):
             self._name += " [" + dev.id + "]" #'Test' #light.name            
