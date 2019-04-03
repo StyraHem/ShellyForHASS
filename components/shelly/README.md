@@ -3,7 +3,6 @@
 ![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg?style=for-the-badge)
 ![version-wip](https://img.shields.io/badge/version-0.0.3-green.svg?style=for-the-badge)
 
-
 # Shelly smart home platform for HASS
 This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices are locally. You can use this plugin and continue to use Shelly Cloud and Shelly app in your mobile if you want.
 
@@ -19,9 +18,7 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Using events so very fast response (no polling)
 - Support restric login with username and password (0.0.3-)
 - Version sensor to show version of component and pyShelly (0.0.4)
-- Device configuration (0.0.4)
--- Name
--- Show switch as light
+- Device configuration (name, show switch as light) (0.0.4)
 - Discovery can be turned off (0.0.4)
 
 ## Devices supported
@@ -52,11 +49,41 @@ When you have installed shelly and make sure it exists under `custom_components`
 It is very easy, just add this to `config.yaml`
 ```
 shelly:
+
+shelly:
+  discover: false
+  version: true #add version sensor
+  devices:      #devices to be added
+    - id: 420FC7
+    - id: 13498B-1   #Shelly 2, Id + Channel number
+    - id: 7BD5F3
+      name: My cool plug   #set friendly name
+
+shelly:
+  discover: true  #add all devices (default)
+  devices:  #configure devices
+    - id: 420FC7
+      lightSwitch: true  #add this switch as a light
+    - id: 7BD5F3
+      name: My cool plug #set friendly name 
 ```
-|Parameter|Description|Version|
-|----|
-|username|User name to use for restrict login|
-|password|Password to use for restrict login|
+
+|Parameter |Description                                                   |Default |Version |
+|----------|--------------------------------------------------------------|--------|--------|
+|username  |User name to use for restrict login                           |        |0.0.3   |
+|password  |Password to use for restrict login                            |        |0.0.3   |
+|discovery |Enable or disable discovery                                   |True    |0.0.4   |
+|version   |Add a version sensor to with version of component and pyShelly|False   |0.0.4   |
+|devices   |Config for each device, se next table for more info           |        |0.0.4   |
+
+### Device configuration
+|Parameter  |Description                                     |Example         |
+|-----------|------------------------------------------------|----------------|
+|id         |Device id, same as in mobile app                |421FC7          |
+|name       |Specify if you want to set a name of the device |My Cool Shelly  |
+|lightSwitch|Show this switch as a light                     |True            |
+
+If you disable discovery only Shellies under devices will be added.
 
 You can only specify one username and password for restrict login. If you enter username and password, access to devices without restrict login will continue to work. Different logins to different deveces will be added later.
 
