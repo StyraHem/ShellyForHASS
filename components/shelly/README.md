@@ -17,6 +17,7 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Using CoAP and REST for communication (not MQTT)
 - Working with both static or dynamic ip addresses on your devices
 - Using events so very fast response (no polling)
+- Support restric login with username and password (from 0.0.3)
 
 ## Devices supported
 - Shelly 1
@@ -47,7 +48,12 @@ It is very easy, just add this to `config.yaml`
 ```
 shelly:
 ```
-(Options will be added later)
+|Parameter|Description|Version|
+|----|
+|username|User name to use for restrict login|
+|password|Password to use for restrict login|
+
+You can only specify one username and password for restrict login. If you enter username and password, access to devices without restrict login will continue to work. Different logins to different deveces will be added later.
 
 ## Restart Home Assistant
 Now you should restart Home Assistant to load shelly
