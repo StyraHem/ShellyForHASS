@@ -87,11 +87,11 @@ class ShellyCover(ShellyDevice, CoverDevice):
 
     def close_cover(self, **kwargs):
         """Close the cover."""
-        self._dev.up()
+        self._dev.down()
 
     def open_cover(self, **kwargs):
         """Open the cover."""
-        self._dev.down()
+        self._dev.up()        
 
     def set_cover_position(self, **kwargs):
         """Move the cover to a specific position."""

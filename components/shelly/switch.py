@@ -6,15 +6,11 @@ https://home-assistant.io/components/shelly/
 """
 
 import logging
-from .sensor import ShellySensor, SENSOR_TYPE_POWER
+#from .sensor import ShellySensor, SENSOR_TYPE_POWER
 from . import ShellyDevice
 from homeassistant.components.switch import SwitchDevice
 
 _LOGGER = logging.getLogger(__name__)
-
-# Validation of the user's configuration
-#PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-#})
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Setup the Shelly Switch platform."""
@@ -57,8 +53,6 @@ class ShellySwitch(ShellyDevice, SwitchDevice):
 
     def turn_on(self, **kwargs):
         self._dev.turnOn()
-        #self._light.brightness = kwargs.get(ATTR_BRIGHTNESS, 255)
-        #self._light.turn_on()
 
     def turn_off(self, **kwargs):
         self._dev.turnOff()
@@ -71,4 +65,4 @@ class ShellySwitch(ShellyDevice, SwitchDevice):
             self._state = self._dev.state;
         except:
             pass
-    
+            

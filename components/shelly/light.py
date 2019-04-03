@@ -6,19 +6,10 @@ https://home-assistant.io/components/shelly/
 """
 import logging
 from . import ShellyDevice
-import voluptuous as vol
-
-from homeassistant.components.light import (
-    ATTR_BRIGHTNESS, Light, PLATFORM_SCHEMA )
-from homeassistant.const import CONF_HOST #, CONF_USERNAME, CONF_PASSWORD
-import homeassistant.helpers.config_validation as cv
 
 from homeassistant.components.light import (
     ATTR_BRIGHTNESS, ATTR_COLOR_TEMP, ATTR_EFFECT, ATTR_HS_COLOR,
-    ATTR_TRANSITION, ATTR_FLASH,
-    EFFECT_RANDOM, PLATFORM_SCHEMA, 
     SUPPORT_BRIGHTNESS, SUPPORT_COLOR, SUPPORT_COLOR_TEMP, SUPPORT_EFFECT, 
-    SUPPORT_TRANSITION, SUPPORT_FLASH, SUPPORT_WHITE_VALUE, 
     Light)
     
 from homeassistant.util.color import (
@@ -44,7 +35,6 @@ EFFECT_ONOFF_C = { 'name':"On/Off gradual (Color)", 'mode':'color', 'effect':5 }
 EFFECT_ONOFF_W = { 'name':"On/Off gradual (White)", 'mode':'white', 'effect':5 }
 EFFECT_REDGREEN = { 'name':"Red/Green Change", 'effect':6 }
 
-
 EFFECT_LIST = [ 
     EFFECT_WHITE,
     EFFECT_COLOR,
@@ -62,23 +52,50 @@ EFFECT_LIST = [
 
 _LOGGER = logging.getLogger(__name__)
 
-# Validation of the user's configuration
-PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    #vol.Required(CONF_HOST): cv.string
-    #vol.Optional(CONF_USERNAME, default='admin'): cv.string,
-    #vol.Optional(CONF_PASSWORD): cv.string,
-})
-
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Setup Shelly Light platform."""
-    #host = config.get(CONF_HOST)
-    #username = config.get(CONF_USERNAME)
-    #password = config.get(CONF_PASSWORD)
-
     dataKey = discovery_info['dataKey']
     dev = hass.data[dataKey]
-    add_devices([ShellyRGB(dev, hass)])
+    if dev.devType=="RELAY":
+        add_devices([ShellyLight(dev, hass)])
+    else:
+        add_devices([ShellyRGB(dev, hass)])
     hass.data[dataKey]=None
+    
+class ShellyLight(ShellyDevice, Light):
+     """Representation of an Shelly Switch."""
+ 
+     def __init__(self, dev, hass):
+         """Initialize an ShellySwitch."""
+         ShellyDevice.__init__(self, dev, hass)
+         self._state = None
+         self.update()
+         
+     def _updated(self):
+         """Receive events when the switch state changed (by mobile, switch etc)"""
+         if self.entity_id is not None:
+             state = self._hass.states.get(self.entity_id)
+             if state is not None:
+                 self._hass.states.set(self.entity_id, "on" if self._dev.state else "off", state.attributes)    
+                 
+     @property
+     def is_on(self):
+         return self._state
+         
+     def turn_on(self, **kwargs):
+         self._dev.turnOn()
+
+     def turn_off(self, **kwargs):
+         self._dev.turnOff()
+
+     def update(self):
+         """Fetch new state data for this light.
+         This is the only method that should fetch new data for Home Assistant.
+         """
+         try:
+             self._state = self._dev.state
+         except:
+             pass
 
 class ShellyRGB(ShellyDevice, Light):
     """Representation of an Shelly Light."""
@@ -97,7 +114,6 @@ class ShellyRGB(ShellyDevice, Light):
         """Receive events when the light state changed (by mobile, switch etc)"""
         if self.entity_id is not None:
             self.schedule_update_ha_state(True)
-            #self.async_schedule_update_ha_state(True)
 
     @property
     def supported_features(self):

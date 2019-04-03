@@ -6,7 +6,7 @@ https://home-assistant.io/components/shelly/
 """
 
 import logging
-from . import ShellyDevice
+from . import (ShellyDevice, SHELLY_CONFIG, CONF_OBJECT_ID_PREFIX)
 from homeassistant.const import (TEMP_CELSIUS, DEVICE_CLASS_TEMPERATURE, DEVICE_CLASS_HUMIDITY)
 from homeassistant.helpers.entity import Entity
 
@@ -31,6 +31,10 @@ SENSOR_TYPES = {
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Setup the Shelly Sensor platform."""
+    if 'version' in discovery_info:
+        add_devices([ ShellyVersion(hass, discovery_info.get('version'), 
+                                    discovery_info.get('pyShellyVersion') ) ])   
+        return
     dataKey = discovery_info['dataKey']
     dev = hass.data[dataKey]
     if dev.devType=="POWERMETER":
@@ -115,3 +119,34 @@ class ShellySensor(ShellyDevice, Entity):
         return attr
 
     
+class ShellyVersion(Entity):
+    """Representation of a Home Assistant version sensor."""
+
+    def __init__(self, hass, version, pyShellyVersion):
+        """Initialize the Version sensor."""
+        conf = hass.data[SHELLY_CONFIG]
+        idPrefix = conf.get(CONF_OBJECT_ID_PREFIX)
+        self._version = version
+        self._pyShellyVersion = pyShellyVersion
+        self.entity_id = "sensor." + idPrefix + "_version"        
+        self._name = "Shelly version"
+
+    @property
+    def name(self):
+        """Return the name of the sensor."""
+        return 'Shelly version'
+
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        return self._version + "/" + self._pyShellyVersion
+
+    @property
+    def device_state_attributes(self):
+        """Return attributes for the sensor."""
+        return {'shelly': self._version, 'pyShelly' : self._pyShellyVersion }
+
+    @property
+    def icon(self):
+        """Return the icon to use in the frontend, if any."""
+        return None

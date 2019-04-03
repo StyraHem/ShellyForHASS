@@ -17,7 +17,12 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Using CoAP and REST for communication (not MQTT)
 - Working with both static or dynamic ip addresses on your devices
 - Using events so very fast response (no polling)
-- Support restric login with username and password (from 0.0.3)
+- Support restric login with username and password (0.0.3-)
+- Version sensor to show version of component and pyShelly (0.0.4)
+- Device configuration (0.0.4)
+-- Name
+-- Show switch as light
+- Discovery can be turned off (0.0.4)
 
 ## Devices supported
 - Shelly 1
