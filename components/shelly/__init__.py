@@ -18,10 +18,10 @@ DOMAIN = 'shelly'
 SHELLY_DATA = 'shellyData'
 SHELLY_CONFIG = 'shellyCfg'
 
-CONF_IGMPFIX = 'igmpfix'
-CONF_SHOW_ID_IN_NAME = 'showIdInName'
-CONF_OBJECT_ID_PREFIX = 'objectIdPrefix'
-CONF_LIGHT_SWITCH = 'lightSwitch'
+CONF_IGMPFIX = 'igmp_fix'
+CONF_SHOW_ID_IN_NAME = 'show_id_in_name'
+CONF_OBJECT_ID_PREFIX = 'id_prefix'
+CONF_LIGHT_SWITCH = 'light_switch'
 CONF_VERSION = 'version'
 
 DEFAULT_IGMPFIX = False
@@ -29,7 +29,7 @@ DEFAULT_DISCOVERY = True
 DEFAULT_SHOW_ID_IN_NAME = True
 DEFAULT_OBJECT_ID_PREFIX = 'shelly'
 
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 VERSION = __version__
 
 DEVICE_SCHEMA = vol.Schema({
