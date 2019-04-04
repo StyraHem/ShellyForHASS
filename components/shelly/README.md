@@ -49,10 +49,13 @@ Do you you have [Custom updater](https://github.com/custom-components/custom_upd
 ## Configure
 When you have installed shelly and make sure it exists under `custom_components` folder it is time to configure it in Home Assistant.
 
-It is very easy, just add this to `config.yaml`
+It is very easy, just add this to your `configuration.yaml`
 ```
 shelly:
+```
 
+**Without discovery - manually specify devices**
+```
 shelly:
   discovery: false
   version: true #add version sensor
@@ -61,7 +64,10 @@ shelly:
     - id: 13498B-1   #Shelly 2, Id + Channel number
     - id: 7BD5F3
       name: My cool plug   #set friendly name
+```
 
+**With discovery - adjust some devices**
+```
 shelly:
   discovery: true  #add all devices (default)
   devices:  #configure devices
