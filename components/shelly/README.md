@@ -6,6 +6,9 @@
 # Shelly smart home platform for HASS
 This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices are locally. You can use this plugin and continue to use Shelly Cloud and Shelly app in your mobile if you want.
 
+## Breaking changes! 
+- Change of parameter names in 0.0.5, see Configure below!
+
 ## Features
 - Automatically discover all Shelly devices
 - Monitor status (state, temperature, humidity, power etc.)
@@ -63,25 +66,28 @@ shelly:
   discover: true  #add all devices (default)
   devices:  #configure devices
     - id: 420FC7
-      lightSwitch: true  #add this switch as a light
+      light_switch: true  #add this switch as a light
     - id: 7BD5F3
       name: My cool plug #set friendly name 
 ```
 
-|Parameter |Description                                                   |Default |Version |
-|----------|--------------------------------------------------------------|--------|--------|
-|username  |User name to use for restrict login                           |        |0.0.3   |
-|password  |Password to use for restrict login                            |        |0.0.3   |
-|discovery |Enable or disable discovery                                   |True    |0.0.4   |
-|version   |Add a version sensor to with version of component and pyShelly|False   |0.0.4   |
-|devices   |Config for each device, se next table for more info           |        |0.0.4   |
+|Parameter      |Description                                                   |Default |Version |
+|---------------|--------------------------------------------------------------|--------|--------|
+|username       |User name to use for restrict login                           |        |0.0.3-  |
+|password       |Password to use for restrict login                            |        |0.0.3-  |
+|discovery      |Enable or disable discovery                                   |True    |0.0.4-  |
+|version        |Add a version sensor to with version of component and pyShelly|False   |0.0.4-  |
+|devices        |Config for each device, se next table for more info           |        |0.0.4-  |
+|show_id_in_name|Add Shelly Device id to the end of the name                   |False   |0.0.5-  |
+|id_prefix      |Shange the prefix of the entity id and unique id of the device|shelly  |0.0.5-  |
+|igmp_fix       |Enable sending out IP_ADD_MEMBERSHIP every minute             |False   |0.0.5-  |
 
 ### Device configuration
-|Parameter  |Description                                     |Example         |
-|-----------|------------------------------------------------|----------------|
-|id         |Device id, same as in mobile app                |421FC7          |
-|name       |Specify if you want to set a name of the device |My Cool Shelly  |
-|lightSwitch|Show this switch as a light                     |True            |
+|Parameter   |Description                                     |Example         |
+|------------|------------------------------------------------|----------------|
+|id          |Device id, same as in mobile app                |421FC7          |
+|name        |Specify if you want to set a name of the device |My Cool Shelly  |
+|light_switch|Show this switch as a light                     |True            |
 
 If you disable discovery only Shellies under devices will be added.
 
