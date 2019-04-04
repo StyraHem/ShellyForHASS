@@ -54,7 +54,7 @@ It is very easy, just add this to `config.yaml`
 shelly:
 
 shelly:
-  discover: false
+  discovery: false
   version: true #add version sensor
   devices:      #devices to be added
     - id: 420FC7
@@ -63,7 +63,7 @@ shelly:
       name: My cool plug   #set friendly name
 
 shelly:
-  discover: true  #add all devices (default)
+  discovery: true  #add all devices (default)
   devices:  #configure devices
     - id: 420FC7
       light_switch: true  #add this switch as a light
