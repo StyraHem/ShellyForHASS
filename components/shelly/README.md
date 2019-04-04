@@ -49,7 +49,7 @@ Do you you have [Custom updater](https://github.com/custom-components/custom_upd
 ## Configure
 When you have installed shelly and make sure it exists under `custom_components` folder it is time to configure it in Home Assistant.
 
-It is very easy, just add this to `config.yaml`
+It is very easy, just add this to your `configuration.yaml`
 ```
 shelly:
 ```
