@@ -30,7 +30,7 @@ DEFAULT_OBJECT_ID_PREFIX = 'shelly'
 SHELLY_DATA = 'shellyData'
 SHELLY_CONFIG = 'shellyCfg'
 
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 VERSION = __version__
 
 DEVICE_SCHEMA = vol.Schema({
