@@ -34,18 +34,18 @@ VERSION = __version__
 
 DEVICE_SCHEMA = vol.Schema({
     vol.Required(CONF_ID): cv.string,
-    vol.Optional(CONF_NAME, default=None): cv.string,
-    vol.Optional(CONF_LIGHT_SWITCH, default=False): cv.string,
+    vol.Optional(CONF_NAME): cv.string,
+    vol.Optional(CONF_LIGHT_SWITCH, default=False): cv.boolean,
 })
 
-CONF_SCHEMA = vol.Schema({
+CONFIG_SCHEMA = vol.Schema({
     DOMAIN: vol.Schema({
         vol.Optional(CONF_IGMPFIX, default=DEFAULT_IGMPFIX): cv.boolean,
         vol.Optional(CONF_SHOW_ID_IN_NAME, default=DEFAULT_SHOW_ID_IN_NAME): cv.boolean,
         vol.Optional(CONF_DISCOVERY, default=DEFAULT_DISCOVERY): cv.boolean,
         vol.Optional(CONF_OBJECT_ID_PREFIX, default=DEFAULT_OBJECT_ID_PREFIX): cv.string,
-        vol.Optional(CONF_USERNAME, default=None): cv.string,
-        vol.Optional(CONF_PASSWORD, default=None): cv.string,
+        vol.Optional(CONF_USERNAME): cv.string,
+        vol.Optional(CONF_PASSWORD): cv.string,
         vol.Optional(CONF_DEVICES, default=[]): vol.All(cv.ensure_list, [DEVICE_SCHEMA]),
         vol.Optional(CONF_VERSION, default=False): cv.boolean,
     })
