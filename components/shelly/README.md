@@ -52,7 +52,10 @@ When you have installed shelly and make sure it exists under `custom_components`
 It is very easy, just add this to `config.yaml`
 ```
 shelly:
+```
 
+**Without discovery - manually specify devices**
+```
 shelly:
   discover: false
   version: true #add version sensor
@@ -61,7 +64,10 @@ shelly:
     - id: 13498B-1   #Shelly 2, Id + Channel number
     - id: 7BD5F3
       name: My cool plug   #set friendly name
+```
 
+**With discovery - adjust some devices**
+```
 shelly:
   discover: true  #add all devices (default)
   devices:  #configure devices
