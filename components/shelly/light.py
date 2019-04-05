@@ -15,7 +15,7 @@ from homeassistant.util.color import (
     color_temperature_kelvin_to_mired as kelvin_to_mired,
     color_temperature_mired_to_kelvin as mired_to_kelvin)
 
-from . import ShellyDevice
+from . import ShellyDevice, get_device_from_hass
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -52,17 +52,13 @@ EFFECT_LIST = [
 SUPPORT_SHELLYRGB_COLOR = (SUPPORT_BRIGHTNESS | SUPPORT_COLOR)
 SUPPORT_SHELLYRGB_WHITE = (SUPPORT_BRIGHTNESS)
 
-
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Setup Shelly Light platform."""
-    data_key = discovery_info['dataKey']
-    dev = hass.data[data_key]
+    dev = get_device_from_hass(hass, discovery_info)
     if dev.devType == "RELAY":
         add_devices([ShellyLight(dev, hass)])
     else:
         add_devices([ShellyRGB(dev, hass)])
-    hass.data[data_key] = None
-
 
 class ShellyLight(ShellyDevice, Light):
     """Representation of an Shelly Switch."""

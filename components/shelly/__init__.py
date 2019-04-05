@@ -11,7 +11,7 @@ from homeassistant.helpers import discovery
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import Entity
 
-REQUIREMENTS = ['pyShelly==0.0.23']
+REQUIREMENTS = ['pyShelly==0.0.22']
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -32,8 +32,9 @@ DEFAULT_OBJECT_ID_PREFIX = 'shelly'
 DEFAULT_SCAN_INTERVAL = timedelta(seconds=60)
 DEFAULT_SHOW_ID_IN_NAME = True
 
-SHELLY_DATA = 'shellyData'
-SHELLY_CONFIG = 'shellyCfg'
+SHELLY_DEVICES = 'shelly_devices'
+SHELLY_CONFIG = 'shelly_cfg'
+SHELLY_DEVICE_ID = 'device_id'
 
 __version__ = "0.0.6"
 VERSION = __version__
@@ -79,7 +80,10 @@ def get_device_config(conf, device_id):
         if item[CONF_ID] == device_id:
             return item
     return {}
-
+    
+def get_device_from_hass(hass, discovery_info):
+    device_key = discovery_info[SHELLY_DEVICE_ID]
+    return hass.data[SHELLY_DEVICES][device_key]    
 
 def setup(hass, config):
     """Setup Shelly component"""
@@ -87,24 +91,31 @@ def setup(hass, config):
 
     conf = config.get(DOMAIN, {})
     update_interval = conf.get(CONF_SCAN_INTERVAL)
-    hass.data[SHELLY_CONFIG] = conf
-
+    hass.data[SHELLY_CONFIG] = conf    
     discover = conf.get(CONF_DISCOVERY)
 
-    from pyShelly import pyShelly
+    try:
+        from .pyShelly import pyShelly  #Used for development only
+    except:
+        from pyShelly import pyShelly
 
-    devices = []
+    devices = {}
     block_sensors = {}
+    hass.data[SHELLY_DEVICES] = devices
 
     def _device_added(dev, code):
-        devices.append(dev)
+        deviceKey = dev.id
+        
+        if deviceKey in devices:
+            return            
+        devices[deviceKey]=dev
         device_config = get_device_config(conf, dev.id)
         if not discover and device_config == {}:
             return
 
-        data_key = SHELLY_DATA + dev.id + dev.devType
-        hass.data[data_key] = dev
-        attr = {'dataKey': data_key}
+        #data_key = SHELLY_DATA + dev.id + dev.devType
+        #hass.data[data_key] = dev
+        attr = {SHELLY_DEVICE_ID : deviceKey}
 
         if conf.get(CONF_ADDITIONAL_INFO):
             dev.block.update_status_information()
@@ -126,37 +137,32 @@ def setup(hass, config):
             if conf.get(CONF_WIFI_SENSOR) \
                     and block_sensors.get(dev.block.id + "_rssi") is None:
                 rssi_attr = {'rssi': dev.infoValues.get('rssi'),
-                             'dataKey': data_key}
+                             SHELLY_DEVICE_ID : deviceKey}
                 discovery.load_platform(hass, 'sensor', DOMAIN, rssi_attr,
                                         config)
-                block_sensors[dev.block.id] = True
+                block_sensors[dev.block.id + "_rssi"] = True
 
             if conf.get(CONF_UPTIME_SENSOR) \
                     and block_sensors.get(dev.block.id + "_uptime") is None:
                 upt_attr = {'uptime': dev.infoValues.get('uptime'),
-                            'dataKey': data_key}
+                            SHELLY_DEVICE_ID : deviceKey}
                 discovery.load_platform(hass, 'sensor', DOMAIN, upt_attr,
                                         config)
-                block_sensors[dev.block.id] = True
+                block_sensors[dev.block.id  + "_uptime"] = True
 
     def _device_removed(dev, code):
         dev.shelly_device.async_remove()
-        devices.remove(dev)
+        try:
+            del devices[dev.id]
+        except:
+            pass
         block_sensors[dev.dev.block.id + "_rssi"] = None
         block_sensors[dev.dev.block.id + "_uptime"] = None
-
-    # def _deviceAddFilter(id, devType, addr):
-    #    if discover:
-    #        return True
-    #    devConf = getDeviceConfig(conf, id)
-    #    if devConf != {}:
-    #        return True
 
     pys = pyShelly()
     _LOGGER.info("pyShelly, %s", pys.version())
     pys.cb_deviceAdded = _device_added
     pys.cb_deviceRemoved = _device_removed
-    # pys.cb_deviceAddFilter = _deviceAddFilter
     pys.username = conf.get(CONF_USERNAME)
     pys.password = conf.get(CONF_PASSWORD)
     pys.igmpFixEnabled = conf.get(CONF_IGMPFIX)

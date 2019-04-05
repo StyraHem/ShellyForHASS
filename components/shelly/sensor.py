@@ -11,7 +11,7 @@ from homeassistant.const import (
     DEVICE_CLASS_HUMIDITY, DEVICE_CLASS_TEMPERATURE, TEMP_CELSIUS, POWER_WATT)
 from homeassistant.helpers.entity import Entity
 
-from . import CONF_OBJECT_ID_PREFIX, SHELLY_CONFIG, ShellyDevice
+from . import CONF_OBJECT_ID_PREFIX, SHELLY_CONFIG, ShellyDevice, get_device_from_hass
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -34,7 +34,6 @@ SENSOR_TYPES = {
         ['Uptime', 's', 'mdi:timer', None]
 }
 
-
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Setup the Shelly Sensor platform."""
     if 'version' in discovery_info:
@@ -42,8 +41,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
                                    discovery_info.get('pyShellyVersion'))])
         return
 
-    data_key = discovery_info['dataKey']
-    dev = hass.data[data_key]
+    dev = get_device_from_hass(hass, discovery_info)
 
     if 'rssi' in discovery_info:
         add_devices([
@@ -66,7 +64,6 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
             ShellySensor(dev, hass, SENSOR_TYPE_TEMPERATURE, 'temperature'),
             ShellySensor(dev, hass, SENSOR_TYPE_HUMIDITY, 'humidity')
         ])
-    hass.data[data_key] = None
 
 
 class ShellySensor(ShellyDevice, Entity):

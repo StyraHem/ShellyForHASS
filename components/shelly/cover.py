@@ -8,16 +8,13 @@ from homeassistant.components.cover import (CoverDevice, SUPPORT_CLOSE,
                                             SUPPORT_OPEN, SUPPORT_STOP,
                                             SUPPORT_SET_POSITION)
 
-from . import ShellyDevice
+from . import ShellyDevice, get_device_from_hass
 
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Set up the Shelly cover platform."""
-    data_key = discovery_info['dataKey']
-    dev = hass.data[data_key]
+    dev = get_device_from_hass(hass, discovery_info)
     add_devices([ShellyCover(dev, hass)])
-    hass.data[data_key] = None
-
 
 class ShellyCover(ShellyDevice, CoverDevice):
     """Shelly cover device."""

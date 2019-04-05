@@ -9,19 +9,16 @@ import logging
 
 from homeassistant.components.switch import SwitchDevice
 
-# from .sensor import ShellySensor, SENSOR_TYPE_POWER
-from . import ShellyDevice
+# from .sensor import ShellySensor
+from . import ShellyDevice, get_device_from_hass
 
 _LOGGER = logging.getLogger(__name__)
 
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Setup the Shelly Switch platform."""
-    data_key = discovery_info['dataKey']
-    dev = hass.data[data_key]
+    dev = get_device_from_hass(hass, discovery_info)
     add_devices([ShellySwitch(dev, hass)])
-    hass.data[data_key] = None
-
 
 class ShellySwitch(ShellyDevice, SwitchDevice):
     """Representation of an Shelly Switch."""
