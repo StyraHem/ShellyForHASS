@@ -11,7 +11,7 @@ from homeassistant.helpers import discovery
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import Entity
 
-REQUIREMENTS = ['pyShelly==0.0.22']
+REQUIREMENTS = ['pyShelly==0.0.23']
 
 _LOGGER = logging.getLogger(__name__)
 
