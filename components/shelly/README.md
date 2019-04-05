@@ -43,9 +43,16 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 
 ## Installation
 
-### (not working yet) Install with Custom Updater
+### Install with Custom Updater
 
 Do you you have [Custom updater](https://github.com/custom-components/custom_updater) installed? Then you can use the service [custom_updater.install](https://github.com/custom-components/custom_updater/wiki/Services#install-element-cardcomponentpython_script) with the parameter {"element":"shelly"} to install Shelly.
+
+You need to add this to your `configure.yaml` first.
+```
+custom_updater:
+  component_urls:
+   - https://raw.githubusercontent.com/StyraHem/hass/master/custom_updater.json
+```
 
 ### Install manually
 
