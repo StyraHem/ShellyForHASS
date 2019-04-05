@@ -11,7 +11,7 @@ from homeassistant.helpers import discovery
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import Entity
 
-REQUIREMENTS = ['pyShelly==0.0.23']
+REQUIREMENTS = ['pyShelly==0.0.24']
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -36,7 +36,7 @@ SHELLY_DEVICES = 'shelly_devices'
 SHELLY_CONFIG = 'shelly_cfg'
 SHELLY_DEVICE_ID = 'device_id'
 
-__version__ = "0.0.6"
+__version__ = "0.0.7"
 VERSION = __version__
 
 DEVICE_SCHEMA = vol.Schema({
@@ -95,7 +95,8 @@ def setup(hass, config):
     discover = conf.get(CONF_DISCOVERY)
 
     try:
-        from .pyShelly import pyShelly  #Used for development only
+        from .pyShelly import pyShelly
+        _LOGGER.info("Loading local pyShelly")
     except:
         from pyShelly import pyShelly
 
@@ -105,7 +106,6 @@ def setup(hass, config):
 
     def _device_added(dev, code):
         deviceKey = dev.id
-        
         if deviceKey in devices:
             return            
         devices[deviceKey]=dev
@@ -113,30 +113,28 @@ def setup(hass, config):
         if not discover and device_config == {}:
             return
 
-        #data_key = SHELLY_DATA + dev.id + dev.devType
-        #hass.data[data_key] = dev
         attr = {SHELLY_DEVICE_ID : deviceKey}
 
         if conf.get(CONF_ADDITIONAL_INFO):
             dev.block.update_status_information()
 
-        if dev.devType == "ROLLER":
+        if dev.device_type == "ROLLER":
             discovery.load_platform(hass, 'cover', DOMAIN, attr, config)
-        elif dev.devType == "RELAY":
+        elif dev.device_type == "RELAY":
             device_config = get_device_config(conf, dev.id)
             if device_config.get(CONF_LIGHT_SWITCH):
                 discovery.load_platform(hass, 'light', DOMAIN, attr, config)
             else:
                 discovery.load_platform(hass, 'switch', DOMAIN, attr, config)
-        elif dev.devType == "SENSOR" or dev.devType == "POWERMETER":
+        elif dev.device_type == "SENSOR" or dev.device_type == "POWERMETER":
             discovery.load_platform(hass, 'sensor', DOMAIN, attr, config)
-        elif dev.devType == "LIGHT":
+        elif dev.device_type == "LIGHT":
             discovery.load_platform(hass, 'light', DOMAIN, attr, config)
 
         if conf.get(CONF_ADDITIONAL_INFO):
             if conf.get(CONF_WIFI_SENSOR) \
                     and block_sensors.get(dev.block.id + "_rssi") is None:
-                rssi_attr = {'rssi': dev.infoValues.get('rssi'),
+                rssi_attr = {'rssi': dev.info_values.get('rssi'),
                              SHELLY_DEVICE_ID : deviceKey}
                 discovery.load_platform(hass, 'sensor', DOMAIN, rssi_attr,
                                         config)
@@ -144,7 +142,7 @@ def setup(hass, config):
 
             if conf.get(CONF_UPTIME_SENSOR) \
                     and block_sensors.get(dev.block.id + "_uptime") is None:
-                upt_attr = {'uptime': dev.infoValues.get('uptime'),
+                upt_attr = {'uptime': dev.info_values.get('uptime'),
                             SHELLY_DEVICE_ID : deviceKey}
                 discovery.load_platform(hass, 'sensor', DOMAIN, upt_attr,
                                         config)
@@ -161,11 +159,11 @@ def setup(hass, config):
 
     pys = pyShelly()
     _LOGGER.info("pyShelly, %s", pys.version())
-    pys.cb_deviceAdded = _device_added
-    pys.cb_deviceRemoved = _device_removed
+    pys.cb_device_added.append(_device_added)
+    pys.cb_device_removed.append(_device_removed)
     pys.username = conf.get(CONF_USERNAME)
     pys.password = conf.get(CONF_PASSWORD)
-    pys.igmpFixEnabled = conf.get(CONF_IGMPFIX)
+    pys.igmp_fix_enabled = conf.get(CONF_IGMPFIX)
     pys.open()
     pys.discover()
 
@@ -203,7 +201,7 @@ class ShellyDevice(Entity):
         id_prefix = conf.get(CONF_OBJECT_ID_PREFIX)
         self._unique_id = id_prefix + "_" + dev.type + "_" + dev.id
         self.entity_id = "." + id_prefix + "_" + dev.type + "_" + dev.id
-        self._name = dev.typeName()
+        self._name = dev.type_name()
         if conf.get(CONF_SHOW_ID_IN_NAME):
             self._name += " [" + dev.id + "]"  # 'Test' #light.name
         self._dev = dev
@@ -223,17 +221,17 @@ class ShellyDevice(Entity):
 
     @property
     def device_state_attributes(self):
-        attrs = {'ipaddr': self._dev.ipaddr,
-                 'shelly_type': self._dev.typeName(),
+        attrs = {'ip_address': self._dev.ip_addr,
+                 'shelly_type': self._dev.type_name(),
                  'shelly_id': self._dev.id}
-        if self._dev.infoValues is not None:
-            attrs['rssi'] = self._dev.infoValues.get('rssi', '-')
-            attrs['ssid'] = self._dev.infoValues.get('ssid', '-')
-            attrs['uptime'] = self._dev.infoValues.get('uptime')
-            attrs['has_update'] = self._dev.infoValues.get('has_update', False)
-            attrs['fw_version'] = self._dev.infoValues.get('fw_version')
-            if self._dev.infoValues.get('new_fw_version') is not None:
-                attrs['new_fw_version'] = self._dev.infoValues.get(
+        if self._dev.info_values is not None:
+            attrs['rssi'] = self._dev.info_values.get('rssi', '-')
+            attrs['ssid'] = self._dev.info_values.get('ssid', '-')
+            attrs['uptime'] = self._dev.info_values.get('uptime')
+            attrs['has_update'] = self._dev.info_values.get('has_update', False)
+            attrs['fw_version'] = self._dev.info_values.get('fw_version')
+            if self._dev.info_values.get('new_fw_version') is not None:
+                attrs['new_fw_version'] = self._dev.info_values.get(
                     'new_fw_version')
         return attrs
 

@@ -55,11 +55,11 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
         ])
         return
 
-    if dev.devType == "POWERMETER":
+    if dev.device_type == "POWERMETER":
         add_devices([
             ShellySensor(dev, hass, SENSOR_TYPE_POWER, 'watt'),
         ])
-    elif dev.devType == "SENSOR":
+    elif dev.device_type == "SENSOR":
         add_devices([
             ShellySensor(dev, hass, SENSOR_TYPE_TEMPERATURE, 'temperature'),
             ShellySensor(dev, hass, SENSOR_TYPE_HUMIDITY, 'humidity')
@@ -84,13 +84,8 @@ class ShellySensor(ShellyDevice, Entity):
     def _updated(self):
         """Receive events when the switch state changed (by mobile,
         switch etc)"""
-        if self.entity_id is not None:
-            state = self._hass.states.get(self.entity_id)
-            if state is not None:
-                self._state = self._dev.sensorValues[self._sensor_name]
-                self._hass.states.set(self.entity_id, self._state,
-                                      state.attributes)
-
+        self.schedule_update_ha_state(True)
+        
     @property
     def state(self):
         """Return the state of the sensor."""
@@ -148,14 +143,14 @@ class ShellyInfoSensor(ShellySensor, Entity):
         if self.entity_id is not None:
             state = self._hass.states.get(self.entity_id)
             if state is not None:
-                self._state = self._dev.infoValues[self._sensor_name]
+                self._state = self._dev.info_values[self._sensor_name]
                 self._hass.states.set(self.entity_id, self._state,
                                       state.attributes)
 
     def update(self):
         """Fetch new state data for this sensor."""
         try:
-            self._state = self._dev.infoValues[self._sensor_name]
+            self._state = self._dev.info_values[self._sensor_name]
             self._battery = self._dev.sensorValues.get('battery', None)
         except:
             pass

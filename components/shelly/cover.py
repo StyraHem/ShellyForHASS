@@ -4,7 +4,8 @@ Shelly platform for the cover component.
 For more details about this platform, please refer to the documentation
 https://home-assistant.io/components/shelly/
 """
-from homeassistant.components.cover import (CoverDevice, SUPPORT_CLOSE,
+from homeassistant.components.cover import (ATTR_POSITION,
+                                            CoverDevice, SUPPORT_CLOSE,
                                             SUPPORT_OPEN, SUPPORT_STOP,
                                             SUPPORT_SET_POSITION)
 
@@ -32,12 +33,7 @@ class ShellyCover(ShellyDevice, CoverDevice):
     def _updated(self):
         """Receive events when the switch state changed (by mobile,
         switch etc)"""
-        if self.entity_id is not None:
-            state = self._hass.states.get(self.entity_id)
-            if state is not None:
-                self.update()
-                self._hass.states.set(self.entity_id, self.state,
-                                      state.attributes)
+        self.schedule_update_ha_state(True)
 
     @property
     def should_poll(self):
@@ -93,7 +89,7 @@ class ShellyCover(ShellyDevice, CoverDevice):
 
     def set_cover_position(self, **kwargs):
         """Move the cover to a specific position."""
-        pass
+        self._dev.set_position(kwargs[ATTR_POSITION])
 
     def stop_cover(self, **kwargs):
         """Stop the cover."""
@@ -106,8 +102,8 @@ class ShellyCover(ShellyDevice, CoverDevice):
         try:
             self._state = self._dev.state
             self._position = self._dev.position
-            self._last_direction = self._dev.lastDirection
-            self._motion_state = self._dev.motionState
-            self._support_position = self._dev.supportPosition
+            self._last_direction = self._dev.last_direction
+            self._motion_state = self._dev.motion_state
+            self._support_position = self._dev.support_position
         except:
             pass

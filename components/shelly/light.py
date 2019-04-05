@@ -55,7 +55,7 @@ SUPPORT_SHELLYRGB_WHITE = (SUPPORT_BRIGHTNESS)
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Setup Shelly Light platform."""
     dev = get_device_from_hass(hass, discovery_info)
-    if dev.devType == "RELAY":
+    if dev.device_type == "RELAY":
         add_devices([ShellyLight(dev, hass)])
     else:
         add_devices([ShellyRGB(dev, hass)])
@@ -72,22 +72,17 @@ class ShellyLight(ShellyDevice, Light):
     def _updated(self):
         """Receive events when the switch state changed (by mobile,
         switch etc)"""
-        if self.entity_id is not None:
-            state = self._hass.states.get(self.entity_id)
-            if state is not None:
-                self._hass.states.set(self.entity_id,
-                                      "on" if self._dev.state else "off",
-                                      state.attributes)
+        self.schedule_update_ha_state(True)
 
     @property
     def is_on(self):
         return self._state
 
     def turn_on(self, **kwargs):
-        self._dev.turnOn()
+        self._dev.turn_on()
 
     def turn_off(self, **kwargs):
-        self._dev.turnOff()
+        self._dev.turn_off()
 
     def update(self):
         """Fetch new state data for this light."""
@@ -118,9 +113,9 @@ class ShellyRGB(ShellyDevice, Light):
         """Flag supported features."""
         features = SUPPORT_SHELLYRGB_WHITE \
             if self._mode == 'white' else SUPPORT_SHELLYRGB_COLOR
-        if self._dev.supportColorTemp and self._mode == "white":
+        if self._dev.support_color_temp and self._mode == "white":
             features = features | SUPPORT_COLOR_TEMP
-        if self._dev.supportEffects:
+        if self._dev.support_effects:
             features = features | SUPPORT_EFFECT
         return features
 
@@ -166,11 +161,11 @@ class ShellyRGB(ShellyDevice, Light):
             if 'effect' in effect:
                 effect_nr = effect['effect']
 
-        self._dev.turnOn(brightness=brightness, rgb=rgb, temp=temp, mode=mode,
+        self._dev.turn_on(brightness=brightness, rgb=rgb, temp=temp, mode=mode,
                          effect=effect_nr)
 
     def turn_off(self, **kwargs):
-        self._dev.turnOff()
+        self._dev.turn_off()
 
     def update(self):
         """Fetch new state data for this light."""

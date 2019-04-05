@@ -32,12 +32,7 @@ class ShellySwitch(ShellyDevice, SwitchDevice):
     def _updated(self):
         """Receive events when the switch state changed (by mobile,
         switch etc)"""
-        if self.entity_id is not None:
-            state = self._hass.states.get(self.entity_id)
-            if state is not None:
-                self._hass.states.set(self.entity_id,
-                                      "on" if self._dev.state else "off",
-                                      state.attributes)
+        self.schedule_update_ha_state(True)
 
     @property
     def current_power_w(self):
@@ -56,10 +51,10 @@ class ShellySwitch(ShellyDevice, SwitchDevice):
         return self._state
 
     def turn_on(self, **kwargs):
-        self._dev.turnOn()
+        self._dev.turn_on()
 
     def turn_off(self, **kwargs):
-        self._dev.turnOff()
+        self._dev.turn_off()
 
     def update(self):
         """Fetch new state data for this switch."""
