@@ -1,31 +1,36 @@
 """Support for Shelly devices."""
+from datetime import timedelta
 import logging
 
 import voluptuous as vol
 
 from homeassistant.const import (
     CONF_DEVICES, CONF_DISCOVERY, CONF_ID, CONF_NAME, CONF_PASSWORD,
-    CONF_USERNAME, EVENT_HOMEASSISTANT_STOP)
+    CONF_SCAN_INTERVAL, CONF_USERNAME, EVENT_HOMEASSISTANT_STOP)
 from homeassistant.helpers import discovery
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import Entity
 
-REQUIREMENTS = ['pyShelly==0.0.22']
+REQUIREMENTS = ['pyShelly==0.0.23']
 
 _LOGGER = logging.getLogger(__name__)
 
 DOMAIN = 'shelly'
 
+CONF_ADDITIONAL_INFO = 'additional_information'
 CONF_IGMPFIX = 'igmp_fix'
-CONF_SHOW_ID_IN_NAME = 'show_id_in_name'
-CONF_OBJECT_ID_PREFIX = 'id_prefix'
 CONF_LIGHT_SWITCH = 'light_switch'
+CONF_OBJECT_ID_PREFIX = 'id_prefix'
+CONF_SHOW_ID_IN_NAME = 'show_id_in_name'
+CONF_UPTIME_SENSOR = 'uptime_sensor'
 CONF_VERSION = 'version'
+CONF_WIFI_SENSOR = 'wifi_sensor'
 
 DEFAULT_IGMPFIX = False
 DEFAULT_DISCOVERY = True
-DEFAULT_SHOW_ID_IN_NAME = True
 DEFAULT_OBJECT_ID_PREFIX = 'shelly'
+DEFAULT_SCAN_INTERVAL = timedelta(seconds=60)
+DEFAULT_SHOW_ID_IN_NAME = True
 
 SHELLY_DATA = 'shellyData'
 SHELLY_CONFIG = 'shellyCfg'
@@ -41,17 +46,28 @@ DEVICE_SCHEMA = vol.Schema({
 
 CONFIG_SCHEMA = vol.Schema({
     DOMAIN: vol.Schema({
-        vol.Optional(CONF_IGMPFIX, default=DEFAULT_IGMPFIX): cv.boolean,
+        vol.Optional(CONF_IGMPFIX,
+                     default=DEFAULT_IGMPFIX): cv.boolean,
         vol.Optional(CONF_SHOW_ID_IN_NAME,
                      default=DEFAULT_SHOW_ID_IN_NAME): cv.boolean,
-        vol.Optional(CONF_DISCOVERY, default=DEFAULT_DISCOVERY): cv.boolean,
+        vol.Optional(CONF_DISCOVERY,
+                     default=DEFAULT_DISCOVERY): cv.boolean,
         vol.Optional(CONF_OBJECT_ID_PREFIX,
                      default=DEFAULT_OBJECT_ID_PREFIX): cv.string,
         vol.Optional(CONF_USERNAME): cv.string,
         vol.Optional(CONF_PASSWORD): cv.string,
-        vol.Optional(CONF_DEVICES, default=[]): vol.All(cv.ensure_list,
-                                                        [DEVICE_SCHEMA]),
-        vol.Optional(CONF_VERSION, default=False): cv.boolean,
+        vol.Optional(CONF_DEVICES,
+                     default=[]): vol.All(cv.ensure_list, [DEVICE_SCHEMA]),
+        vol.Optional(CONF_VERSION,
+                     default=False): cv.boolean,
+        vol.Optional(CONF_WIFI_SENSOR,
+                     default=False): cv.boolean,
+        vol.Optional(CONF_UPTIME_SENSOR,
+                     default=False): cv.boolean,
+        vol.Optional(CONF_ADDITIONAL_INFO,
+                     default=True): cv.boolean,
+        vol.Optional(CONF_SCAN_INTERVAL,
+                     default=DEFAULT_SCAN_INTERVAL): cv.time_period
     })
 }, extra=vol.ALLOW_EXTRA)
 
@@ -70,6 +86,7 @@ def setup(hass, config):
     _LOGGER.info("Starting shelly, %s", __version__)
 
     conf = config.get(DOMAIN, {})
+    update_interval = conf.get(CONF_SCAN_INTERVAL)
     hass.data[SHELLY_CONFIG] = conf
 
     discover = conf.get(CONF_DISCOVERY)
@@ -77,15 +94,21 @@ def setup(hass, config):
     from pyShelly import pyShelly
 
     devices = []
+    block_sensors = {}
 
     def _device_added(dev, code):
         devices.append(dev)
         device_config = get_device_config(conf, dev.id)
         if not discover and device_config == {}:
             return
+
         data_key = SHELLY_DATA + dev.id + dev.devType
         hass.data[data_key] = dev
         attr = {'dataKey': data_key}
+
+        if conf.get(CONF_ADDITIONAL_INFO):
+            dev.block.update_status_information()
+
         if dev.devType == "ROLLER":
             discovery.load_platform(hass, 'cover', DOMAIN, attr, config)
         elif dev.devType == "RELAY":
@@ -99,9 +122,28 @@ def setup(hass, config):
         elif dev.devType == "LIGHT":
             discovery.load_platform(hass, 'light', DOMAIN, attr, config)
 
+        if conf.get(CONF_ADDITIONAL_INFO):
+            if conf.get(CONF_WIFI_SENSOR) \
+                    and block_sensors.get(dev.block.id + "_rssi") is None:
+                rssi_attr = {'rssi': dev.infoValues.get('rssi'),
+                             'dataKey': data_key}
+                discovery.load_platform(hass, 'sensor', DOMAIN, rssi_attr,
+                                        config)
+                block_sensors[dev.block.id] = True
+
+            if conf.get(CONF_UPTIME_SENSOR) \
+                    and block_sensors.get(dev.block.id + "_uptime") is None:
+                upt_attr = {'uptime': dev.infoValues.get('uptime'),
+                            'dataKey': data_key}
+                discovery.load_platform(hass, 'sensor', DOMAIN, upt_attr,
+                                        config)
+                block_sensors[dev.block.id] = True
+
     def _device_removed(dev, code):
         dev.shelly_device.async_remove()
         devices.remove(dev)
+        block_sensors[dev.dev.block.id + "_rssi"] = None
+        block_sensors[dev.dev.block.id + "_uptime"] = None
 
     # def _deviceAddFilter(id, devType, addr):
     #    if discover:
@@ -127,10 +169,22 @@ def setup(hass, config):
 
     def stop_shelly(event):
         """Stop Shelly."""
-        _LOGGER.info("Shutting down Xiaomi Hub")
+        _LOGGER.info("Shutting down Shelly")
         pys.close()
 
     hass.bus.listen_once(EVENT_HOMEASSISTANT_STOP, stop_shelly)
+
+    def update_status_information():
+        for _, block in pys.blocks.items():
+            block.update_status_information()
+
+    async def update_domain_callback(now):
+        """Update the Shelly status information"""
+        await hass.async_add_executor_job(update_status_information)
+
+    if conf.get(CONF_ADDITIONAL_INFO):
+        hass.helpers.event.async_track_time_interval(
+            update_domain_callback, update_interval)
 
     return True
 
@@ -163,9 +217,19 @@ class ShellyDevice(Entity):
 
     @property
     def device_state_attributes(self):
-        return {'ipaddr': self._dev.ipaddr,
-                'shelly_type': self._dev.typeName(),
-                'shelly_id': self._dev.id}
+        attrs = {'ipaddr': self._dev.ipaddr,
+                 'shelly_type': self._dev.typeName(),
+                 'shelly_id': self._dev.id}
+        if self._dev.infoValues is not None:
+            attrs['rssi'] = self._dev.infoValues.get('rssi', '-')
+            attrs['ssid'] = self._dev.infoValues.get('ssid', '-')
+            attrs['uptime'] = self._dev.infoValues.get('uptime')
+            attrs['has_update'] = self._dev.infoValues.get('has_update', False)
+            attrs['fw_version'] = self._dev.infoValues.get('fw_version')
+            if self._dev.infoValues.get('new_fw_version') is not None:
+                attrs['new_fw_version'] = self._dev.infoValues.get(
+                    'new_fw_version')
+        return attrs
 
     @property
     def unique_id(self):
