@@ -8,7 +8,7 @@ https://home-assistant.io/components/shelly/
 import logging
 
 from homeassistant.const import (
-    DEVICE_CLASS_HUMIDITY, DEVICE_CLASS_TEMPERATURE, TEMP_CELSIUS)
+    DEVICE_CLASS_HUMIDITY, DEVICE_CLASS_TEMPERATURE, TEMP_CELSIUS, POWER_WATT)
 from homeassistant.helpers.entity import Entity
 
 from . import CONF_OBJECT_ID_PREFIX, SHELLY_CONFIG, ShellyDevice
@@ -18,6 +18,8 @@ _LOGGER = logging.getLogger(__name__)
 SENSOR_TYPE_TEMPERATURE = 'temp'
 SENSOR_TYPE_HUMIDITY = 'humidity'
 SENSOR_TYPE_POWER = 'watt'
+SENSOR_TYPE_RSSI = 'rssi'
+SENSOR_TYPE_UPTIME = 'uptime'
 
 SENSOR_TYPES = {
     SENSOR_TYPE_TEMPERATURE:
@@ -25,7 +27,11 @@ SENSOR_TYPES = {
     SENSOR_TYPE_HUMIDITY:
         ['Humidity', '%', None, DEVICE_CLASS_HUMIDITY],
     SENSOR_TYPE_POWER:
-        ['Power', 'W', None, None]
+        ['Power', POWER_WATT, None, None],
+    SENSOR_TYPE_RSSI:
+        ['RSSI', 'dB', 'mdi:wifi', None],
+    SENSOR_TYPE_UPTIME:
+        ['Uptime', 's', 'mdi:timer', None]
 }
 
 
@@ -38,6 +44,19 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
 
     data_key = discovery_info['dataKey']
     dev = hass.data[data_key]
+
+    if 'rssi' in discovery_info:
+        add_devices([
+            ShellyInfoSensor(dev, hass, SENSOR_TYPE_RSSI, 'rssi')
+        ])
+        return
+
+    if 'uptime' in discovery_info:
+        add_devices([
+            ShellyInfoSensor(dev, hass, SENSOR_TYPE_UPTIME, 'uptime')
+        ])
+        return
+
     if dev.devType == "POWERMETER":
         add_devices([
             ShellySensor(dev, hass, SENSOR_TYPE_POWER, 'watt'),
@@ -51,7 +70,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
 
 
 class ShellySensor(ShellyDevice, Entity):
-    """Representation of an Shelly Switch."""
+    """Representation of a Shelly Sensor."""
 
     def __init__(self, dev, hass, sensor_type, sensor_name):
         """Initialize an ShellySwitch."""
@@ -120,8 +139,37 @@ class ShellySensor(ShellyDevice, Entity):
         return attr
 
 
+class ShellyInfoSensor(ShellySensor, Entity):
+    """Representation of a Shelly Info Sensor."""
+
+    def __init__(self, dev, hass, sensor_type, sensor_name):
+        ShellySensor.__init__(self, dev, hass, sensor_type, sensor_name)
+
+    def _updated(self):
+        """Receive events when the switch state changed (by mobile,
+        switch etc)"""
+        if self.entity_id is not None:
+            state = self._hass.states.get(self.entity_id)
+            if state is not None:
+                self._state = self._dev.infoValues[self._sensor_name]
+                self._hass.states.set(self.entity_id, self._state,
+                                      state.attributes)
+
+    def update(self):
+        """Fetch new state data for this sensor."""
+        try:
+            self._state = self._dev.infoValues[self._sensor_name]
+            self._battery = self._dev.sensorValues.get('battery', None)
+        except:
+            pass
+
+    @property
+    def device_state_attributes(self):
+        return None
+
+
 class ShellyVersion(Entity):
-    """Representation of a Home Assistant version sensor."""
+    """Representation of a Shelly version sensor."""
 
     def __init__(self, hass, version, py_shelly_version):
         """Initialize the Version sensor."""
