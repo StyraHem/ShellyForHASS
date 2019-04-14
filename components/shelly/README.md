@@ -86,25 +86,25 @@ shelly:
     - id: 420FC7
       light_switch: true  #add this switch as a light
     - id: 7BD5F3
-      name: My cool plug #set friendly name 
+      name: My cool plug #set friendly name
 ```
 
 ### Parameters
 
-| Parameter              | Description                                                                                             | Default | Version |
-|------------------------|---------------------------------------------------------------------------------------------------------|---------|---------|
-| username               | User name to use for restrict login                                                                     |         | 0.0.3-  |
-| password               | Password to use for restrict login                                                                      |         | 0.0.3-  |
-| discovery              | Enable or disable discovery                                                                             | True    | 0.0.4-  |
-| version                | Add a version sensor to with version of component and pyShelly                                          | False   | 0.0.4-  |
-| devices                | Config for each device, se next table for more info                                                     |         | 0.0.4-  |
-| show_id_in_name        | Add Shelly Device id to the end of the name                                                             | False   | 0.0.5-  |
-| id_prefix              | Shange the prefix of the entity id and unique id of the device                                          | shelly  | 0.0.5-  |
-| igmp_fix               | Enable sending out IP_ADD_MEMBERSHIP every minute                                                       | False   | 0.0.5-  |
-| additional_information | Retrieve additional information (rssi, ssid, uptime, ..)                                                | True    | 0.0.6-  |
-| scan_interval          | Update frequency for additional information                                                             | 60      | 0.0.6-  |
-| wifi_sensor            | Add extra sensor for wifi signal of each device.<br/>Requires `additional_information` to be `True`    | False   | 0.0.6-  |
-| uptime_sensor          | Add extra sensor for device uptime of each devivce.<br/>Requires `additional_information` to be `True` | False   | 0.0.6-  |
+| Parameter              | Description                                                                                            | Default | Version |
+|------------------------|--------------------------------------------------------------------------------------------------------|---------|---------|
+| username               | User name to use for restrict login                                                                    |         | 0.0.3-  |
+| password               | Password to use for restrict login                                                                     |         | 0.0.3-  |
+| discovery              | Enable or disable discovery                                                                            | True    | 0.0.4-  |
+| version                | Add a version sensor to with version of component and pyShelly                                         | False   | 0.0.4-  |
+| devices                | Config for each device, se next table for more info                                                    |         | 0.0.4-  |
+| show_id_in_name        | Add Shelly Device id to the end of the name                                                            | False   | 0.0.5-  |
+| id_prefix              | Shange the prefix of the entity id and unique id of the device                                         | shelly  | 0.0.5-  |
+| igmp_fix               | Enable sending out IP_ADD_MEMBERSHIP every minute                                                      | False   | 0.0.5-  |
+| additional_information | Retrieve additional information (rssi, ssid, uptime, ..)                                               | True    | 0.0.6-  |
+| scan_interval          | Update frequency for additional information                                                            | 60      | 0.0.6-  |
+| wifi_sensor            | Add extra sensor for wifi signal of each device. Requires `additional_information` to be `True`    | False   | 0.0.6-  |
+| uptime_sensor          | Add extra sensor for device uptime of each devivce. Requires `additional_information` to be `True` | False   | 0.0.6-  |
 
 #### Device configuration
 

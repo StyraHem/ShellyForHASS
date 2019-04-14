@@ -1,4 +1,9 @@
-"""Support for Shelly devices."""
+"""
+Support for Shelly smart home devices.
+
+For more details about this component, please refer to the documentation at
+https://home-assistant.io/components/shelly/
+"""
 from datetime import timedelta
 import logging
 
@@ -11,7 +16,7 @@ from homeassistant.helpers import discovery
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import Entity
 
-REQUIREMENTS = ['pyShelly==0.0.24']
+REQUIREMENTS = ['pyShelly==0.0.26']
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -36,7 +41,7 @@ SHELLY_DEVICES = 'shelly_devices'
 SHELLY_CONFIG = 'shelly_cfg'
 SHELLY_DEVICE_ID = 'device_id'
 
-__version__ = "0.0.7"
+__version__ = "0.0.8"
 VERSION = __version__
 
 DEVICE_SCHEMA = vol.Schema({
@@ -80,8 +85,9 @@ def get_device_config(conf, device_id):
         if item[CONF_ID] == device_id:
             return item
     return {}
-    
+
 def get_device_from_hass(hass, discovery_info):
+    """Get device from HASS"""
     device_key = discovery_info[SHELLY_DEVICE_ID]
     return hass.data[SHELLY_DEVICES][device_key]    
 
@@ -91,29 +97,29 @@ def setup(hass, config):
 
     conf = config.get(DOMAIN, {})
     update_interval = conf.get(CONF_SCAN_INTERVAL)
-    hass.data[SHELLY_CONFIG] = conf    
+    hass.data[SHELLY_CONFIG] = conf
     discover = conf.get(CONF_DISCOVERY)
 
     try:
         from .pyShelly import pyShelly
         _LOGGER.info("Loading local pyShelly")
-    except:
+    except ModuleNotFoundError:
         from pyShelly import pyShelly
 
     devices = {}
     block_sensors = {}
     hass.data[SHELLY_DEVICES] = devices
 
-    def _device_added(dev, code):
-        deviceKey = dev.id
-        if deviceKey in devices:
-            return            
-        devices[deviceKey]=dev
+    def _device_added(dev, _code):
+        device_key = dev.id + dev.device_type
+        if device_key in devices:
+            return
+        devices[device_key] = dev
         device_config = get_device_config(conf, dev.id)
         if not discover and device_config == {}:
             return
 
-        attr = {SHELLY_DEVICE_ID : deviceKey}
+        attr = {SHELLY_DEVICE_ID : device_key}
 
         if conf.get(CONF_ADDITIONAL_INFO):
             dev.block.update_status_information()
@@ -135,7 +141,7 @@ def setup(hass, config):
             if conf.get(CONF_WIFI_SENSOR) \
                     and block_sensors.get(dev.block.id + "_rssi") is None:
                 rssi_attr = {'rssi': dev.info_values.get('rssi'),
-                             SHELLY_DEVICE_ID : deviceKey}
+                             SHELLY_DEVICE_ID : device_key}
                 discovery.load_platform(hass, 'sensor', DOMAIN, rssi_attr,
                                         config)
                 block_sensors[dev.block.id + "_rssi"] = True
@@ -143,16 +149,16 @@ def setup(hass, config):
             if conf.get(CONF_UPTIME_SENSOR) \
                     and block_sensors.get(dev.block.id + "_uptime") is None:
                 upt_attr = {'uptime': dev.info_values.get('uptime'),
-                            SHELLY_DEVICE_ID : deviceKey}
+                            SHELLY_DEVICE_ID : device_key}
                 discovery.load_platform(hass, 'sensor', DOMAIN, upt_attr,
                                         config)
                 block_sensors[dev.block.id  + "_uptime"] = True
 
-    def _device_removed(dev, code):
+    def _device_removed(dev, _code):
         dev.shelly_device.async_remove()
         try:
             del devices[dev.id]
-        except:
+        except IndexError:
             pass
         block_sensors[dev.dev.block.id + "_rssi"] = None
         block_sensors[dev.dev.block.id + "_uptime"] = None
@@ -171,7 +177,7 @@ def setup(hass, config):
         attr = {'version': VERSION, 'pyShellyVersion': pys.version()}
         discovery.load_platform(hass, 'sensor', DOMAIN, attr, config)
 
-    def stop_shelly(event):
+    def stop_shelly():
         """Stop Shelly."""
         _LOGGER.info("Shutting down Shelly")
         pys.close()
@@ -182,7 +188,7 @@ def setup(hass, config):
         for _, block in pys.blocks.items():
             block.update_status_information()
 
-    async def update_domain_callback(now):
+    async def update_domain_callback(_now):
         """Update the Shelly status information"""
         await hass.async_add_executor_job(update_status_information)
 

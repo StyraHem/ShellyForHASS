@@ -12,7 +12,7 @@ from homeassistant.components.cover import (ATTR_POSITION,
 from . import ShellyDevice, get_device_from_hass
 
 
-def setup_platform(hass, config, add_devices, discovery_info=None):
+def setup_platform(hass, _config, add_devices, discovery_info=None):
     """Set up the Shelly cover platform."""
     dev = get_device_from_hass(hass, discovery_info)
     add_devices([ShellyCover(dev, hass)])
@@ -42,6 +42,7 @@ class ShellyCover(ShellyDevice, CoverDevice):
 
     @property
     def current_cover_position(self):
+        """Return current position"""
         if self._support_position:
             return self._position
 
@@ -79,11 +80,11 @@ class ShellyCover(ShellyDevice, CoverDevice):
             supported_features |= SUPPORT_SET_POSITION
         return supported_features
 
-    def close_cover(self, **kwargs):
+    def close_cover(self, **_kwargs):
         """Close the cover."""
         self._dev.down()
 
-    def open_cover(self, **kwargs):
+    def open_cover(self, **_kwargs):
         """Open the cover."""
         self._dev.up()
 
@@ -91,7 +92,7 @@ class ShellyCover(ShellyDevice, CoverDevice):
         """Move the cover to a specific position."""
         self._dev.set_position(kwargs[ATTR_POSITION])
 
-    def stop_cover(self, **kwargs):
+    def stop_cover(self, **_kwargs):
         """Stop the cover."""
         self._dev.stop()
 
@@ -99,11 +100,8 @@ class ShellyCover(ShellyDevice, CoverDevice):
         """Fetch new state data for this light.
         This is the only method that should fetch new data for Home Assistant.
         """
-        try:
-            self._state = self._dev.state
-            self._position = self._dev.position
-            self._last_direction = self._dev.last_direction
-            self._motion_state = self._dev.motion_state
-            self._support_position = self._dev.support_position
-        except:
-            pass
+        self._state = self._dev.state
+        self._position = self._dev.position
+        self._last_direction = self._dev.last_direction
+        self._motion_state = self._dev.motion_state
+        self._support_position = self._dev.support_position

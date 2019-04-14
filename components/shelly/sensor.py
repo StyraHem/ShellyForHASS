@@ -7,11 +7,13 @@ https://home-assistant.io/components/shelly/
 
 import logging
 
-from homeassistant.const import (
-    DEVICE_CLASS_HUMIDITY, DEVICE_CLASS_TEMPERATURE, TEMP_CELSIUS, POWER_WATT)
+from homeassistant.const import (DEVICE_CLASS_HUMIDITY,
+                                 DEVICE_CLASS_TEMPERATURE,
+                                 TEMP_CELSIUS, POWER_WATT)
 from homeassistant.helpers.entity import Entity
 
-from . import CONF_OBJECT_ID_PREFIX, SHELLY_CONFIG, ShellyDevice, get_device_from_hass
+from . import (CONF_OBJECT_ID_PREFIX, SHELLY_CONFIG,
+               ShellyDevice, get_device_from_hass)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -34,7 +36,7 @@ SENSOR_TYPES = {
         ['Uptime', 's', 'mdi:timer', None]
 }
 
-def setup_platform(hass, config, add_devices, discovery_info=None):
+def setup_platform(hass, _config, add_devices, discovery_info=None):
     """Setup the Shelly Sensor platform."""
     if 'version' in discovery_info:
         add_devices([ShellyVersion(hass, discovery_info.get('version'),
@@ -65,7 +67,6 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
             ShellySensor(dev, hass, SENSOR_TYPE_HUMIDITY, 'humidity')
         ])
 
-
 class ShellySensor(ShellyDevice, Entity):
     """Representation of a Shelly Sensor."""
 
@@ -85,7 +86,7 @@ class ShellySensor(ShellyDevice, Entity):
         """Receive events when the switch state changed (by mobile,
         switch etc)"""
         self.schedule_update_ha_state(True)
-        
+
     @property
     def state(self):
         """Return the state of the sensor."""
@@ -117,11 +118,9 @@ class ShellySensor(ShellyDevice, Entity):
 
     def update(self):
         """Fetch new state data for this sensor."""
-        try:
-            self._state = self._dev.sensorValues[self._sensor_name]
-            self._battery = self._dev.sensorValues.get('battery', None)
-        except:
-            pass
+        if hasattr(self._dev, 'sensor_values'):
+            self._state = self._dev.sensor_values.get(self._sensor_name, None)
+            self._battery = self._dev.sensor_values.get('battery', None)
 
     @property
     def device_state_attributes(self):
@@ -140,20 +139,14 @@ class ShellyInfoSensor(ShellySensor, Entity):
     def _updated(self):
         """Receive events when the switch state changed (by mobile,
         switch etc)"""
-        if self.entity_id is not None:
-            state = self._hass.states.get(self.entity_id)
-            if state is not None:
-                self._state = self._dev.info_values[self._sensor_name]
-                self._hass.states.set(self.entity_id, self._state,
-                                      state.attributes)
+        self.schedule_update_ha_state(True)
 
     def update(self):
         """Fetch new state data for this sensor."""
-        try:
-            self._state = self._dev.info_values[self._sensor_name]
-            self._battery = self._dev.sensorValues.get('battery', None)
-        except:
-            pass
+        if hasattr(self._dev, 'info_values'):
+            self._state = self._dev.info_values.get(self._sensor_name, None)
+        if hasattr(self._dev, 'sensor_values'):
+            self._battery = self._dev.sensor_values.get('battery', None)
 
     @property
     def device_state_attributes(self):

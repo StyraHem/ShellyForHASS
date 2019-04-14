@@ -52,7 +52,7 @@ EFFECT_LIST = [
 SUPPORT_SHELLYRGB_COLOR = (SUPPORT_BRIGHTNESS | SUPPORT_COLOR)
 SUPPORT_SHELLYRGB_WHITE = (SUPPORT_BRIGHTNESS)
 
-def setup_platform(hass, config, add_devices, discovery_info=None):
+def setup_platform(hass, _config, add_devices, discovery_info=None):
     """Setup Shelly Light platform."""
     dev = get_device_from_hass(hass, discovery_info)
     if dev.device_type == "RELAY":
@@ -131,9 +131,11 @@ class ShellyRGB(ShellyDevice, Light):
 
     @property
     def is_on(self):
+        """Return status of light"""
         return self._state
 
     def turn_on(self, **kwargs):
+        """Turn on light"""
         brightness = None
         rgb = None
         temp = None
@@ -162,9 +164,10 @@ class ShellyRGB(ShellyDevice, Light):
                 effect_nr = effect['effect']
 
         self._dev.turn_on(brightness=brightness, rgb=rgb, temp=temp, mode=mode,
-                         effect=effect_nr)
+                          effect=effect_nr)
 
-    def turn_off(self, **kwargs):
+    def turn_off(self, **_kwargs):
+        """Turn off light"""
         self._dev.turn_off()
 
     def update(self):

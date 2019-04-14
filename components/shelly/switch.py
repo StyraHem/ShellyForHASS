@@ -15,7 +15,7 @@ from . import ShellyDevice, get_device_from_hass
 _LOGGER = logging.getLogger(__name__)
 
 
-def setup_platform(hass, config, add_devices, discovery_info=None):
+def setup_platform(hass, _config, add_devices, discovery_info=None):
     """Setup the Shelly Switch platform."""
     dev = get_device_from_hass(hass, discovery_info)
     add_devices([ShellySwitch(dev, hass)])
@@ -48,12 +48,15 @@ class ShellySwitch(ShellyDevice, SwitchDevice):
 
     @property
     def is_on(self):
+        """Get device state"""
         return self._state
 
-    def turn_on(self, **kwargs):
+    def turn_on(self, **_kwargs):
+        """Turn on device"""
         self._dev.turn_on()
 
-    def turn_off(self, **kwargs):
+    def turn_off(self, **_kwargs):
+        """Turn off device"""
         self._dev.turn_off()
 
     def update(self):
