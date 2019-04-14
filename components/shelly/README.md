@@ -3,7 +3,7 @@
 [![founder-wip](https://img.shields.io/badge/founder-StyraHem.se-green.svg?style=for-the-badge)](https://www.styrahem.se)
 
 ![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg?style=for-the-badge)
-![version-wip](https://img.shields.io/badge/version-0.0.7-green.svg?style=for-the-badge)
+![version-wip](https://img.shields.io/badge/version-0.0.8-green.svg?style=for-the-badge)
 
 This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices are locally. You can use this plugin and continue to use Shelly Cloud and Shelly app in your mobile if you want.
 
@@ -37,13 +37,12 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Shelly RGBWW
 - Shelly RGBW2
 - Shelly H&T
+- Shelly 2.5
 - Shelly 2LED (not tested)
-- Shelly 2.5 (not tested)
 - Shelly PLUG S (not tested)
 
 ## Installation
 
-### Install with Custom Updater
 ### Install with Custom Updater
 
 Do you you have [Custom updater](https://github.com/custom-components/custom_updater) installed? Then you can use the service [custom_updater.install](https://github.com/custom-components/custom_updater/wiki/Services#install-element-cardcomponentpython_script) with the parameter {"element":"shelly"} to install Shelly.
