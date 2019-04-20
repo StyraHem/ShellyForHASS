@@ -41,7 +41,7 @@ SHELLY_DEVICES = 'shelly_devices'
 SHELLY_CONFIG = 'shelly_cfg'
 SHELLY_DEVICE_ID = 'device_id'
 
-__version__ = "0.0.8"
+__version__ = "0.0.9"
 VERSION = __version__
 
 DEVICE_SCHEMA = vol.Schema({
@@ -103,7 +103,7 @@ def setup(hass, config):
     try:
         from .pyShelly import pyShelly
         _LOGGER.info("Loading local pyShelly")
-    except ModuleNotFoundError:
+    except ImportError:
         from pyShelly import pyShelly
 
     devices = {}
