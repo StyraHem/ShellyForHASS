@@ -16,7 +16,7 @@ from homeassistant.helpers import discovery
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import Entity
 
-REQUIREMENTS = ['pyShelly==0.0.26']
+REQUIREMENTS = ['pyShelly==0.0.27']
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ SHELLY_DEVICES = 'shelly_devices'
 SHELLY_CONFIG = 'shelly_cfg'
 SHELLY_DEVICE_ID = 'device_id'
 
-__version__ = "0.0.9"
+__version__ = "0.0.10"
 VERSION = __version__
 
 DEVICE_SCHEMA = vol.Schema({
