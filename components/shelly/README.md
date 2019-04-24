@@ -3,7 +3,7 @@
 [![founder-wip](https://img.shields.io/badge/founder-StyraHem.se-green.svg?style=for-the-badge)](https://www.styrahem.se)
 
 ![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg?style=for-the-badge)
-![version-wip](https://img.shields.io/badge/version-0.0.9-green.svg?style=for-the-badge)
+![version-wip](https://img.shields.io/badge/version-0.0.10-green.svg?style=for-the-badge)
 
 This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices are locally. You can use this plugin and continue to use Shelly Cloud and Shelly app in your mobile if you want.
 
