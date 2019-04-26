@@ -1,7 +1,7 @@
 # Shelly smart home platform for HASS
 
 [![founder-wip](https://img.shields.io/badge/founder-Håkan_Åkerberg@StyraHem.se-green.svg?style=for-the-badge)](https://www.styrahem.se)
-[![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20me%20a%20coffee-orange.svg?style=for-the-badge)](https://www.buymeacoffee.com/w0aetjdDW)
+[![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20me%20a%20coffee-orange.svg?style=for-the-badge)](https://www.buymeacoffee.com/styrahem)
 
 ![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg?style=for-the-badge)
 ![version-wip](https://img.shields.io/badge/version-0.0.10-green.svg?style=for-the-badge)
@@ -140,7 +140,7 @@ Please give us feedback on info@styrahem.se or Facebook groups: [Shelly grupp (S
 
 This plugin is created by the StyraHem.se, the Swedish distributor of Shelly. In Sweden you can bye Shellies from [StyraHem.se](https://www.styrahem.se/c/126/shelly) or any of the retailers like Kjell&Company.
 
-[![buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/w0aetjdDW)
+[![buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/styrahem)
 
 ## Screen shots
 
