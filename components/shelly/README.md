@@ -123,11 +123,54 @@ If you disable discovery only Shellies under devices will be added.
 
 You can only specify one username and password for restrict login. If you enter username and password, access to devices without restrict login will continue to work. Different logins to different deveces will be added later.
 
-## Restart Home Assistant
+### Restart Home Assistant
 
 Now you should restart Home Assistant to load shelly
 
 Shelly will discover all devices on your LAN and show them as light, switch, sensor and cover in Home Assistant.
+
+## Monster card
+You can use the component with [monstercard](https://github.com/ciotlosm/custom-lovelace/tree/master/monster-card) to present data in a nice way.
+
+### All shelly devices
+```yaml
+card:
+  show_header_toggle: false
+  title: Shelly
+  type: entities
+filter:
+  exclude:
+    - entity_id: '*rssi*'
+    - entity_id: '*uptime*'
+    - entity_id: '*firmware*'
+  include:
+    - entity_id: '*shelly*'
+type: 'custom:monster-card'
+```
+
+### Need firmware update (click on the switch to update)
+```yaml
+card:
+  show_header_toggle: false
+  title: Shelly need update
+  type: entities
+filter:
+  include:
+    - entity_id: '*firmware_update*'
+type: 'custom:monster-card'
+```
+
+### WiFi signal of all devices (rssi)
+```yaml
+card:
+  show_header_toggle: false
+  title: Shelly
+  type: entities
+filter:
+  include:
+    - entity_id: '*rssi*'
+type: 'custom:monster-card'
+```
 
 ## Feedback
 
