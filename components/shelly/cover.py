@@ -30,11 +30,6 @@ class ShellyCover(ShellyDevice, CoverDevice):
         self._state = None
         self.update()
 
-    def _updated(self):
-        """Receive events when the switch state changed (by mobile,
-        switch etc)"""
-        self.schedule_update_ha_state(True)
-
     @property
     def should_poll(self):
         """No polling needed."""

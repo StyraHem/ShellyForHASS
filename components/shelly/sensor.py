@@ -13,7 +13,8 @@ from homeassistant.const import (DEVICE_CLASS_HUMIDITY,
 from homeassistant.helpers.entity import Entity
 
 from . import (CONF_OBJECT_ID_PREFIX, SHELLY_CONFIG,
-               ShellyDevice, get_device_from_hass)
+               ShellyDevice, get_device_from_hass,
+               ShellyBlock, get_block_from_hass)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -43,19 +44,21 @@ def setup_platform(hass, _config, add_devices, discovery_info=None):
                                    discovery_info.get('pyShellyVersion'))])
         return
 
-    dev = get_device_from_hass(hass, discovery_info)
-
     if 'rssi' in discovery_info:
+        block = get_block_from_hass(hass, discovery_info)
         add_devices([
-            ShellyInfoSensor(dev, hass, SENSOR_TYPE_RSSI, 'rssi')
+            ShellyInfoSensor(block, hass, SENSOR_TYPE_RSSI, 'rssi')
         ])
         return
 
     if 'uptime' in discovery_info:
+        block = get_block_from_hass(hass, discovery_info)
         add_devices([
-            ShellyInfoSensor(dev, hass, SENSOR_TYPE_UPTIME, 'uptime')
+            ShellyInfoSensor(block, hass, SENSOR_TYPE_UPTIME, 'uptime')
         ])
         return
+
+    dev = get_device_from_hass(hass, discovery_info)
 
     if dev.device_type == "POWERMETER":
         add_devices([
@@ -81,11 +84,6 @@ class ShellySensor(ShellyDevice, Entity):
 
         self._state = None
         self.update()
-
-    def _updated(self):
-        """Receive events when the switch state changed (by mobile,
-        switch etc)"""
-        self.schedule_update_ha_state(True)
 
     @property
     def state(self):
@@ -118,7 +116,7 @@ class ShellySensor(ShellyDevice, Entity):
 
     def update(self):
         """Fetch new state data for this sensor."""
-        if hasattr(self._dev, 'sensor_values'):
+        if self._dev.sensor_values is not None:
             self._state = self._dev.sensor_values.get(self._sensor_name, None)
             self._battery = self._dev.sensor_values.get('battery', None)
 
@@ -130,23 +128,45 @@ class ShellySensor(ShellyDevice, Entity):
         return attr
 
 
-class ShellyInfoSensor(ShellySensor, Entity):
+class ShellyInfoSensor(ShellyBlock, Entity):
     """Representation of a Shelly Info Sensor."""
 
-    def __init__(self, dev, hass, sensor_type, sensor_name):
-        ShellySensor.__init__(self, dev, hass, sensor_type, sensor_name)
-
-    def _updated(self):
-        """Receive events when the switch state changed (by mobile,
-        switch etc)"""
-        self.schedule_update_ha_state(True)
+    def __init__(self, block, hass, sensor_type, sensor_name):
+        ShellyBlock.__init__(self, block, hass, "_" + sensor_name)
+        self.entity_id = "sensor" + self.entity_id
+        self._sensor_name = sensor_name
+        self._sensor_type = sensor_type
+        self._state = None
+        self.update()
 
     def update(self):
         """Fetch new state data for this sensor."""
-        if hasattr(self._dev, 'info_values'):
-            self._state = self._dev.info_values.get(self._sensor_name, None)
-        if hasattr(self._dev, 'sensor_values'):
-            self._battery = self._dev.sensor_values.get('battery', None)
+        if self._block.info_values is not None:
+            self._state = self._block.info_values.get(self._sensor_name, None)
+        #if self._block.sensor_values is not None:
+        #    self._battery = self._block.sensor_values.get('battery', None)
+
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        return self._state
+        
+    def quantity_name(self):
+        """Name of quantity."""
+        return SENSOR_TYPES[self._sensor_type][0] \
+            if self._sensor_type in SENSOR_TYPES else None
+
+    @property
+    def unit_of_measurement(self):
+        """Return the unit of measurement."""
+        return SENSOR_TYPES[self._sensor_type][1] \
+            if self._sensor_type in SENSOR_TYPES else None
+
+    @property
+    def icon(self):
+        """Return the icon."""
+        return SENSOR_TYPES[self._sensor_type][2] \
+            if self._sensor_type in SENSOR_TYPES else None
 
     @property
     def device_state_attributes(self):

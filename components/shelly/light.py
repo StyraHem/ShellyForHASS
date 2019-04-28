@@ -7,9 +7,12 @@ https://home-assistant.io/components/shelly/
 import logging
 
 from homeassistant.components.light import (
-    ATTR_BRIGHTNESS, ATTR_COLOR_TEMP, ATTR_EFFECT, ATTR_HS_COLOR,
+    ATTR_BRIGHTNESS, ATTR_COLOR_TEMP, ATTR_EFFECT, ATTR_HS_COLOR, 
+    ATTR_WHITE_VALUE,
     SUPPORT_BRIGHTNESS, SUPPORT_COLOR, SUPPORT_COLOR_TEMP, SUPPORT_EFFECT,
-    Light)
+    SUPPORT_WHITE_VALUE,
+    Light
+)
 import homeassistant.util.color as color_util
 from homeassistant.util.color import (
     color_temperature_kelvin_to_mired as kelvin_to_mired,
@@ -69,11 +72,6 @@ class ShellyLight(ShellyDevice, Light):
         self._state = None
         self.update()
 
-    def _updated(self):
-        """Receive events when the switch state changed (by mobile,
-        switch etc)"""
-        self.schedule_update_ha_state(True)
-
     @property
     def is_on(self):
         return self._state
@@ -97,16 +95,11 @@ class ShellyRGB(ShellyDevice, Light):
         ShellyDevice.__init__(self, dev, hass)
         self._state = None
         self._brightness = None
+        self._white_value = None
         self._rgb = None
         self._mode = None
         self._temp = None
         self.update()
-
-    def _updated(self):
-        """Receive events when the light state changed (by mobile,
-        switch etc)"""
-        if self.entity_id is not None:
-            self.schedule_update_ha_state(True)
 
     @property
     def supported_features(self):
@@ -117,6 +110,8 @@ class ShellyRGB(ShellyDevice, Light):
             features = features | SUPPORT_COLOR_TEMP
         if self._dev.support_effects:
             features = features | SUPPORT_EFFECT
+        if self._dev.support_white_value:
+            features = features | SUPPORT_WHITE_VALUE
         return features
 
     @property
@@ -130,6 +125,11 @@ class ShellyRGB(ShellyDevice, Light):
         return int(self._brightness * 2.55)
 
     @property
+    def white_value(self):
+        """Return the white value of this light between 0..255."""
+        return int(self._white_value)
+
+    @property
     def is_on(self):
         """Return status of light"""
         return self._state
@@ -141,9 +141,13 @@ class ShellyRGB(ShellyDevice, Light):
         temp = None
         effect_nr = None
         mode = None
+        white_value = None
 
         if ATTR_BRIGHTNESS in kwargs:
             brightness = int(kwargs[ATTR_BRIGHTNESS] / 2.55)
+        
+        if ATTR_WHITE_VALUE in kwargs:
+            white_value = int(kwargs[ATTR_WHITE_VALUE])
 
         if ATTR_HS_COLOR in kwargs:
             red, green, blue = \
@@ -164,7 +168,7 @@ class ShellyRGB(ShellyDevice, Light):
                 effect_nr = effect['effect']
 
         self._dev.turn_on(brightness=brightness, rgb=rgb, temp=temp, mode=mode,
-                          effect=effect_nr)
+                          effect=effect_nr, white_value=white_value)
 
     def turn_off(self, **_kwargs):
         """Turn off light"""
@@ -175,6 +179,7 @@ class ShellyRGB(ShellyDevice, Light):
         self._state = self._dev.state
         self._rgb = self._dev.rgb
         self._brightness = self._dev.brightness
+        self._white_value = self._dev.white_value
         self._temp = self._dev.temp
         self._mode = self._dev.mode
 
