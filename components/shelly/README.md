@@ -8,10 +8,6 @@
 
 This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices are locally. You can use this plugin and continue to use Shelly Cloud and Shelly app in your mobile if you want.
 
-## Breaking changes
-
-- Change of parameter names in 0.0.5, see Configure below!
-
 ## Features
 
 - Automatically discover all Shelly devices
@@ -27,6 +23,7 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Version sensor to show version of component and pyShelly (0.0.4)
 - Device configuration (name, show switch as light) (0.0.4)
 - Discovery can be turned off (0.0.4)
+- Add switch for firmware update trigger, use with monster-card to show a list of devices to need to be update
 
 ## Devices supported
 
