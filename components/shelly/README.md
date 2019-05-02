@@ -4,7 +4,7 @@
 [![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20me%20a%20coffee-orange.svg?style=for-the-badge)](https://www.buymeacoffee.com/styrahem)
 
 ![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge)
-![version-wip](https://img.shields.io/badge/version-0.0.11-green.svg?style=for-the-badge)
+![version-wip](https://img.shields.io/badge/version-0.0.12-green.svg?style=for-the-badge)
 
 This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices are locally. You can use this plugin and continue to use Shelly Cloud and Shelly app in your mobile if you want.
 
@@ -28,14 +28,15 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 ## Devices supported
 
 - Shelly 1
+- Shelly 1 PM (no power meter, firmware bug)
 - Shelly 2 (relay or roller mode)
+- Shelly 2.5 (relay or roller mode)
 - Shelly 4
 - Shelly PLUG
 - Shelly BULB
 - Shelly RGBWW
 - Shelly RGBW2
 - Shelly H&T
-- Shelly 2.5
 - Shelly 2LED (not tested)
 - Shelly PLUG S (not tested)
 

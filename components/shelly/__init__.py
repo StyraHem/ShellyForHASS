@@ -18,7 +18,9 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.script import Script
 from homeassistant.util import slugify
 
-REQUIREMENTS = ['pyShelly==0.0.28']
+import time
+
+REQUIREMENTS = ['pyShelly==0.0.29']
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -45,7 +47,7 @@ SHELLY_CONFIG = 'shelly_cfg'
 SHELLY_DEVICE_ID = 'device_id'
 SHELLY_BLOCK_ID = 'block_id'
 
-__version__ = "0.0.11"
+__version__ = "0.0.12"
 VERSION = __version__
 
 DEVICE_SCHEMA = vol.Schema({
@@ -106,12 +108,14 @@ def get_device_from_hass(hass, discovery_info):
     device_key = discovery_info[SHELLY_DEVICE_ID]
     return hass.data[SHELLY_DEVICES][device_key]  
 
-def get_device_config(conf, device_id):
+def get_device_config(conf, device_id, device_id_2=None):
     """Get config for device."""
     device_conf_list = conf.get(CONF_DEVICES)
     for item in device_conf_list:
         if item[CONF_ID] == device_id:
             return item
+    if device_id_2 is not None:
+        return get_device_config(conf, device_id_2)
     return {}
 
 def setup(hass, config):
@@ -134,13 +138,20 @@ def setup(hass, config):
 
     def _block_updated(block):
         has_update = block.info_values.get('has_update', False)
-        print('YYYYYYYY')
 
+        #now = time.time()
+        #if block.id == "5DBDD5" and (now // 10) % 2 == 0:
+        #    has_update = True
+
+        update_switch = getattr(block, 'firmware_switch', None)
         if has_update:
-            conf = hass.data[SHELLY_CONFIG]
-            attr = {'firmware': True,
-                    SHELLY_BLOCK_ID : _get_block_key(block)}
-            discovery.load_platform(hass, 'switch', DOMAIN, attr, conf)
+            if update_switch is None:
+                config = hass.data[SHELLY_CONFIG]
+                attr = {'firmware': True,
+                        SHELLY_BLOCK_ID : _get_block_key(block)}
+                discovery.load_platform(hass, 'switch', DOMAIN, attr, config)
+        elif update_switch is not None:
+            update_switch.remove()
 
     def _block_added(block):
         block.cb_updated.append(_block_updated)
@@ -162,14 +173,13 @@ def setup(hass, config):
         device_key = _get_device_key(dev)
         attr = {SHELLY_DEVICE_ID : device_key}
 
-        device_config = get_device_config(conf, dev.id)
+        device_config = get_device_config(conf, dev.id, dev.block.id)
         if not discover and device_config == {}:
             return
 
         if dev.device_type == "ROLLER":
             discovery.load_platform(hass, 'cover', DOMAIN, attr, config)
         elif dev.device_type == "RELAY":
-            device_config = get_device_config(conf, dev.id)
             if device_config.get(CONF_LIGHT_SWITCH):
                 discovery.load_platform(hass, 'light', DOMAIN, attr, config)
             else:
@@ -228,7 +238,8 @@ class ShellyBlock(Entity):
     def __init__(self, block, hass, prefix=""):
         conf = hass.data[SHELLY_CONFIG]
         id_prefix = conf.get(CONF_OBJECT_ID_PREFIX)
-        self._unique_id = slugify(id_prefix + "_" + block.type + "_" + block.id + prefix)
+        self._unique_id = slugify(id_prefix + "_" + block.type + "_" +
+                                  block.id + prefix)
         self.entity_id = "." + self._unique_id
         self._name = block.type_name()
         if conf.get(CONF_SHOW_ID_IN_NAME):
@@ -239,18 +250,24 @@ class ShellyBlock(Entity):
         block.shelly_device = self
         device_config = get_device_config(conf, block.id)
         self._name = device_config.get(CONF_NAME, self._name)
-        self.xxxx = False
+                      
+        self._is_removed = False
 
     @property
     def name(self):
         """Return the display name of this device."""
         return self._name
 
-    def _updated(self, block):
+    def _updated(self, _block):
         """Receive events when the switch state changed (by mobile,
-        switch etc)"""        
-        if self.entity_id is not None:
+        switch etc)"""
+
+        if self.entity_id is not None and not self._is_removed:
             self.schedule_update_ha_state(True)
+
+    def remove(self):
+        self._is_removed = True
+        self._hass.add_job(self.async_remove)
 
 class ShellyDevice(Entity):
     """Base class for Shelly entities"""
@@ -267,7 +284,7 @@ class ShellyDevice(Entity):
         self._hass = hass
         self._dev.cb_updated.append(self._updated)
         dev.shelly_device = self
-        device_config = get_device_config(conf, dev.id)
+        device_config = get_device_config(conf, dev.id, dev.block.id)
         self._name = device_config.get(CONF_NAME, self._name)
 
     def _updated(self):
@@ -291,7 +308,7 @@ class ShellyDevice(Entity):
             attrs['rssi'] = self._dev.info_values.get('rssi', '-')
             attrs['ssid'] = self._dev.info_values.get('ssid', '-')
             attrs['uptime'] = self._dev.info_values.get('uptime')
-            attrs['has_update'] = self._dev.info_values.get('has_update', False)
+            attrs['has_fw_update'] = self._dev.info_values.get('has_update', False)
             attrs['fw_version'] = self._dev.info_values.get('fw_version')
             if self._dev.info_values.get('new_fw_version') is not None:
                 attrs['new_fw_version'] = self._dev.info_values.get(
