@@ -46,6 +46,8 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 
 Do you you have [Custom updater](https://github.com/custom-components/custom_updater) installed? Then you can use the service [custom_updater.install](https://github.com/custom-components/custom_updater/wiki/Services#install-element-cardcomponentpython_script) with the parameter {"element":"shelly"} to install Shelly.
 
+Custom updater also let you to upgrade to latest version. We recomend you to use this.
+
 ### Install manually
 
 1. Install this platform by creating a `custom_components` folder in the same folder as your configuration.yaml, if it doesn't already exist.
@@ -119,7 +121,7 @@ You can only specify one username and password for restrict login. If you enter 
 
 ### Restart Home Assistant
 
-Now you should restart Home Assistant to load shelly
+Now you should restart Home Assistant to load shelly. Some times you need to restart twice to get the required library pyShelly installed. You can see this error in the log file.
 
 Shelly will discover all devices on your LAN and show them as light, switch, sensor and cover in Home Assistant.
 
