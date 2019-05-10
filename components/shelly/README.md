@@ -174,7 +174,7 @@ Please give us feedback on info@styrahem.se or Facebook groups: [Shelly grupp (S
 
 ## Founder
 
-This plugin is created by the StyraHem.se, the Swedish distributor of Shelly. In Sweden you can bye Shellies from [StyraHem.se](https://www.styrahem.se/c/126/shelly) or any of the retailers like Kjell&Company.
+This plugin is created by the StyraHem.se, the Swedish distributor of Shelly. In Sweden you can buy Shellies from [StyraHem.se](https://www.styrahem.se/c/126/shelly) or any of the retailers like Kjell&Company.
 
 [![buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/styrahem)
 
