@@ -4,14 +4,14 @@
 [![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20me%20a%20coffee-orange.svg?style=for-the-badge)](https://www.buymeacoffee.com/styrahem)
 
 ![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge)
-![version-wip](https://img.shields.io/badge/version-0.0.12-green.svg?style=for-the-badge)
+![version-wip](https://img.shields.io/badge/version-0.0.13-green.svg?style=for-the-badge)
 
-This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices are locally. You can use this plugin and continue to use Shelly Cloud and Shelly app in your mobile if you want.
+This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices are locally. You can use this plugin and continue to use Shelly Cloud, MQTT and Shelly app in your mobile if you want.
 
 ## Features
 
 - Automatically discover all Shelly devices
-- Monitor status (state, temperature, humidity, power etc.)
+- Monitor status (state, temperature, humidity, power, rssi, ip, fw, battery, uptime etc.)
 - Control (turn on/off, dim, color, effects, up/down etc.)
 - Works with Shelly default settings, no extra configuration
 - Run locally, you don't have to add the device to Shelly Cloud
@@ -23,7 +23,7 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Version sensor to show version of component and pyShelly (0.0.4)
 - Device configuration (name, show switch as light) (0.0.4)
 - Discovery can be turned off (0.0.4)
-- Add switch for firmware update trigger, use with monster-card to show a list of devices to need to be update
+- Switch for firmware update trigger (use with monster-card to show a list of devices to need to be update, see examples below)
 
 ## Devices supported
 

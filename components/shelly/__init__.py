@@ -47,7 +47,7 @@ SHELLY_CONFIG = 'shelly_cfg'
 SHELLY_DEVICE_ID = 'device_id'
 SHELLY_BLOCK_ID = 'block_id'
 
-__version__ = "0.0.12"
+__version__ = "0.0.13"
 VERSION = __version__
 
 DEVICE_SCHEMA = vol.Schema({

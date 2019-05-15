@@ -23,6 +23,7 @@ SENSOR_TYPE_HUMIDITY = 'humidity'
 SENSOR_TYPE_POWER = 'watt'
 SENSOR_TYPE_RSSI = 'rssi'
 SENSOR_TYPE_UPTIME = 'uptime'
+SENSOR_TYPE_BATTERY = 'battery'
 
 SENSOR_TYPES = {
     SENSOR_TYPE_TEMPERATURE:
@@ -34,7 +35,9 @@ SENSOR_TYPES = {
     SENSOR_TYPE_RSSI:
         ['RSSI', 'dB', 'mdi:wifi', None],
     SENSOR_TYPE_UPTIME:
-        ['Uptime', 's', 'mdi:timer', None]
+        ['Uptime', 's', 'mdi:timer', None],
+    SENSOR_TYPE_BATTERY:
+        ['Battery', '%', 'mdi:battery-50', None]
 }
 
 def setup_platform(hass, _config, add_devices, discovery_info=None):
@@ -67,7 +70,8 @@ def setup_platform(hass, _config, add_devices, discovery_info=None):
     elif dev.device_type == "SENSOR":
         add_devices([
             ShellySensor(dev, hass, SENSOR_TYPE_TEMPERATURE, 'temperature'),
-            ShellySensor(dev, hass, SENSOR_TYPE_HUMIDITY, 'humidity')
+            ShellySensor(dev, hass, SENSOR_TYPE_HUMIDITY, 'humidity'),
+            ShellySensor(dev, hass, SENSOR_TYPE_BATTERY, 'battery')
         ])
 
 class ShellySensor(ShellyDevice, Entity):
