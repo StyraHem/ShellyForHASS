@@ -1,0 +1,8 @@
+{
+  "domain": "shelly",
+  "name": "Shelly",
+  "documentation": "https://github.com/StyraHem/hass/tree/master/components/shelly",
+  "dependencies": [],
+  "codeowners": ["@StyraHem"],
+  "requirements": ["pyShelly==0.0.29"]
+}
