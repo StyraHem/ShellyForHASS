@@ -12,7 +12,7 @@ from homeassistant.const import (DEVICE_CLASS_HUMIDITY,
                                  TEMP_CELSIUS, POWER_WATT)
 from homeassistant.helpers.entity import Entity
 
-from . import (CONF_OBJECT_ID_PREFIX, SHELLY_CONFIG,
+from . import (CONF_OBJECT_ID_PREFIX, CONF_POWER_DECIMALS, SHELLY_CONFIG,
                ShellyDevice, get_device_from_hass,
                ShellyBlock, get_block_from_hass)
 
@@ -85,6 +85,7 @@ class ShellySensor(ShellyDevice, Entity):
         self._sensor_type = sensor_type
         self._sensor_name = sensor_name
         self._battery = None
+        self._config = hass.data[SHELLY_CONFIG]
 
         self._state = None
         self.update()
@@ -122,6 +123,13 @@ class ShellySensor(ShellyDevice, Entity):
         """Fetch new state data for this sensor."""
         if self._dev.sensor_values is not None:
             self._state = self._dev.sensor_values.get(self._sensor_name, None)
+            power_decimals = self._config.get(CONF_POWER_DECIMALS, None)
+            if self._state is not None and self._sensor_type == SENSOR_TYPE_POWER and power_decimals is not None:
+                if power_decimals > 0:
+                    self._state = round(self._state, power_decimals)
+                elif power_decimals == 0:
+                    self._state = round(self._state)
+
             self._battery = self._dev.sensor_values.get('battery', None)
 
     @property

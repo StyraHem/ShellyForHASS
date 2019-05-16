@@ -106,6 +106,7 @@ shelly:
 | scan_interval          | Update frequency for additional information                                                            | 60      | 0.0.6-  |
 | wifi_sensor            | Add extra sensor for wifi signal of each device. Requires `additional_information` to be `True`    | False   | 0.0.6-  |
 | uptime_sensor          | Add extra sensor for device uptime of each devivce. Requires `additional_information` to be `True` | False   | 0.0.6-  |
+| power_decimals         | Round power sensor values to the given number of decimals                                          |         | 0.0.14- |
 
 #### Device configuration
 
