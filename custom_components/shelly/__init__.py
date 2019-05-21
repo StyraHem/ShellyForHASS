@@ -34,6 +34,7 @@ CONF_SHOW_ID_IN_NAME = 'show_id_in_name'
 CONF_UPTIME_SENSOR = 'uptime_sensor'
 CONF_VERSION = 'version'
 CONF_WIFI_SENSOR = 'wifi_sensor'
+CONF_POWER_DECIMALS = 'power_decimals'
 
 DEFAULT_IGMPFIX = False
 DEFAULT_DISCOVERY = True
@@ -79,7 +80,8 @@ CONFIG_SCHEMA = vol.Schema({
         vol.Optional(CONF_ADDITIONAL_INFO,
                      default=True): cv.boolean,
         vol.Optional(CONF_SCAN_INTERVAL,
-                     default=DEFAULT_SCAN_INTERVAL): cv.time_period
+                     default=DEFAULT_SCAN_INTERVAL): cv.time_period,
+        vol.Optional(CONF_POWER_DECIMALS): cv.positive_int
     })
 }, extra=vol.ALLOW_EXTRA)
 
