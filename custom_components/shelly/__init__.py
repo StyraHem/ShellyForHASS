@@ -20,7 +20,7 @@ from homeassistant.util import slugify
 
 import time
 
-REQUIREMENTS = ['pyShelly==0.0.29']
+REQUIREMENTS = ['pyShelly==0.0.30']
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -47,7 +47,7 @@ SHELLY_CONFIG = 'shelly_cfg'
 SHELLY_DEVICE_ID = 'device_id'
 SHELLY_BLOCK_ID = 'block_id'
 
-__version__ = "0.0.13"
+__version__ = "0.0.14"
 VERSION = __version__
 
 DEVICE_SCHEMA = vol.Schema({
@@ -184,7 +184,7 @@ def setup(hass, config):
                 discovery.load_platform(hass, 'light', DOMAIN, attr, config)
             else:
                 discovery.load_platform(hass, 'switch', DOMAIN, attr, config)
-        elif dev.device_type == "SENSOR" or dev.device_type == "POWERMETER":
+        elif dev.device_type in ["SENSOR","POWERMETER","INFOSENSOR"]:
             discovery.load_platform(hass, 'sensor', DOMAIN, attr, config)
         elif dev.device_type == "LIGHT":
             discovery.load_platform(hass, 'light', DOMAIN, attr, config)
@@ -219,8 +219,9 @@ def setup(hass, config):
     hass.bus.listen_once(EVENT_HOMEASSISTANT_STOP, stop_shelly)
 
     def update_status_information():
-        for _, block in pys.blocks.items():
-            block.update_status_information()
+        pys.update_status_information()
+        #for _, block in pys.blocks.items():
+        #    block.update_status_information()
 
     async def update_domain_callback(_now):
         """Update the Shelly status information"""
@@ -287,7 +288,7 @@ class ShellyDevice(Entity):
         device_config = get_device_config(conf, dev.id, dev.block.id)
         self._name = device_config.get(CONF_NAME, self._name)
 
-    def _updated(self):
+    def _updated(self, _block):
         """Receive events when the switch state changed (by mobile,
         switch etc)"""
         if self.entity_id is not None:
@@ -305,6 +306,10 @@ class ShellyDevice(Entity):
                  'shelly_type': self._dev.type_name(),
                  'shelly_id': self._dev.id}
         if self._dev.info_values is not None:
+            def set_attr(name):
+                value = self._dev.info_values.get(name)
+                if value is not None:
+                    attrs[name] = value
             attrs['rssi'] = self._dev.info_values.get('rssi', '-')
             attrs['ssid'] = self._dev.info_values.get('ssid', '-')
             attrs['uptime'] = self._dev.info_values.get('uptime')
@@ -313,6 +318,10 @@ class ShellyDevice(Entity):
             if self._dev.info_values.get('new_fw_version') is not None:
                 attrs['new_fw_version'] = self._dev.info_values.get(
                     'new_fw_version')
+            attrs['cloud_connected'] = self._dev.info_values.get('cloud_connected')            
+            set_attr('temperature')
+            set_attr('over_temperature')
+            set_attr('over_power')
         return attrs
 
     @property

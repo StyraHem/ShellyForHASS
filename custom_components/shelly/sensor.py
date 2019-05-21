@@ -73,6 +73,10 @@ def setup_platform(hass, _config, add_devices, discovery_info=None):
             ShellySensor(dev, hass, SENSOR_TYPE_HUMIDITY, 'humidity'),
             ShellySensor(dev, hass, SENSOR_TYPE_BATTERY, 'battery')
         ])
+    elif dev.device_type == "INFOSENSOR":
+        add_devices([
+            ShellyInfoSensor(dev, hass, SENSOR_TYPE_TEMPERATURE, 'temperature')
+        ])
 
 class ShellySensor(ShellyDevice, Entity):
     """Representation of a Shelly Sensor."""

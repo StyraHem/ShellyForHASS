@@ -1,16 +1,16 @@
 {
     "shelly": {
-        "version": "0.0.13",
-        "updated_at": "2019-05-15",
+        "version": "0.0.14",
+        "updated_at": "2019-05-21",
         "local_location": "/custom_components/shelly/__init__.py",
-        "remote_location": "https://raw.githubusercontent.com/StyraHem/hass/master/components/shelly/__init__.py",
-        "visit_repo": "https://github.com/StyraHem/hass/tree/master/components/shelly",
-        "changelog": "https://github.com/StyraHem/hass/tree/master/components/shelly",
+        "remote_location": "https://raw.githubusercontent.com/StyraHem/hass/master/custom_components/shelly/__init__.py",
+        "visit_repo": "https://github.com/StyraHem/hass/tree/master/custom_components/shelly",
+        "changelog": "https://github.com/StyraHem/hass/tree/master/custom_components/shelly",
         "resources": [
-            "https://raw.githubusercontent.com/StyraHem/hass/master/components/shelly/cover.py",
-            "https://raw.githubusercontent.com/StyraHem/hass/master/components/shelly/light.py",
-            "https://raw.githubusercontent.com/StyraHem/hass/master/components/shelly/sensor.py",
-            "https://raw.githubusercontent.com/StyraHem/hass/master/components/shelly/switch.py"
+            "https://raw.githubusercontent.com/StyraHem/hass/master/custom_components/shelly/cover.py",
+            "https://raw.githubusercontent.com/StyraHem/hass/master/custom_components/shelly/light.py",
+            "https://raw.githubusercontent.com/StyraHem/hass/master/custom_components/shelly/sensor.py",
+            "https://raw.githubusercontent.com/StyraHem/hass/master/custom_components/shelly/switch.py"
         ]
     }
 }
