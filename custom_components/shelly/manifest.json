@@ -1,7 +1,7 @@
 {
   "domain": "shelly",
   "name": "Shelly smart home",
-  "documentation": "https://github.com/StyraHem/hass/blob/master/custom_components/shelly/README.md",
+  "documentation": "https://github.com/StyraHem/ShellyForHASS/blob/master/custom_components/shelly/README.md",
   "dependencies": [],
   "codeowners": ["@hakana","@StyraHem"],
   "requirements": ["pyShelly==0.0.30"]
