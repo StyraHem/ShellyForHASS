@@ -51,7 +51,7 @@ Custom updater also let you to upgrade to latest version. We recomend you to use
 ### Install manually
 
 1. Install this platform by creating a `custom_components` folder in the same folder as your configuration.yaml, if it doesn't already exist.
-2. Create another folder `shelly` in the `custom_components` folder. Copy all 5 Python (.py) files into the `shelly` folder. Use `raw version` if you copy and paste the files from the browser.
+2. Create another folder `shelly` in the `custom_components` folder. Copy all 5 Python (.py) files from custom_components into the `shelly` folder. Use `raw version` if you copy and paste the files from the browser.
 
 ## Configure
 
