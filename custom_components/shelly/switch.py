@@ -40,7 +40,7 @@ class ShellySwitch(ShellyDevice, SwitchDevice):
     def current_power_w(self):
         """Return the current power usage in W."""
         if hasattr(self._dev, 'sensorValues'):
-            return self._dev.sensorValues['watt']
+            return self._dev.sensorValues['consumption']
         return None
 
     @property

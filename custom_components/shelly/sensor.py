@@ -18,12 +18,17 @@ from . import (CONF_OBJECT_ID_PREFIX, CONF_POWER_DECIMALS, SHELLY_CONFIG,
 
 _LOGGER = logging.getLogger(__name__)
 
-SENSOR_TYPE_TEMPERATURE = 'temp'
+SENSOR_TYPE_TEMPERATURE = 'temperature'
 SENSOR_TYPE_HUMIDITY = 'humidity'
-SENSOR_TYPE_POWER = 'watt'
+SENSOR_TYPE_POWER = 'consumtion'
 SENSOR_TYPE_RSSI = 'rssi'
 SENSOR_TYPE_UPTIME = 'uptime'
 SENSOR_TYPE_BATTERY = 'battery'
+SENSOR_TYPE_OVER_POWER = 'over_power'
+SENSOR_TYPE_DEVICE_TEMP = 'device_temp'
+SENSOR_TYPE_OVER_TEMP = 'over_temp'
+SENSOR_TYPE_CLOUD_STATUS = 'cloud_status'
+SENSOR_TYPE_MQTT_CONNECTED = 'mqtt_connected'
 
 SENSOR_TYPES = {
     SENSOR_TYPE_TEMPERATURE:
@@ -31,13 +36,23 @@ SENSOR_TYPES = {
     SENSOR_TYPE_HUMIDITY:
         ['Humidity', '%', None, DEVICE_CLASS_HUMIDITY],
     SENSOR_TYPE_POWER:
-        ['Power', POWER_WATT, None, None],
+        ['Consumption', POWER_WATT, None, None],
     SENSOR_TYPE_RSSI:
         ['RSSI', 'dB', 'mdi:wifi', None],
     SENSOR_TYPE_UPTIME:
         ['Uptime', 's', 'mdi:timer', None],
     SENSOR_TYPE_BATTERY:
-        ['Battery', '%', 'mdi:battery-50', None]
+        ['Battery', '%', 'mdi:battery-50', None],
+    SENSOR_TYPE_OVER_POWER:
+        ['Over power', '', 'mdi:alert', None],
+    SENSOR_TYPE_DEVICE_TEMP:
+        ['Device temperature', TEMP_CELSIUS, "mdi:oil-temperature", None],
+    SENSOR_TYPE_OVER_TEMP:
+        ['Over temperature', '', 'mdi:alert', None],
+    SENSOR_TYPE_CLOUD_STATUS:
+        ['Cloud status', '', 'mdi:transit-connection-variant', None],
+    SENSOR_TYPE_MQTT_CONNECTED:
+        ['MQTT connected', '', 'mdi:transit-connection-variant', None]
 }
 
 def setup_platform(hass, _config, add_devices, discovery_info=None):
@@ -47,36 +62,32 @@ def setup_platform(hass, _config, add_devices, discovery_info=None):
                                    discovery_info.get('pyShellyVersion'))])
         return
 
-    if 'rssi' in discovery_info:
+    if 'sensor_type' in discovery_info:        
+        sensor_type = discovery_info['sensor_type']
         block = get_block_from_hass(hass, discovery_info)
-        add_devices([
-            ShellyInfoSensor(block, hass, SENSOR_TYPE_RSSI, 'rssi')
-        ])
-        return
-
-    if 'uptime' in discovery_info:
-        block = get_block_from_hass(hass, discovery_info)
-        add_devices([
-            ShellyInfoSensor(block, hass, SENSOR_TYPE_UPTIME, 'uptime')
-        ])
+        if block is not None:
+            add_devices([ShellyInfoSensor(block, hass, sensor_type, sensor_type)])
+        else:
+            dev = get_device_from_hass(hass, discovery_info)
+            add_devices([ShellyInfoSensor(dev, hass, sensor_type, sensor_type)])
         return
 
     dev = get_device_from_hass(hass, discovery_info)
 
     if dev.device_type == "POWERMETER":
         add_devices([
-            ShellySensor(dev, hass, SENSOR_TYPE_POWER, 'watt'),
+            ShellySensor(dev, hass, SENSOR_TYPE_POWER, 'consumtion'),
         ])
     elif dev.device_type == "SENSOR":
         add_devices([
             ShellySensor(dev, hass, SENSOR_TYPE_TEMPERATURE, 'temperature'),
             ShellySensor(dev, hass, SENSOR_TYPE_HUMIDITY, 'humidity'),
-            ShellySensor(dev, hass, SENSOR_TYPE_BATTERY, 'battery')
+            #ShellySensor(dev, hass, SENSOR_TYPE_BATTERY, 'battery')
         ])
-    elif dev.device_type == "INFOSENSOR":
-        add_devices([
-            ShellyInfoSensor(dev, hass, SENSOR_TYPE_TEMPERATURE, 'temperature')
-        ])
+    # elif dev.device_type == "INFOSENSOR":
+    #     add_devices([
+    #         ShellyInfoSensor(dev, hass, SENSOR_TYPE_TEMPERATURE, 'temperature')
+    #     ])
 
 class ShellySensor(ShellyDevice, Entity):
     """Representation of a Shelly Sensor."""
@@ -137,31 +148,30 @@ class ShellySensor(ShellyDevice, Entity):
                     self._state = round(self._state)
             self._battery = self._dev.sensor_values.get('battery', None)
 
-    @property
-    def device_state_attributes(self):
-        attr = super(ShellySensor, self).device_state_attributes
-        if self._battery is not None:
-            attr["battery"] = str(self._battery) + '%'
-        return attr
+    #@property
+    #def device_state_attributes(self):
+    #    attr = super(ShellySensor, self).device_state_attributes
+    #    if self._battery is not None:
+    #        attr["battery"] = str(self._battery) + '%'
+    #    return attr
 
 
 class ShellyInfoSensor(ShellyBlock, Entity):
     """Representation of a Shelly Info Sensor."""
 
     def __init__(self, block, hass, sensor_type, sensor_name):
-        ShellyBlock.__init__(self, block, hass, "_" + sensor_name)
+        ShellyBlock.__init__(self, block, hass, "_" + sensor_name + "_attr")
         self.entity_id = "sensor" + self.entity_id
         self._sensor_name = sensor_name
         self._sensor_type = sensor_type
         self._state = None
+        self._name += " - " + self.quantity_name()
         self.update()
 
     def update(self):
         """Fetch new state data for this sensor."""
         if self._block.info_values is not None:
             self._state = self._block.info_values.get(self._sensor_name, None)
-        #if self._block.sensor_values is not None:
-        #    self._battery = self._block.sensor_values.get('battery', None)
 
     @property
     def state(self):
