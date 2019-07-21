@@ -25,7 +25,7 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Device configuration (name, show switch as light) (0.0.4)
 - Discovery can be turned off (0.0.4)
 - Switch for firmware update trigger (use with monster-card to show a list of devices to need to be update, see examples below)
-- Support proxy to allow Shelly devices in other sub net / vlan
+- Support proxy to allow Shelly devices in other sub-net / vlan
 
 ## Devices supported
 
@@ -175,6 +175,11 @@ You can only specify one username and password for restrict login. If you enter 
 Now you should restart Home Assistant to load shelly. Some times you need to restart twice to get the required library pyShelly installed. You can see this error in the log file.
 
 Shelly will discover all devices on your LAN and show them as light, switch, sensor and cover in Home Assistant.
+
+### Proxy for VLAN or different network
+If you running Shellies on different VLAN or network there is a [proxy.py](https://github.com/StyraHem/ShellyForHASS/blob/master/util/proxy.py) that can be used to forward CoAP messages to ShellyForHASS plugin.
+
+Update the script with the ip-address of your HASS installation and run it on a computer/router etc that are connected to same nettwork as your Shellies.
 
 ## Monster card
 You can use the component with [monstercard](https://github.com/ciotlosm/custom-lovelace/tree/master/monster-card) to present data in a nice way.
