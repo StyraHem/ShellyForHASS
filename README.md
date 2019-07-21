@@ -28,7 +28,7 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Device configuration (name, show switch as light) (0.0.4)
 - Discovery can be turned off (0.0.4)
 - Switch for firmware update trigger (use with monster-card to show a list of devices to need to be update, see examples below)
-- Support proxy to allow Shelly devices in other LANs (VLAN).
+- Support proxy to allow Shelly devices in other LANs (0.0.15).
 
 ## Devices supported
 
