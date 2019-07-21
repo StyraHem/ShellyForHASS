@@ -1,4 +1,6 @@
-This is a plugin platform for Shelly smart home WiFI devices. The plugin communicate localy with the devices. 
+This is a plugin platform for Shelly smart home WiFI devices. The plugin communicate localy with the devices.
+
+![List](https://raw.githubusercontent.com/StyraHem/ShellyForHASS/master/images/intro.png)
 
 # Features
 - Support all Shelly devices (temperature & humidity, switche, RGB, effects etc)
