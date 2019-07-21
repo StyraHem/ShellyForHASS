@@ -141,6 +141,7 @@ shelly:
 | _uptime_sensor_        | Add extra sensor for device uptime of each devivce. Requires `additional_information` to be `True` | False   | 0.0.6 (deprecated)  |
 | power_decimals         | Round power sensor values to the given number of decimals                                          |         | 0.0.14- |
 | sensors                | A list with sensors to show for each device. See list below.                                        | power | 0.0.15- |
+| upgrade_switch         | Add firmware switches when upgrade needed.                                                           | True  | 0.0.15- |
 
 #### Device configuration
 
@@ -150,6 +151,7 @@ shelly:
 | name         | Specify if you want to set a name of the device                                           | My Cool Shelly |         |
 | light_switch | Show this switch as a light                                                               | True           |         |
 | sensors      | A list with sensors to show for each device. This will override the global sensors. See list below.  |                | 0.0.15- |
+| upgrade_switch | Add firmware switches when upgrade needed. Override global configuration.               | False    | 0.0.15- |
 
 #### Sensors
 | Sensor       | Description                           | Values / Unit     |
