@@ -38,6 +38,7 @@ CONF_VERSION = 'version'
 CONF_POWER_DECIMALS = 'power_decimals'
 CONF_SENSORS = 'sensors'
 CONF_UPGRADE_SWITCH = 'upgrade_switch'
+CONF_LOCAL_PY_SHELLY = 'local_py_shelly'
 
 CONF_WIFI_SENSOR = 'wifi_sensor' #deprecated
 CONF_UPTIME_SENSOR = 'uptime_sensor' #deprecated
@@ -117,7 +118,9 @@ CONFIG_SCHEMA = vol.Schema({
                      default=True): cv.boolean,
         vol.Optional(CONF_SCAN_INTERVAL,
                      default=DEFAULT_SCAN_INTERVAL): cv.time_period,
-        vol.Optional(CONF_POWER_DECIMALS): cv.positive_int
+        vol.Optional(CONF_POWER_DECIMALS): cv.positive_int,        
+        vol.Optional(CONF_LOCAL_PY_SHELLY,
+                     default=False): cv.boolean,        
     })
 }, extra=vol.ALLOW_EXTRA)
 
@@ -197,11 +200,11 @@ def setup(hass, config):
     hass.data[SHELLY_CONFIG] = conf
     discover = conf.get(CONF_DISCOVERY)
 
-    #try:
-    from .pyShelly import pyShelly
-    _LOGGER.info("Loading local pyShelly")
-    #except ImportError:
-    #    from pyShelly import pyShelly
+    if conf.get(CONF_LOCAL_PY_SHELLY):
+        _LOGGER.info("Loading local pyShelly")
+        from .pyShelly import pyShelly
+    else:
+        from pyShelly import pyShelly
 
     hass.data[SHELLY_DEVICES] = DEVICES
     hass.data[SHELLY_BLOCKS] = BLOCKS

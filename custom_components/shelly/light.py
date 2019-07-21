@@ -27,15 +27,15 @@ EFFECT_COLOR = {'name': "Color", 'mode': 'color', 'effect': 0}
 EFFECT_METEOR = {'name': "Meteor Shower", 'effect': 1}
 # EFFECT_GRADUAL_C = { 'name':"Gradual Change (Color)"   , 'mode':'color', 'effect':2 }
 # EFFECT_GRADUAL_W = { 'name':"Gradual Change (White)"   , 'mode':'white', 'effect':2 }
-EFFECT_BREATH_C = {'name': "Breath (Color)", 'mode': 'color', 'effect': 3}
-EFFECT_BREATH_W = {'name': "Breath (White)", 'mode': 'white', 'effect': 3}
+# EFFECT_BREATH_C = {'name': "Breath (Color)", 'mode': 'color', 'effect': 3}
+# EFFECT_BREATH_W = {'name': "Breath (White)", 'mode': 'white', 'effect': 3}
 EFFECT_FLASH_C = {'name': "Flash (Color)", 'mode': 'color', 'effect': 4}
 EFFECT_FLASH_W = {'name': "Flash (White)", 'mode': 'white', 'effect': 4}
 EFFECT_ONOFF_C = {'name': "On/Off gradual (Color)", 'mode': 'color',
                   'effect': 5}
 EFFECT_ONOFF_W = {'name': "On/Off gradual (White)", 'mode': 'white',
                   'effect': 5}
-EFFECT_REDGREEN = {'name': "Red/Green Change", 'effect': 6}
+# EFFECT_REDGREEN = {'name': "Red/Green Change", 'effect': 6}
 
 EFFECT_LIST = [
     EFFECT_WHITE,
@@ -43,13 +43,13 @@ EFFECT_LIST = [
     EFFECT_METEOR,
     # EFFECT_GRADUAL_C,
     # EFFECT_GRADUAL_W,
-    EFFECT_BREATH_C,
-    EFFECT_BREATH_W,
+    # EFFECT_BREATH_C,
+    # EFFECT_BREATH_W,
     EFFECT_FLASH_C,
     EFFECT_FLASH_W,
     EFFECT_ONOFF_C,
     EFFECT_ONOFF_W,
-    EFFECT_REDGREEN
+    #EFFECT_REDGREEN
 ]
 
 SUPPORT_SHELLYRGB_COLOR = (SUPPORT_BRIGHTNESS | SUPPORT_COLOR)
