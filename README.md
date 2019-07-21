@@ -4,7 +4,7 @@
 [![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20me%20a%20coffee-orange.svg?style=for-the-badge)](https://www.buymeacoffee.com/styrahem)
 
 ![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge)
-![version-wip](https://img.shields.io/badge/version-0.0.14-green.svg?style=for-the-badge)
+![version-wip](https://img.shields.io/badge/version-0.0.15-green.svg?style=for-the-badge)
 
 This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices are locally. You can use this plugin and continue to use Shelly Cloud, MQTT and Shelly app in your mobile if you want.
 
@@ -13,6 +13,7 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Automatically discover all Shelly devices
 - Monitor status (state, temperature, humidity, power, rssi, ip, fw, battery, uptime etc.)
 - Control (turn on/off, dim, color, effects, up/down etc.)
+- Sensors for most of the attributes
 - Works with Shelly default settings, no extra configuration
 - Run locally, you don't have to add the device to Shelly Cloud
 - Coexist with Shelly Cloud so you can continue to use Shelly Cloud and Shelly apps
@@ -24,6 +25,7 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Device configuration (name, show switch as light) (0.0.4)
 - Discovery can be turned off (0.0.4)
 - Switch for firmware update trigger (use with monster-card to show a list of devices to need to be update, see examples below)
+- Support proxy to allow Shelly devices in other sub-net / vlan
 
 ## Devices supported
 
@@ -33,16 +35,21 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Shelly 2.5 (relay or roller mode)
 - Shelly 4
 - Shelly PLUG
+- Shelly PLUG S
 - Shelly BULB
 - Shelly RGBWW
 - Shelly RGBW2
 - Shelly H&T
 - Shelly 2LED (not tested)
-- Shelly PLUG S (not tested)
 
 ## Installation
 
-### Install with Custom Updater
+### Install with HACS  (recomended)
+
+Do you you have [HACS](https://community.home-assistant.io/t/custom-component-hacs) installed? Just search for Shelly and install it direct from HACS. HACS will keep track of updates and you can easly upgrade Shelly to latest version.
+
+### Install with Custom Updater (deprecated)
+_We recomend you use HACS as Customer Updater is deprecated._
 
 Do you you have [Custom updater](https://github.com/custom-components/custom_updater) installed? Then you can use the service [custom_updater.install](https://github.com/custom-components/custom_updater/wiki/Services#install-element-cardcomponentpython_script) with the parameter {"element":"shelly"} to install Shelly.
 
@@ -61,6 +68,8 @@ It is very easy, just add `shelly` this to your `configuration.yaml`
 
 ### Examples
 
+#### Default with discovery and power sensors
+
 ```yaml
 shelly:
 ```
@@ -71,11 +80,16 @@ shelly:
 shelly:
   discovery: false
   version: true #add version sensor
+  sensors:
+    - all
   devices:      #devices to be added
     - id: 420FC7
     - id: 13498B-1   #Shelly 2, Id + Channel number
     - id: 7BD5F3
       name: My cool plug   #set friendly name
+      sensors: #overide global (all)
+         - power
+         - device_temp
 ```
 
 #### With discovery - adjust some devices
@@ -83,6 +97,23 @@ shelly:
 ```yaml
 shelly:
   discovery: true  #add all devices (default)
+  sensors: #sensors to show
+    - rssi
+    - uptime
+  devices:  #configure devices
+    - id: 420FC7
+      light_switch: true  #add this switch as a light
+    - id: 7BD5F3
+      name: My cool plug #set friendly name
+```
+
+#### Sensor, global and per device
+
+```yaml
+shelly:
+  discovery: true  #add all devices (default)
+  sensors:
+    - all #show all sensors
   devices:  #configure devices
     - id: 420FC7
       light_switch: true  #add this switch as a light
@@ -104,17 +135,35 @@ shelly:
 | igmp_fix               | Enable sending out IP_ADD_MEMBERSHIP every minute                                                      | False   | 0.0.5-  |
 | additional_information | Retrieve additional information (rssi, ssid, uptime, ..)                                               | True    | 0.0.6-  |
 | scan_interval          | Update frequency for additional information                                                            | 60      | 0.0.6-  |
-| wifi_sensor            | Add extra sensor for wifi signal of each device. Requires `additional_information` to be `True`    | False   | 0.0.6-  |
-| uptime_sensor          | Add extra sensor for device uptime of each devivce. Requires `additional_information` to be `True` | False   | 0.0.6-  |
+| _wifi_sensor_          | Add extra sensor for wifi signal of each device. Requires `additional_information` to be `True`.  | False   | 0.0.6 (deprecated) |
+| _uptime_sensor_        | Add extra sensor for device uptime of each devivce. Requires `additional_information` to be `True` | False   | 0.0.6 (deprecated)  |
 | power_decimals         | Round power sensor values to the given number of decimals                                          |         | 0.0.14- |
+| sensors                | A list with sensors to show for each device. See list below.                                        | power | 0.0.15- |
 
 #### Device configuration
 
-| Parameter    | Description                                     | Example        |
-|--------------|-------------------------------------------------|----------------|
-| id           | Device id, same as in mobile app                | 421FC7         |
-| name         | Specify if you want to set a name of the device | My Cool Shelly |
-| light_switch | Show this switch as a light                     | True           |
+| Parameter    | Description                                                                               | Example        | Version |
+|--------------|-------------------------------------------------------------------------------------------|----------------|---------|
+| id           | Device id, same as in mobile app                                                          | 421FC7         |         |
+| name         | Specify if you want to set a name of the device                                           | My Cool Shelly |         |
+| light_switch | Show this switch as a light                                                               | True           |         |
+| sensors      | A list with sensors to show for each device. This will override the global sensors. See list below.  |                | 0.0.15- |
+
+#### Sensors
+| Sensor       | Description                           | Values / Unit     |
+|--------------|---------------------------------------|-------------------|
+| all          | Show all available sensors            |                   |
+| power        | Show power consumtion sensors         | W                 |
+| rssi         | Show WiFi quality sensors             | dB                |
+| uptime       | Show uptime sensors                   | s                 |
+| over_power   | Show over power sensors               | True, False       |
+| device_temp  | Show device inner temperature sensors | °C                |
+| over_temp    | Show over temperature sensors         | True, False       |
+| cloud        | Show cloud status                     | disabled, disconnected, connected |
+| mqtt         | Show mqtt connection state            | True, False       |
+| battery      | Show battery percentage (H&T)         | %                 |
+
+All of the sensors (not power) require additional_information to be True to work.
 
 If you disable discovery only Shellies under devices will be added.
 
@@ -125,6 +174,11 @@ You can only specify one username and password for restrict login. If you enter 
 Now you should restart Home Assistant to load shelly. Some times you need to restart twice to get the required library pyShelly installed. You can see this error in the log file.
 
 Shelly will discover all devices on your LAN and show them as light, switch, sensor and cover in Home Assistant.
+
+### Proxy for VLAN or different network
+If you running Shellies on different VLAN or network there is a [proxy.py](https://github.com/StyraHem/ShellyForHASS/blob/master/util/proxy.py) that can be used to forward CoAP messages to ShellyForHASS plugin.
+
+Update the script with the ip-address of your HASS installation and run it on a computer/router etc that are connected to same nettwork as your Shellies.
 
 ## Monster card
 You can use the component with [monstercard](https://github.com/ciotlosm/custom-lovelace/tree/master/monster-card) to present data in a nice way.
@@ -175,9 +229,13 @@ Please give us feedback on info@styrahem.se or Facebook groups: [Shelly grupp (S
 
 ## Founder
 
-This plugin is created by the StyraHem.se, the Swedish distributor of Shelly. In Sweden you can buy Shellies from [StyraHem.se](https://www.styrahem.se/c/126/shelly) or any of the retailers like Kjell&Company.
+This plugin is created by the StyraHem.se, the Swedish distributor of Shelly. In Sweden you can buy Shellies from [StyraHem.se](https://www.styrahem.se/c/126/shelly) or any of the retailers like m.nu, Kjell&Company etc.
 
 [![buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/styrahem)
+
+## Thank to
+- [@tefinger](https://github.com/tefinger) that have test and add functinallity to improve this coponent.
+- Allterco that have developed all nice Shellies and also response quickly on requests and bugfixes.
 
 ## Screen shots
 
