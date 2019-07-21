@@ -6,7 +6,7 @@
 ![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge)
 ![version-wip](https://img.shields.io/badge/version-0.0.15-green.svg?style=for-the-badge)
 
-This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices are locally. You can use this plugin and continue to use Shelly Cloud, MQTT and Shelly app in your mobile if you want.
+This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices are locally. You can use this plugin and continue to use Shelly Cloud, MQTT and Shelly app in your mobile if you want. A proxy can also be used to include Shellies on different LAN's.
 
 ## Features
 
@@ -25,7 +25,7 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Device configuration (name, show switch as light) (0.0.4)
 - Discovery can be turned off (0.0.4)
 - Switch for firmware update trigger (use with monster-card to show a list of devices to need to be update, see examples below)
-- Support proxy to allow Shelly devices in other sub-net / vlan
+- Support proxy to allow Shelly devices in other LANs (VLAN).
 
 ## Devices supported
 
@@ -178,7 +178,7 @@ Shelly will discover all devices on your LAN and show them as light, switch, sen
 ### Proxy for VLAN or different network
 If you running Shellies on different VLAN or network there is a [proxy.py](https://github.com/StyraHem/ShellyForHASS/blob/master/util/proxy.py) that can be used to forward CoAP messages to ShellyForHASS plugin.
 
-Update the script with the ip-address of your HASS installation and run it on a computer/router etc that are connected to same nettwork as your Shellies.
+Update the script with the ip-address of your HASS installation and run it on a computer/router etc that are connected to same nettwork as your Shellies. Firewall and routing must be enabled, TCP 80 HASS -> Shelly and UDP 5683 Shelly -> HASS.
 
 ## Monster card
 You can use the component with [monstercard](https://github.com/ciotlosm/custom-lovelace/tree/master/monster-card) to present data in a nice way.
