@@ -1,3 +1,7 @@
+{% if prerelease %}
+## This is a beta version!
+{% endif %}
+
 This is a plugin platform for Shelly smart home WiFI devices. The plugin communicate localy with the devices.
 
 ![List](https://raw.githubusercontent.com/StyraHem/ShellyForHASS/master/images/intro.png)
