@@ -46,8 +46,7 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 
 ### Install with HACS  (recomended)
 
-Do you you have [HACS](https://community.home-assistant.io/t/custom-component-hacs) installed? Shelly is added as a component as default so just search for it in the store in HACS.
-HACS keep track of updates and you can easly upgrade Shelly to latest version.
+Do you you have [HACS](https://community.home-assistant.io/t/custom-component-hacs) installed? Just search for Shelly and install it direct from HACS. HACS will keep track of updates and you can easly upgrade Shelly to latest version.
 
 ### Install with Custom Updater (deprecated)
 _We recomend you use HACS as Customer Updater is deprecated._
