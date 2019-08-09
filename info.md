@@ -11,7 +11,7 @@ This is a plugin platform for Shelly smart home WiFi devices. The plugin communi
 - Only local communication, can work in parallel with MQTT or Shelly Cloud for mobile access
 - Proxy support, if Shellies on different LAN than HASS
 - Zero configuratiion with automatic discovery of all Shellies
-- Immediate respose, uses CoAP events from Shellies
+- Immediate response, uses CoAP events from Shellies
 - Sensors for all information (battery, power, rssi, uptime, over power/temp, device temperaure, cloud & mqtt connectivity)
 
 # Links
