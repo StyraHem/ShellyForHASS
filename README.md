@@ -7,7 +7,7 @@
 ![version-wip](https://img.shields.io/badge/latest_version-0.0.15-green.svg?style=for-the-badge)
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-green.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 
-This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices are locally. You can use this plugin and continue to use Shelly Cloud, MQTT and Shelly app in your mobile if you want. A proxy can also be used to include Shellies on different LAN's.
+This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices is local. You can use this plugin and continue to use Shelly Cloud, MQTT and Shelly app in your mobile if you want. A proxy can also be used to include Shellies on different LAN's.
 
 ![List](https://raw.githubusercontent.com/StyraHem/ShellyForHASS/master/images/intro.png)
 
@@ -18,12 +18,12 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Control (turn on/off, dim, color, effects, up/down etc.)
 - Sensors for most of the attributes
 - Works with Shelly default settings, no extra configuration
-- Run locally, you don't have to add the device to Shelly Cloud
-- Coexist with Shelly Cloud so you can continue to use Shelly Cloud and Shelly apps
+- Runs locally, you don't have to add the device to Shelly Cloud
+- Coexists with Shelly Cloud so you can continue to use Shelly Cloud and Shelly apps
 - Using CoAP and REST for communication (not MQTT)
 - Working with both static or dynamic ip addresses on your devices
 - Using events so very fast response (no polling)
-- Support restric login with username and password (0.0.3-)
+- Support restrict login with username and password (0.0.3-)
 - Version sensor to show version of component and pyShelly (0.0.4)
 - Device configuration (name, show switch as light) (0.0.4)
 - Discovery can be turned off (0.0.4)
@@ -67,7 +67,7 @@ Custom updater also let you to upgrade to latest version. We recomend you to use
 
 When you have installed shelly and make sure it exists under `custom_components` folder it is time to configure it in Home Assistant.
 
-It is very easy, just add `shelly` this to your `configuration.yaml`
+It is very easy, just add `shelly:` to your `configuration.yaml`
 
 ### Examples
 
@@ -134,7 +134,7 @@ shelly:
 | version                | Add a version sensor to with version of component and pyShelly                                         | False   | 0.0.4-  |
 | devices                | Config for each device, se next table for more info                                                    |         | 0.0.4-  |
 | show_id_in_name        | Add Shelly Device id to the end of the name                                                            | False   | 0.0.5-  |
-| id_prefix              | Shange the prefix of the entity id and unique id of the device                                         | shelly  | 0.0.5-  |
+| id_prefix              | Change the prefix of the entity id and unique id of the device                                         | shelly  | 0.0.5-  |
 | igmp_fix               | Enable sending out IP_ADD_MEMBERSHIP every minute                                                      | False   | 0.0.5-  |
 | additional_information | Retrieve additional information (rssi, ssid, uptime, ..)                                               | True    | 0.0.6-  |
 | scan_interval          | Update frequency for additional information                                                            | 60      | 0.0.6-  |
@@ -172,7 +172,7 @@ All of the sensors (not power) require additional_information to be True to work
 
 If you disable discovery only Shellies under devices will be added.
 
-You can only specify one username and password for restrict login. If you enter username and password, access to devices without restrict login will continue to work. Different logins to different deveces will be added later.
+You can only specify one username and password for restrict login. If you enter username and password, access to devices without restrict login will continue to work. Different logins to different devices will be added later.
 
 ### Restart Home Assistant
 
