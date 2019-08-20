@@ -17,6 +17,8 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Monitor status (state, temperature, humidity, power, rssi, ip, fw, battery, uptime etc.)
 - Control (turn on/off, dim, color, effects, up/down etc.)
 - Sensors for most of the attributes
+- Switch sensors to show status of switch button (0.0.16)
+- Detection of click and multiple quick clicks by events
 - Works with Shelly default settings, no extra configuration
 - Runs locally, you don't have to add the device to Shelly Cloud
 - Coexists with Shelly Cloud so you can continue to use Shelly Cloud and Shelly apps
@@ -124,6 +126,26 @@ shelly:
       name: My cool plug #set friendly name
 ```
 
+#### Events
+
+```yaml
+automation:
+  - alias: "Shelly turn off and then on quickly, any switch"
+    trigger:
+      platform: event
+      event_type: shelly_switch_click
+      event_data:
+        click_cnt: 2
+        state: True
+  - alias: "Shelly double click (momentary) on a specific switch"
+    trigger:
+      platform: event
+      event_type: shelly_switch_click
+      event_data:
+        entity_id: sensor.shelly_shsw_1_XXXXXX_switch
+        click_cnt: 4        
+```
+
 ### Parameters
 
 | Parameter              | Description                                                                                            | Default | Version |
@@ -143,6 +165,7 @@ shelly:
 | power_decimals         | Round power sensor values to the given number of decimals                                          |         | 0.0.14- |
 | sensors                | A list with sensors to show for each device. See list below.                                        | power | 0.0.15- |
 | upgrade_switch         | Add firmware switches when upgrade needed.                                                           | True  | 0.0.15- |
+| unavailable_after_sec  | Number of seconds before the device will be unavialable      | 60 | 0.0.16- |
 
 #### Device configuration
 
@@ -153,6 +176,7 @@ shelly:
 | light_switch | Show this switch as a light                                                               | True           |         |
 | sensors      | A list with sensors to show for each device. This will override the global sensors. See list below.  |                | 0.0.15- |
 | upgrade_switch | Add firmware switches when upgrade needed. Override global configuration.               | False    | 0.0.15- |
+| unavailable_after_sec  | Overide number of seconds before the device will be unavialable.    | 120 | 0.0.16- | 
 
 #### Sensors
 | Sensor       | Description                           | Values / Unit     |
@@ -167,12 +191,30 @@ shelly:
 | cloud        | Show cloud status                     | disabled, disconnected, connected |
 | mqtt         | Show mqtt connection state            | True, False       |
 | battery      | Show battery percentage (H&T)         | %                 |
+| switch       | Show state of the actual switch button| True, False       |
 
 All of the sensors (not power) require additional_information to be True to work.
 
 If you disable discovery only Shellies under devices will be added.
 
 You can only specify one username and password for restrict login. If you enter username and password, access to devices without restrict login will continue to work. Different logins to different devices will be added later.
+
+### Events 
+[Events added in release 0.0.16]
+#### shelly_switch_click
+When the switch sensor is enabled an event will be sent for multiple clicks on the switch button. This can be used to trig automations for double clicks etc.
+
+```json
+{
+    "event_type": "shelly_switch_click",
+    "data": {
+        "entity_id": "sensor.shelly_shsw_1_xxxxxx_switch",
+        "click_cnt": 4,
+        "state": true
+}
+```
+| click_cnt | Number of clicks, 2 = turn back and forth quickly, 4 = double click on momentary switch. |
+| state     | Current state of the switch, can be uset to distinct on-off-on from off-on-off for example. |
 
 ### Restart Home Assistant
 
