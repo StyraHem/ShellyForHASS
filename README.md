@@ -173,6 +173,7 @@ automation:
 |--------------|-------------------------------------------------------------------------------------------|----------------|---------|
 | id           | Device id, same as in mobile app                                                          | 421FC7         |         |
 | name         | Specify if you want to set a name of the device                                           | My Cool Shelly |         |
+| entity_id    | Override the auto generated part of entity_id, like shsw_1_500500                         | bedlamp        | 0.0.16- |
 | light_switch | Show this switch as a light                                                               | True           |         |
 | sensors      | A list with sensors to show for each device. This will override the global sensors. See list below.  |                | 0.0.15- |
 | upgrade_switch | Add firmware switches when upgrade needed. Override global configuration.               | False    | 0.0.15- |
