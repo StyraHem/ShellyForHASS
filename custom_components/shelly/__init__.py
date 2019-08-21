@@ -20,11 +20,11 @@ from homeassistant.util import slugify
 
 import time
 
-REQUIREMENTS = ['pyShelly==0.0.33']
+REQUIREMENTS = ['pyShelly==0.0.34']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.0.17"
+__version__ = "0.0.18"
 VERSION = __version__
 
 DOMAIN = 'shelly'
