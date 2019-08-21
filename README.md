@@ -39,13 +39,14 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Shelly 2 (relay or roller mode)
 - Shelly 2.5 (relay or roller mode)
 - Shelly 4
+- Shelly BULB
+- Shelly EM
+- Shelly H&T
 - Shelly PLUG
 - Shelly PLUG S
-- Shelly BULB
 - Shelly RGBWW
 - Shelly RGBW2
-- Shelly H&T
-- Shelly 2LED (not tested)
+- Shelly 2LED (not verified)
 
 ## Installation
 
@@ -214,7 +215,9 @@ When the switch sensor is enabled an event will be sent for multiple clicks on t
         "state": true
 }
 ```
-| click_cnt | Number of clicks, 2 = turn back and forth quickly, 4 = double click on momentary switch. |
+| Parameter | Description                                                                                 |
+|-----------|---------------------------------------------------------------------------------------------|
+| click_cnt | Number of clicks, 2 = turn back and forth quickly, 4 = double click on momentary switch.    |
 | state     | Current state of the switch, can be uset to distinct on-off-on from off-on-off for example. |
 
 ### Restart Home Assistant
@@ -282,7 +285,7 @@ This plugin is created by the StyraHem.se, the Swedish distributor of Shelly. In
 [![buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/styrahem)
 
 ## Thanks to
-- [@tefinger](https://github.com/tefinger) that have test and add functinallity to improve this coponent.
+- [@tefinger](https://github.com/tefinger) that have test and add functinallity to improve this component.
 - Allterco that have developed all nice Shellies and also response quickly on requests and bugfixes.
 
 ## Screen shots
