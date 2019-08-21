@@ -39,13 +39,14 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Shelly 2 (relay or roller mode)
 - Shelly 2.5 (relay or roller mode)
 - Shelly 4
+- Shelly BULB
+- Shelly EM
+- Shelly H&T
 - Shelly PLUG
 - Shelly PLUG S
-- Shelly BULB
 - Shelly RGBWW
 - Shelly RGBW2
-- Shelly H&T
-- Shelly 2LED (not tested)
+- Shelly 2LED (not verified)
 
 ## Installation
 
