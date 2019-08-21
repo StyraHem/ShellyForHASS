@@ -5,8 +5,9 @@
 
 ![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge)
 ![version-wip](https://img.shields.io/badge/latest_version-0.0.16-green.svg?style=for-the-badge)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-green.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 
-This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices are locally. You can use this plugin and continue to use Shelly Cloud, MQTT and Shelly app in your mobile if you want. A proxy can also be used to include Shellies on different LAN's.
+This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices is local. You can use this plugin and continue to use Shelly Cloud, MQTT and Shelly app in your mobile if you want. A proxy can also be used to include Shellies on different LAN's.
 
 ![List](https://raw.githubusercontent.com/StyraHem/ShellyForHASS/master/images/intro.png)
 
@@ -16,18 +17,20 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Monitor status (state, temperature, humidity, power, rssi, ip, fw, battery, uptime etc.)
 - Control (turn on/off, dim, color, effects, up/down etc.)
 - Sensors for most of the attributes
+- Switch sensors to show status of switch button (0.0.16)
+- Detection of click and multiple quick clicks by events
 - Works with Shelly default settings, no extra configuration
-- Run locally, you don't have to add the device to Shelly Cloud
-- Coexist with Shelly Cloud so you can continue to use Shelly Cloud and Shelly apps
+- Runs locally, you don't have to add the device to Shelly Cloud
+- Coexists with Shelly Cloud so you can continue to use Shelly Cloud and Shelly apps
 - Using CoAP and REST for communication (not MQTT)
 - Working with both static or dynamic ip addresses on your devices
 - Using events so very fast response (no polling)
-- Support restric login with username and password (0.0.3-)
+- Support restrict login with username and password (0.0.3-)
 - Version sensor to show version of component and pyShelly (0.0.4)
 - Device configuration (name, show switch as light) (0.0.4)
 - Discovery can be turned off (0.0.4)
 - Switch for firmware update trigger (use with monster-card to show a list of devices to need to be update, see examples below)
-- Support proxy to allow Shelly devices in other LANs (VLAN).
+- Support proxy to allow Shelly devices in other LANs (0.0.15).
 
 ## Devices supported
 
@@ -66,7 +69,7 @@ Custom updater also let you to upgrade to latest version. We recomend you to use
 
 When you have installed shelly and make sure it exists under `custom_components` folder it is time to configure it in Home Assistant.
 
-It is very easy, just add `shelly` this to your `configuration.yaml`
+It is very easy, just add `shelly:` to your `configuration.yaml`
 
 ### Examples
 
@@ -123,6 +126,26 @@ shelly:
       name: My cool plug #set friendly name
 ```
 
+#### Events
+
+```yaml
+automation:
+  - alias: "Shelly turn off and then on quickly, any switch"
+    trigger:
+      platform: event
+      event_type: shelly_switch_click
+      event_data:
+        click_cnt: 2
+        state: True
+  - alias: "Shelly double click (momentary) on a specific switch"
+    trigger:
+      platform: event
+      event_type: shelly_switch_click
+      event_data:
+        entity_id: sensor.shelly_shsw_1_XXXXXX_switch
+        click_cnt: 4        
+```
+
 ### Parameters
 
 | Parameter              | Description                                                                                            | Default | Version |
@@ -133,7 +156,7 @@ shelly:
 | version                | Add a version sensor to with version of component and pyShelly                                         | False   | 0.0.4-  |
 | devices                | Config for each device, se next table for more info                                                    |         | 0.0.4-  |
 | show_id_in_name        | Add Shelly Device id to the end of the name                                                            | False   | 0.0.5-  |
-| id_prefix              | Shange the prefix of the entity id and unique id of the device                                         | shelly  | 0.0.5-  |
+| id_prefix              | Change the prefix of the entity id and unique id of the device                                         | shelly  | 0.0.5-  |
 | igmp_fix               | Enable sending out IP_ADD_MEMBERSHIP every minute                                                      | False   | 0.0.5-  |
 | additional_information | Retrieve additional information (rssi, ssid, uptime, ..)                                               | True    | 0.0.6-  |
 | scan_interval          | Update frequency for additional information                                                            | 60      | 0.0.6-  |
@@ -142,6 +165,7 @@ shelly:
 | power_decimals         | Round power sensor values to the given number of decimals                                          |         | 0.0.14- |
 | sensors                | A list with sensors to show for each device. See list below.                                        | power | 0.0.15- |
 | upgrade_switch         | Add firmware switches when upgrade needed.                                                           | True  | 0.0.15- |
+| unavailable_after_sec  | Number of seconds before the device will be unavialable      | 60 | 0.0.16- |
 
 #### Device configuration
 
@@ -149,9 +173,11 @@ shelly:
 |--------------|-------------------------------------------------------------------------------------------|----------------|---------|
 | id           | Device id, same as in mobile app                                                          | 421FC7         |         |
 | name         | Specify if you want to set a name of the device                                           | My Cool Shelly |         |
+| entity_id    | Override the auto generated part of entity_id, like shsw_1_500500                         | bedlamp        | 0.0.16- |
 | light_switch | Show this switch as a light                                                               | True           |         |
 | sensors      | A list with sensors to show for each device. This will override the global sensors. See list below.  |                | 0.0.15- |
 | upgrade_switch | Add firmware switches when upgrade needed. Override global configuration.               | False    | 0.0.15- |
+| unavailable_after_sec  | Overide number of seconds before the device will be unavialable.    | 120 | 0.0.16- | 
 
 #### Sensors
 | Sensor       | Description                           | Values / Unit     |
@@ -166,12 +192,30 @@ shelly:
 | cloud        | Show cloud status                     | disabled, disconnected, connected |
 | mqtt         | Show mqtt connection state            | True, False       |
 | battery      | Show battery percentage (H&T)         | %                 |
+| switch       | Show state of the actual switch button| True, False       |
 
 All of the sensors (not power) require additional_information to be True to work.
 
 If you disable discovery only Shellies under devices will be added.
 
-You can only specify one username and password for restrict login. If you enter username and password, access to devices without restrict login will continue to work. Different logins to different deveces will be added later.
+You can only specify one username and password for restrict login. If you enter username and password, access to devices without restrict login will continue to work. Different logins to different devices will be added later.
+
+### Events 
+[Events added in release 0.0.16]
+#### shelly_switch_click
+When the switch sensor is enabled an event will be sent for multiple clicks on the switch button. This can be used to trig automations for double clicks etc.
+
+```json
+{
+    "event_type": "shelly_switch_click",
+    "data": {
+        "entity_id": "sensor.shelly_shsw_1_xxxxxx_switch",
+        "click_cnt": 4,
+        "state": true
+}
+```
+| click_cnt | Number of clicks, 2 = turn back and forth quickly, 4 = double click on momentary switch. |
+| state     | Current state of the switch, can be uset to distinct on-off-on from off-on-off for example. |
 
 ### Restart Home Assistant
 
