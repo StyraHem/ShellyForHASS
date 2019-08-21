@@ -214,7 +214,9 @@ When the switch sensor is enabled an event will be sent for multiple clicks on t
         "state": true
 }
 ```
-| click_cnt | Number of clicks, 2 = turn back and forth quickly, 4 = double click on momentary switch. |
+| Parameter | Description                                                                                 |
+|-----------|---------------------------------------------------------------------------------------------|
+| click_cnt | Number of clicks, 2 = turn back and forth quickly, 4 = double click on momentary switch.    |
 | state     | Current state of the switch, can be uset to distinct on-off-on from off-on-off for example. |
 
 ### Restart Home Assistant
