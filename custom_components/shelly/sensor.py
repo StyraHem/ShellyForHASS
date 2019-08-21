@@ -6,10 +6,13 @@ https://home-assistant.io/components/shelly/
 """
 
 import logging
+import time
+from threading import Timer
 
 from homeassistant.const import (DEVICE_CLASS_HUMIDITY,
                                  DEVICE_CLASS_TEMPERATURE,
-                                 TEMP_CELSIUS, POWER_WATT)
+                                 TEMP_CELSIUS, POWER_WATT,
+                                 STATE_ON, STATE_OFF)
 from homeassistant.helpers.entity import Entity
 
 from . import (CONF_OBJECT_ID_PREFIX, CONF_POWER_DECIMALS, SHELLY_CONFIG,
@@ -20,7 +23,7 @@ _LOGGER = logging.getLogger(__name__)
 
 SENSOR_TYPE_TEMPERATURE = 'temperature'
 SENSOR_TYPE_HUMIDITY = 'humidity'
-SENSOR_TYPE_POWER = 'consumtion'
+SENSOR_TYPE_POWER = 'consumption'
 SENSOR_TYPE_RSSI = 'rssi'
 SENSOR_TYPE_UPTIME = 'uptime'
 SENSOR_TYPE_BATTERY = 'battery'
@@ -29,6 +32,7 @@ SENSOR_TYPE_DEVICE_TEMP = 'device_temp'
 SENSOR_TYPE_OVER_TEMP = 'over_temp'
 SENSOR_TYPE_CLOUD_STATUS = 'cloud_status'
 SENSOR_TYPE_MQTT_CONNECTED = 'mqtt_connected'
+SENSOR_TYPE_SWITCH = 'switch'
 
 SENSOR_TYPES = {
     SENSOR_TYPE_TEMPERATURE:
@@ -52,7 +56,7 @@ SENSOR_TYPES = {
     SENSOR_TYPE_CLOUD_STATUS:
         ['Cloud status', '', 'mdi:transit-connection-variant', None],
     SENSOR_TYPE_MQTT_CONNECTED:
-        ['MQTT connected', '', 'mdi:transit-connection-variant', None]
+        ['MQTT connected', '', 'mdi:transit-connection-variant', None]    
 }
 
 def setup_platform(hass, _config, add_devices, discovery_info=None):
@@ -76,7 +80,7 @@ def setup_platform(hass, _config, add_devices, discovery_info=None):
 
     if dev.device_type == "POWERMETER":
         add_devices([
-            ShellySensor(dev, hass, SENSOR_TYPE_POWER, 'consumtion'),
+            ShellySensor(dev, hass, SENSOR_TYPE_POWER, 'consumption'),
         ])
     elif dev.device_type == "SENSOR":
         add_devices([
@@ -84,6 +88,11 @@ def setup_platform(hass, _config, add_devices, discovery_info=None):
             ShellySensor(dev, hass, SENSOR_TYPE_HUMIDITY, 'humidity'),
             #ShellySensor(dev, hass, SENSOR_TYPE_BATTERY, 'battery')
         ])
+    elif dev.device_type == "SWITCH":
+        add_devices([
+            ShellySwitch(dev, hass),
+        ])
+
     # elif dev.device_type == "INFOSENSOR":
     #     add_devices([
     #         ShellyInfoSensor(dev, hass, SENSOR_TYPE_TEMPERATURE, 'temperature')
@@ -93,7 +102,7 @@ class ShellySensor(ShellyDevice, Entity):
     """Representation of a Shelly Sensor."""
 
     def __init__(self, dev, hass, sensor_type, sensor_name):
-        """Initialize an ShellySwitch."""
+        """Initialize an ShellySensor."""
         ShellyDevice.__init__(self, dev, hass)
         self._unique_id += "_" + sensor_name
         self.entity_id += "_" + sensor_name
@@ -155,7 +164,63 @@ class ShellySensor(ShellyDevice, Entity):
     #        attr["battery"] = str(self._battery) + '%'
     #    return attr
 
+class ShellySwitch(ShellyDevice, Entity):
+    """Representation of a Shelly Swwitch state."""
 
+    def __init__(self, dev, hass):
+        """Initialize an ShellySwitch."""
+        ShellyDevice.__init__(self, dev, hass)
+        self._unique_id += "_switch"
+        self.entity_id += "_switch"
+        self._state = None
+        self._click_delay = 500
+        self._last_state_change = 0
+        self._click_cnt = 0
+        self._click_timer = None
+        self.update()
+
+    @property
+    def state(self):
+        """Return the state of the switch."""
+        return STATE_ON if self._state else STATE_OFF
+
+    @property
+    def icon(self):
+        """Return the button icon."""
+        return "mdi:hockey-puck"
+
+    def _millis(self):
+        return int(round(time.time() * 1000))
+
+    def _click_timeout(self):
+        self._send_click_event()     
+        self._click_cnt = 0
+        self._click_timer = None
+
+    def _send_click_event(self):
+        self._hass.bus.fire('shelly_switch_click', \
+                            {'entity_id' : self.entity_id,
+                             'click_cnt': self._click_cnt,
+                             'state' : self._state })
+
+    def update(self):
+        """Fetch new state data for this switch."""        
+        if self._dev.sensor_values is not None:
+            ms = self._millis()
+            new_state = self._dev.sensor_values.get("switch", None) != 0
+            if self._state is not None and new_state != self._state:                
+                if self._click_timer is not None:
+                    self._click_timer.cancel()
+                diff = ms - self._last_state_change 
+                if diff < self._click_delay or self._click_cnt == 0:
+                    self._click_cnt += 1
+                else:
+                    self._click_cnt = 1
+                self._last_state_change = ms                
+                self._click_timer = Timer(self._click_delay/1000, self._click_timeout)
+                self._click_timer.start()
+            self._state = new_state
+                
 class ShellyInfoSensor(ShellyBlock, Entity):
     """Representation of a Shelly Info Sensor."""
 
@@ -195,9 +260,9 @@ class ShellyInfoSensor(ShellyBlock, Entity):
         return SENSOR_TYPES[self._sensor_type][2] \
             if self._sensor_type in SENSOR_TYPES else None
 
-    @property
-    def device_state_attributes(self):
-        return None
+    #@property
+    #def device_state_attributes(self):
+    #    return None
 
 
 class ShellyVersion(Entity):

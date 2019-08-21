@@ -4,6 +4,7 @@ This is a plugin platform for Shelly smart home WiFI devices. The plugin communi
 
 # Features
 - Support all Shelly devices (temperature & humidity, switche, RGB, effects etc)
+- Events for multiple clicks, double clicks etc.
 - Only local communication, can work in parallel with MQTT or Shelly Cloud for mobile access
 - Proxy support, if Shellies on different LAN then HASS
 - Zero configuratiion with automaticly discovery of all Shellies
