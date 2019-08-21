@@ -285,7 +285,7 @@ This plugin is created by the StyraHem.se, the Swedish distributor of Shelly. In
 [![buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/styrahem)
 
 ## Thanks to
-- [@tefinger](https://github.com/tefinger) that have test and add functinallity to improve this coponent.
+- [@tefinger](https://github.com/tefinger) that have test and add functinallity to improve this component.
 - Allterco that have developed all nice Shellies and also response quickly on requests and bugfixes.
 
 ## Screen shots
