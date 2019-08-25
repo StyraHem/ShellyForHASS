@@ -24,7 +24,7 @@ REQUIREMENTS = ['pyShelly==0.0.34']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.0.18"
+__version__ = "0.0.19"
 VERSION = __version__
 
 DOMAIN = 'shelly'
@@ -416,8 +416,8 @@ class ShellyDevice(Entity):
     def __init__(self, dev, hass):
         conf = hass.data[SHELLY_CONFIG]
         id_prefix = conf.get(CONF_OBJECT_ID_PREFIX)
-        self._unique_id = slugify(id_prefix + "_" + dev.type + "_" + dev.id)
-        self.entity_id = "." + self._unique_id
+        self._unique_id = id_prefix + "_" + dev.type + "_" + dev.id
+        self.entity_id = "." + slugify(self._unique_id)
         entity_id = _get_specific_config(conf, CONF_ENTITY_ID , 
                                                     None, dev.id, dev.block.id)
         if entity_id is not None:
