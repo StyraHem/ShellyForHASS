@@ -20,11 +20,11 @@ from homeassistant.util import slugify
 
 import time
 
-REQUIREMENTS = ['pyShelly==0.0.34']
+REQUIREMENTS = ['pyShelly==0.0.35']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.0.19"
+__version__ = "0.0.20"
 VERSION = __version__
 
 DOMAIN = 'shelly'
@@ -151,8 +151,14 @@ def get_block_from_hass(hass, discovery_info):
         key = discovery_info[SHELLY_BLOCK_ID]
         return hass.data[SHELLY_BLOCKS][key] 
 
+def _dev_key(dev):
+    key = dev.id + "-" + dev.device_type   
+    if dev.device_sub_type is not None:
+        key += "-" + dev.device_sub_type
+    return key
+
 def _get_device_key(dev):
-    key = dev.id + dev.device_type
+    key = _dev_key(dev)
     if not key in DEVICES:
         DEVICES[key] = dev
     return key
@@ -270,6 +276,11 @@ def setup(hass, config):
             'discover': discover_block
         }
         
+        #Config block
+        if block.unavailable_after_sec is None:
+            block.unavailable_after_sec \
+                = _get_specific_config_root(conf, CONF_UNAVALABLE_AFTER_SEC,
+                                                block.id)
 
         #if conf.get(CONF_ADDITIONAL_INFO):
             #block.update_status_information()
@@ -313,7 +324,7 @@ def setup(hass, config):
     def _device_removed(dev, _code):
         dev.shelly_device.remove()
         try:
-            key = dev.id + dev.device_type
+            key = _dev_key(dev)
             del DEVICES[key]
         except KeyError:
             pass
@@ -377,8 +388,7 @@ class ShellyBlock(Entity):
         self.hass = hass
         self._block.cb_updated.append(self._updated)
         block.shelly_device = self
-        self._name = _get_specific_config(conf, CONF_NAME, self.name, block.id)
-              
+        self._name = _get_specific_config(conf, CONF_NAME, self.name, block.id)              
         self._is_removed = False
 
     @property
@@ -434,12 +444,6 @@ class ShellyDevice(Entity):
         self._sensor_conf = _get_sensor_config(conf, dev.id, dev.block.id)
 
         self._is_removed = False
-
-        #Config device
-        if dev.unavailable_after_sec is None:
-            dev.unavailable_after_sec \
-                = _get_specific_config_root(conf, CONF_UNAVALABLE_AFTER_SEC, 
-                                            dev.id, dev.block.id)
 
     def _updated(self, _block):
         """Receive events when the switch state changed (by mobile,

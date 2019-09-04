@@ -33,30 +33,36 @@ SENSOR_TYPE_OVER_TEMP = 'over_temp'
 SENSOR_TYPE_CLOUD_STATUS = 'cloud_status'
 SENSOR_TYPE_MQTT_CONNECTED = 'mqtt_connected'
 SENSOR_TYPE_SWITCH = 'switch'
+SENSOR_TYPE_FLOOD = 'flood'
+SENSOR_TYPE_DEFAULT = 'default'
 
-SENSOR_TYPES = {
+SENSOR_TYPES_CFG = {
+    SENSOR_TYPE_DEFAULT:
+        [None, None, None, None, None],
     SENSOR_TYPE_TEMPERATURE:
-        ['Temperature', TEMP_CELSIUS, None, DEVICE_CLASS_TEMPERATURE],
+        ['Temperature', TEMP_CELSIUS, None, DEVICE_CLASS_TEMPERATURE, None],
     SENSOR_TYPE_HUMIDITY:
-        ['Humidity', '%', None, DEVICE_CLASS_HUMIDITY],
+        ['Humidity', '%', None, DEVICE_CLASS_HUMIDITY, None],
     SENSOR_TYPE_POWER:
-        ['Consumption', POWER_WATT, None, None],
+        ['Consumption', POWER_WATT, None, None, None],
     SENSOR_TYPE_RSSI:
-        ['RSSI', 'dB', 'mdi:wifi', None],
+        ['RSSI', 'dB', 'mdi:wifi', None, None],
     SENSOR_TYPE_UPTIME:
-        ['Uptime', 's', 'mdi:timer', None],
+        ['Uptime', 's', 'mdi:timer', None, None],
     SENSOR_TYPE_BATTERY:
-        ['Battery', '%', 'mdi:battery-50', None],
+        ['Battery', '%', 'mdi:battery-50', None, None],
     SENSOR_TYPE_OVER_POWER:
-        ['Over power', '', 'mdi:alert', None],
+        ['Over power', '', 'mdi:alert', None, None],
     SENSOR_TYPE_DEVICE_TEMP:
-        ['Device temperature', TEMP_CELSIUS, "mdi:oil-temperature", None],
+        ['Device temperature', TEMP_CELSIUS, "mdi:oil-temperature", None, None],
     SENSOR_TYPE_OVER_TEMP:
-        ['Over temperature', '', 'mdi:alert', None],
+        ['Over temperature', '', 'mdi:alert', None, None],
     SENSOR_TYPE_CLOUD_STATUS:
-        ['Cloud status', '', 'mdi:transit-connection-variant', None],
+        ['Cloud status', '', 'mdi:transit-connection-variant', None, None],
     SENSOR_TYPE_MQTT_CONNECTED:
-        ['MQTT connected', '', 'mdi:transit-connection-variant', None]    
+        ['MQTT connected', '', 'mdi:transit-connection-variant', None, None],  
+    SENSOR_TYPE_FLOOD:
+        ['Flood', '', 'mdi:water', None, 'bool']
 }
 
 def setup_platform(hass, _config, add_devices, discovery_info=None):
@@ -83,26 +89,16 @@ def setup_platform(hass, _config, add_devices, discovery_info=None):
             ShellySensor(dev, hass, SENSOR_TYPE_POWER, 'consumption'),
         ])
     elif dev.device_type == "SENSOR":
-        add_devices([
-            ShellySensor(dev, hass, SENSOR_TYPE_TEMPERATURE, 'temperature'),
-            ShellySensor(dev, hass, SENSOR_TYPE_HUMIDITY, 'humidity'),
-            #ShellySensor(dev, hass, SENSOR_TYPE_BATTERY, 'battery')
-        ])
+        add_devices([ShellySensor(dev, hass, dev.sensor_type, dev.sensor_type)])
     elif dev.device_type == "SWITCH":
-        add_devices([
-            ShellySwitch(dev, hass),
-        ])
-
-    # elif dev.device_type == "INFOSENSOR":
-    #     add_devices([
-    #         ShellyInfoSensor(dev, hass, SENSOR_TYPE_TEMPERATURE, 'temperature')
-    #     ])
+        add_devices([ ShellySwitch(dev, hass) ])
 
 class ShellySensor(ShellyDevice, Entity):
     """Representation of a Shelly Sensor."""
 
     def __init__(self, dev, hass, sensor_type, sensor_name):
         """Initialize an ShellySensor."""
+        self._sensor_cfg = SENSOR_TYPES_CFG[SENSOR_TYPE_DEFAULT]
         ShellyDevice.__init__(self, dev, hass)
         self._unique_id += "_" + sensor_name
         self.entity_id += "_" + sensor_name
@@ -110,38 +106,37 @@ class ShellySensor(ShellyDevice, Entity):
         self._sensor_name = sensor_name
         self._battery = None
         self._config = hass.data[SHELLY_CONFIG]
-
         self._state = None
+        if self._sensor_type in SENSOR_TYPES_CFG:
+            self._sensor_cfg = SENSOR_TYPES_CFG[self._sensor_type]
         self.update()
 
     @property
     def state(self):
         """Return the state of the sensor."""
+        if self._sensor_cfg[4] == "bool":
+            return STATE_ON if self._state else STATE_OFF
         return self._state
 
     @property
     def quantity_name(self):
-        """Name of quantity."""
-        return SENSOR_TYPES[self._sensor_type][0] \
-            if self._sensor_type in SENSOR_TYPES else None
+        """Name of quantity."""        
+        return self._sensor_cfg[0]
 
     @property
     def unit_of_measurement(self):
         """Return the unit of measurement."""
-        return SENSOR_TYPES[self._sensor_type][1] \
-            if self._sensor_type in SENSOR_TYPES else None
+        return self._sensor_cfg[1]
 
     @property
     def icon(self):
         """Return the icon."""
-        return SENSOR_TYPES[self._sensor_type][2] \
-            if self._sensor_type in SENSOR_TYPES else None
+        return self._sensor_cfg[2]
 
     @property
     def device_class(self):
         """Return the device class."""
-        return SENSOR_TYPES[self._sensor_type][3] \
-            if self._sensor_type in SENSOR_TYPES else None
+        return self._sensor_cfg[3]
 
     def update(self):
         """Fetch new state data for this sensor."""
@@ -157,12 +152,6 @@ class ShellySensor(ShellyDevice, Entity):
                     self._state = round(self._state)
             self._battery = self._dev.sensor_values.get('battery', None)
 
-    #@property
-    #def device_state_attributes(self):
-    #    attr = super(ShellySensor, self).device_state_attributes
-    #    if self._battery is not None:
-    #        attr["battery"] = str(self._battery) + '%'
-    #    return attr
 
 class ShellySwitch(ShellyDevice, Entity):
     """Representation of a Shelly Swwitch state."""
@@ -225,10 +214,13 @@ class ShellyInfoSensor(ShellyBlock, Entity):
     """Representation of a Shelly Info Sensor."""
 
     def __init__(self, block, hass, sensor_type, sensor_name):
+        self._sensor_cfg = SENSOR_TYPES_CFG[SENSOR_TYPE_DEFAULT]
         ShellyBlock.__init__(self, block, hass, "_" + sensor_name + "_attr")
         self.entity_id = "sensor" + self.entity_id
         self._sensor_name = sensor_name
         self._sensor_type = sensor_type
+        if self._sensor_type in SENSOR_TYPES_CFG:
+            self._sensor_cfg = SENSOR_TYPES_CFG[self._sensor_type]
         self._state = None
         self._name += " - " + self.quantity_name()
         self.update()
@@ -245,20 +237,17 @@ class ShellyInfoSensor(ShellyBlock, Entity):
         
     def quantity_name(self):
         """Name of quantity."""
-        return SENSOR_TYPES[self._sensor_type][0] \
-            if self._sensor_type in SENSOR_TYPES else None
+        return self._sensor_cfg[0]
 
     @property
     def unit_of_measurement(self):
         """Return the unit of measurement."""
-        return SENSOR_TYPES[self._sensor_type][1] \
-            if self._sensor_type in SENSOR_TYPES else None
+        return self._sensor_cfg[1]
 
     @property
     def icon(self):
         """Return the icon."""
-        return SENSOR_TYPES[self._sensor_type][2] \
-            if self._sensor_type in SENSOR_TYPES else None
+        return self._sensor_cfg[2]
 
     #@property
     #def device_state_attributes(self):
