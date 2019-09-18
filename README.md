@@ -106,12 +106,13 @@ shelly:
 ```yaml
 shelly:
   discovery: true  #add all devices (default)
-  sensors: #sensors to show
+  sensors: #sensors to show, can be override on each device
     - rssi
     - uptime
   devices:  #configure devices
     - id: "420FC7"
       light_switch: true  #add this switch as a light
+      sensors: [ switch ] #Override the global sensor
     - id: "7BD5F3"
       name: My cool plug #set friendly name
 ```
