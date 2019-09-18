@@ -30,6 +30,8 @@ def setup_platform(hass, _config, add_devices, discovery_info=None):
     dev = get_device_from_hass(hass, discovery_info)
     if dev.device_type == "RELAY":
         add_devices([ShellyLight(dev, hass)])
+    elif dev.device_type == "DIMMER":
+        add_devices([ShellyDimmer(dev, hass)])
     else:
         add_devices([ShellyRGB(dev, hass)])
 
@@ -37,7 +39,7 @@ class ShellyLight(ShellyDevice, Light):
     """Representation of an Shelly Switch."""
 
     def __init__(self, dev, hass):
-        """Initialize an ShellySwitch."""
+        """Initialize an ShellyLight."""
         ShellyDevice.__init__(self, dev, hass)
         self._state = None
         self.update()
@@ -56,7 +58,44 @@ class ShellyLight(ShellyDevice, Light):
         """Fetch new state data for this light."""
         self._state = self._dev.state
 
+class ShellyDimmer(ShellyDevice, Light):
+    """Representation of an Shelly Dimmer."""
 
+    def __init__(self, dev, hass):
+        """Initialize an ShellyDimmer."""
+        ShellyDevice.__init__(self, dev, hass)
+        self._state = None
+        self._brightness = None
+        self.update()
+
+    @property
+    def supported_features(self):
+        """Flag supported features."""
+        return SUPPORT_BRIGHTNESS
+
+    @property
+    def is_on(self):
+        return self._state
+
+    def turn_on(self, **kwargs):
+        brightness = None
+        if ATTR_BRIGHTNESS in kwargs:
+            brightness = int(kwargs[ATTR_BRIGHTNESS] / 2.55)
+        self._dev.turn_on(brightness)
+
+    def turn_off(self, **kwargs):
+        self._dev.turn_off()
+
+    @property
+    def brightness(self):
+        """Return the brightness of the light."""
+        return int(self._brightness * 2.55)
+
+    def update(self):
+        """Fetch new state data for this light."""
+        self._state = self._dev.state
+        self._brightness = self._dev.brightness
+        
 class ShellyRGB(ShellyDevice, Light):
     """Representation of an Shelly Light."""
 

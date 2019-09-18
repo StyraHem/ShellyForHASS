@@ -20,11 +20,11 @@ from homeassistant.util import slugify
 
 import time
 
-REQUIREMENTS = ['pyShelly==0.0.35']
+REQUIREMENTS = ['pyShelly==0.1.0']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.0.20"
+__version__ = "0.1.0"
 VERSION = __version__
 
 DOMAIN = 'shelly'
@@ -171,8 +171,8 @@ def get_device_from_hass(hass, discovery_info):
 def _find_device_config(conf, id):
     device_conf_list = conf.get(CONF_DEVICES)
     for item in device_conf_list:
-            if item[CONF_ID] == id:
-                return item
+        if item[CONF_ID].upper() == id:
+            return item
     return None
 
 def _get_device_config(conf, id, id_2=None):
@@ -318,7 +318,7 @@ def setup(hass, config):
                 discovery.load_platform(hass, 'sensor', DOMAIN, attr, config)
         elif dev.device_type in ["SENSOR"]: #, "INFOSENSOR"]:            
             discovery.load_platform(hass, 'sensor', DOMAIN, attr, config)
-        elif dev.device_type == "LIGHT":
+        elif dev.device_type in ["LIGHT", "DIMMER"]:
             discovery.load_platform(hass, 'light', DOMAIN, attr, config)
 
     def _device_removed(dev, _code):
@@ -347,7 +347,7 @@ def setup(hass, config):
         attr = {'version': VERSION, 'pyShellyVersion': pys.version()}
         discovery.load_platform(hass, 'sensor', DOMAIN, attr, config)
 
-    def stop_shelly():
+    def stop_shelly(_):
         """Stop Shelly."""
         _LOGGER.info("Shutting down Shelly")
         pys.close()
@@ -381,6 +381,7 @@ class ShellyBlock(Entity):
         entity_id = _get_specific_config(conf, CONF_ENTITY_ID , None, block.id)
         if entity_id is not None:
             self.entity_id = "." + slugify(id_prefix + "_" + entity_id + prefix)
+            self._unique_id += "_" + slugify(entity_id)
         self._name = block.type_name()
         if conf.get(CONF_SHOW_ID_IN_NAME):
             self._name += " [" + block.id + "]"
@@ -432,11 +433,12 @@ class ShellyDevice(Entity):
                                                     None, dev.id, dev.block.id)
         if entity_id is not None:
             self.entity_id = "." + slugify(id_prefix + "_" + entity_id)
+            self._unique_id += "_" + slugify(entity_id)
         self._name = dev.type_name()
         if conf.get(CONF_SHOW_ID_IN_NAME):
             self._name += " [" + dev.id + "]"  # 'Test' #light.name
         self._dev = dev
-        self._hass = hass
+        self.hass = hass
         self._dev.cb_updated.append(self._updated)
         dev.shelly_device = self
         self._name = _get_specific_config(conf, CONF_NAME, self._name, dev.id, dev.block.id)
@@ -460,8 +462,8 @@ class ShellyDevice(Entity):
                         if SENSOR_TYPES[sensor].get('attr') == key:
                             attr = {'sensor_type':key,
                                     SHELLY_DEVICE_ID : _get_device_key(self._dev)}
-                            conf = self._hass.data[SHELLY_CONFIG]
-                            discovery.load_platform(self._hass, 'sensor',
+                            conf = self.hass.data[SHELLY_CONFIG]
+                            discovery.load_platform(self.hass, 'sensor',
                                                     DOMAIN, attr, conf)
     @property
     def name(self):

@@ -8,6 +8,7 @@ https://home-assistant.io/components/shelly/
 import logging
 import time
 from threading import Timer
+from homeassistant.util import slugify
 
 from homeassistant.const import (DEVICE_CLASS_HUMIDITY,
                                  DEVICE_CLASS_TEMPERATURE,
@@ -187,7 +188,7 @@ class ShellySwitch(ShellyDevice, Entity):
         self._click_timer = None
 
     def _send_click_event(self):
-        self._hass.bus.fire('shelly_switch_click', \
+        self.hass.bus.fire('shelly_switch_click', \
                             {'entity_id' : self.entity_id,
                              'click_cnt': self._click_cnt,
                              'state' : self._state })
@@ -260,7 +261,7 @@ class ShellyVersion(Entity):
     def __init__(self, hass, version, py_shelly_version):
         """Initialize the Version sensor."""
         conf = hass.data[SHELLY_CONFIG]
-        id_prefix = conf.get(CONF_OBJECT_ID_PREFIX)
+        id_prefix = slugify(conf.get(CONF_OBJECT_ID_PREFIX))
         self._version = version
         self._py_shelly_version = py_shelly_version
         self.entity_id = "sensor." + id_prefix + "_version"
