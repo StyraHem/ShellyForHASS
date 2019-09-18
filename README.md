@@ -90,9 +90,9 @@ shelly:
   sensors:
     - all
   devices:      #devices to be added
-    - id: '420FC7'
-    - id: '13498B-1'   #Shelly 2, Id + Channel number
-    - id: '7BD5F3'
+    - id: "420FC7"
+    - id: "13498B-1"   #Shelly 2, Id + Channel number
+    - id: "7BD5F3"
       name: My cool plug   #set friendly name
       sensors: #overide global (all)
          - power
@@ -108,9 +108,9 @@ shelly:
     - rssi
     - uptime
   devices:  #configure devices
-    - id: '420FC7'
+    - id: "420FC7"
       light_switch: true  #add this switch as a light
-    - id: '7BD5F3'
+    - id: "7BD5F3"
       name: My cool plug #set friendly name
 ```
 
@@ -122,9 +122,9 @@ shelly:
   sensors:
     - all #show all sensors
   devices:  #configure devices
-    - id: '420FC7'
+    - id: "420FC7"
       light_switch: true  #add this switch as a light
-    - id: '7BD5F3'
+    - id: "7BD5F3"
       name: My cool plug #set friendly name
 ```
 
