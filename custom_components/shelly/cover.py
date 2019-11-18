@@ -28,6 +28,9 @@ class ShellyCover(ShellyDevice, CoverDevice):
         self._motion_state = None
         self._support_position = None
         self._state = None
+        self._offset = 0
+        if dev.offset:
+            self._offset = dev.offset
         self.update()
 
     @property
@@ -39,7 +42,12 @@ class ShellyCover(ShellyDevice, CoverDevice):
     def current_cover_position(self):
         """Return current position"""
         if self._support_position:
-            return self._position
+            if self._position == 0:
+                return 0
+            elif self._position <= self._offset:
+                return 1
+            else:
+                return (100 * (self._position - self._offset)) / (100 - self._offset)
 
         return None
 

@@ -42,6 +42,7 @@ CONF_UPGRADE_SWITCH = 'upgrade_switch'
 CONF_UNAVALABLE_AFTER_SEC = 'unavailable_after_sec'
 CONF_LOCAL_PY_SHELLY = 'debug_local_py_shelly'
 CONF_ONLY_DEVICE_ID = 'debug_only_device_id'
+CONF_COVER_OFFSET = 'cover_offset'
 
 CONF_WIFI_SENSOR = 'wifi_sensor' #deprecated
 CONF_UPTIME_SENSOR = 'uptime_sensor' #deprecated
@@ -95,8 +96,9 @@ DEVICE_SCHEMA = vol.Schema({
     vol.Optional(CONF_SENSORS):
             vol.All(cv.ensure_list, [vol.In(SENSOR_TYPES)]),
     vol.Optional(CONF_UPGRADE_SWITCH): cv.boolean,
-    vol.Optional(CONF_UNAVALABLE_AFTER_SEC) : cv.positive_int,
+    vol.Optional(CONF_UNAVALABLE_AFTER_SEC): cv.positive_int,
     vol.Optional(CONF_ENTITY_ID): cv.string,
+    vol.Optional(CONF_COVER_OFFSET): cv.positive_int,
 })
 
 CONFIG_SCHEMA = vol.Schema({
@@ -303,6 +305,8 @@ def setup(hass, config):
 
         if dev.device_type == "ROLLER":
             discovery.load_platform(hass, 'cover', DOMAIN, attr, config)
+            if device_config.get(CONF_COVER_OFFSET):
+                dev.offset = device_config.get(CONF_COVER_OFFSET)
         elif dev.device_type == "RELAY":
             if device_config.get(CONF_LIGHT_SWITCH):
                 discovery.load_platform(hass, 'light', DOMAIN, attr, config)
