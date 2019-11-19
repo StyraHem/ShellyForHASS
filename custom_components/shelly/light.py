@@ -83,7 +83,7 @@ class ShellyDimmer(ShellyDevice, Light):
             brightness = int(kwargs[ATTR_BRIGHTNESS] / 2.55)
         self._dev.turn_on(brightness)
 
-    def turn_off(self, **kwargs):
+    def turn_off(self, **_kwargs):
         self._dev.turn_off()
 
     @property
@@ -155,7 +155,7 @@ class ShellyRGB(ShellyDevice, Light):
 
         if ATTR_BRIGHTNESS in kwargs:
             brightness = int(kwargs[ATTR_BRIGHTNESS] / 2.55)
-        
+
         if ATTR_WHITE_VALUE in kwargs:
             white_value = int(kwargs[ATTR_WHITE_VALUE])
 
@@ -169,7 +169,7 @@ class ShellyRGB(ShellyDevice, Light):
 
         if ATTR_EFFECT in kwargs:
             affect_attr = kwargs.get(ATTR_EFFECT)
-            effect = [e for e in self._dev.effects_list 
+            effect = [e for e in self._dev.effects_list
                         if e['name'] == affect_attr][0]
 
             #if 'mode' in effect:

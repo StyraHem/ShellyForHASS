@@ -4,6 +4,8 @@ Shelly platform for the cover component.
 For more details about this platform, please refer to the documentation
 https://home-assistant.io/components/shelly/
 """
+
+#pylint: disable=import-error
 from homeassistant.components.cover import (ATTR_POSITION,
                                             CoverDevice, SUPPORT_CLOSE,
                                             SUPPORT_OPEN, SUPPORT_STOP,

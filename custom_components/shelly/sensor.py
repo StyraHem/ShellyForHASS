@@ -61,7 +61,7 @@ SENSOR_TYPES_CFG = {
     SENSOR_TYPE_CLOUD_STATUS:
         ['Cloud status', '', 'mdi:transit-connection-variant', None, None],
     SENSOR_TYPE_MQTT_CONNECTED:
-        ['MQTT connected', '', 'mdi:transit-connection-variant', None, None],  
+        ['MQTT connected', '', 'mdi:transit-connection-variant', None, None],
     SENSOR_TYPE_FLOOD:
         ['Flood', '', 'mdi:water', None, 'bool']
 }
@@ -73,11 +73,12 @@ def setup_platform(hass, _config, add_devices, discovery_info=None):
                                    discovery_info.get('pyShellyVersion'))])
         return
 
-    if 'sensor_type' in discovery_info:        
+    if 'sensor_type' in discovery_info:
         sensor_type = discovery_info['sensor_type']
         block = get_block_from_hass(hass, discovery_info)
         if block is not None:
-            add_devices([ShellyInfoSensor(block, hass, sensor_type, sensor_type)])
+            add_devices([ShellyInfoSensor(block, hass,
+                                          sensor_type, sensor_type)])
         else:
             dev = get_device_from_hass(hass, discovery_info)
             add_devices([ShellyInfoSensor(dev, hass, sensor_type, sensor_type)])
@@ -121,7 +122,7 @@ class ShellySensor(ShellyDevice, Entity):
 
     @property
     def quantity_name(self):
-        """Name of quantity."""        
+        """Name of quantity."""
         return self._sensor_cfg[0]
 
     @property
@@ -183,7 +184,7 @@ class ShellySwitch(ShellyDevice, Entity):
         return int(round(time.time() * 1000))
 
     def _click_timeout(self):
-        self._send_click_event()     
+        self._send_click_event()
         self._click_cnt = 0
         self._click_timer = None
 
@@ -194,23 +195,24 @@ class ShellySwitch(ShellyDevice, Entity):
                              'state' : self._state })
 
     def update(self):
-        """Fetch new state data for this switch."""        
+        """Fetch new state data for this switch."""
         if self._dev.sensor_values is not None:
             ms = self._millis()
             new_state = self._dev.sensor_values.get("switch", None) != 0
-            if self._state is not None and new_state != self._state:                
+            if self._state is not None and new_state != self._state:
                 if self._click_timer is not None:
                     self._click_timer.cancel()
-                diff = ms - self._last_state_change 
+                diff = ms - self._last_state_change
                 if diff < self._click_delay or self._click_cnt == 0:
                     self._click_cnt += 1
                 else:
                     self._click_cnt = 1
-                self._last_state_change = ms                
-                self._click_timer = Timer(self._click_delay/1000, self._click_timeout)
+                self._last_state_change = ms
+                self._click_timer = Timer(self._click_delay/1000,
+                                          self._click_timeout)
                 self._click_timer.start()
             self._state = new_state
-                
+
 class ShellyInfoSensor(ShellyBlock, Entity):
     """Representation of a Shelly Info Sensor."""
 
@@ -235,7 +237,7 @@ class ShellyInfoSensor(ShellyBlock, Entity):
     def state(self):
         """Return the state of the sensor."""
         return self._state
-        
+
     def quantity_name(self):
         """Name of quantity."""
         return self._sensor_cfg[0]
