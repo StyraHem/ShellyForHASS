@@ -21,7 +21,7 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.script import Script
 from homeassistant.util import slugify
 
-REQUIREMENTS = ['pyShelly==0.1.5']
+REQUIREMENTS = ['pyShelly==0.1.6']
 
 _LOGGER = logging.getLogger(__name__)
 
