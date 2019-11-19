@@ -7,8 +7,8 @@
 ![version-wip](https://img.shields.io/badge/latest_version-0.1.0-green.svg?style=for-the-badge)
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-green.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 
-## Facebook group:
-This Facebook group are used to anounce new releases etc. Please join it to be updated.
+## Join Facebook group:
+This Facebook group are used to anounce new releases etc. Please join it to be updated of new releases.
 [https://www.facebook.com/groups/shellyforhass/](https://www.facebook.com/groups/shellyforhass/)
 
 ## Intro
@@ -40,7 +40,7 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 ## Devices supported
 
 - Shelly 1
-- Shelly 1 PM (no power meter, firmware bug)
+- Shelly 1 PM
 - Shelly 2 (relay or roller mode)
 - Shelly 2.5 (relay or roller mode)
 - Shelly 4
@@ -54,7 +54,7 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Shelly 2LED (not verified)
 - Shelly Flood
 - Shelly Dimmer
-- Shelly EM (comming soon)
+- Shelly EM
 
 ## Installation
 
