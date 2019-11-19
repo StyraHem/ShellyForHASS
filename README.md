@@ -106,12 +106,13 @@ shelly:
 ```yaml
 shelly:
   discovery: true  #add all devices (default)
-  sensors: #sensors to show
+  sensors: #sensors to show, can be override on each device
     - rssi
     - uptime
   devices:  #configure devices
     - id: "420FC7"
       light_switch: true  #add this switch as a light
+      sensors: [ switch ] #Override the global sensor
     - id: "7BD5F3"
       name: My cool plug #set friendly name
 ```
@@ -235,7 +236,7 @@ If you running Shellies on different VLAN or network there is a [proxy.py](https
 Update the script with the ip-address of your HASS installation and run it on a computer/router etc that are connected to same nettwork as your Shellies. Firewall and routing must be enabled, TCP 80 HASS -> Shelly and UDP 5683 Shelly -> HASS.
 
 ## Monster card
-You can use the component with [monstercard](https://github.com/ciotlosm/custom-lovelace/tree/master/monster-card) to present data in a nice way.
+You can use the component with [monstercard](https://github.com/custom-cards/monster-card) to present data in a nice way.
 
 ### All shelly devices
 ```yaml

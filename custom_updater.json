@@ -1,7 +1,7 @@
 {
     "shelly": {
-        "version": "0.0.19",
-        "updated_at": "2019-08-25",
+        "version": "0.1.0",
+        "updated_at": "2019-10-17",
         "local_location": "/custom_components/shelly/__init__.py",
         "remote_location": "https://raw.githubusercontent.com/StyraHem/ShellyForHASS/master/custom_components/shelly/__init__.py",
         "visit_repo": "https://github.com/StyraHem/ShellyForHASS/tree/master/custom_components/shelly",
