@@ -81,7 +81,7 @@ class ShellyFirmwareUpdate(ShellyBlock, SwitchDevice):
 
     @property
     def name(self):
-        return "Upgrade firmware " + ShellyBlock.name
+        return "Upgrade firmware " + ShellyBlock.name.fget(self)
 
     @property
     def is_on(self):
