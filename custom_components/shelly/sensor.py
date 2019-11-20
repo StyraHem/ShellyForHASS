@@ -225,7 +225,7 @@ class ShellyInfoSensor(ShellyBlock, Entity):
         if self._sensor_type in SENSOR_TYPES_CFG:
             self._sensor_cfg = SENSOR_TYPES_CFG[self._sensor_type]
         self._state = None
-        self._name += " - " + self.quantity_name()
+        self._name_ext = self.quantity_name()
         self.update()
 
     def update(self):

@@ -21,11 +21,11 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.script import Script
 from homeassistant.util import slugify
 
-REQUIREMENTS = ['pyShelly==0.1.6']
+REQUIREMENTS = ['pyShelly==0.1.7']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 VERSION = __version__
 
 DOMAIN = 'shelly'
@@ -43,6 +43,8 @@ CONF_UPGRADE_SWITCH = 'upgrade_switch'
 CONF_UNAVALABLE_AFTER_SEC = 'unavailable_after_sec'
 CONF_LOCAL_PY_SHELLY = 'debug_local_py_shelly'
 CONF_ONLY_DEVICE_ID = 'debug_only_device_id'
+CONF_CLOUD_AUTH_KEY = 'cloud_auth_key'
+CONF_CLOUD_SEREVR = 'cloud_server'
 
 CONF_WIFI_SENSOR = 'wifi_sensor' #deprecated
 CONF_UPTIME_SENSOR = 'uptime_sensor' #deprecated
@@ -131,7 +133,9 @@ CONFIG_SCHEMA = vol.Schema({
         vol.Optional(CONF_POWER_DECIMALS): cv.positive_int,
         vol.Optional(CONF_LOCAL_PY_SHELLY,
                      default=False): cv.boolean,
-        vol.Optional(CONF_ONLY_DEVICE_ID) : cv.string
+        vol.Optional(CONF_ONLY_DEVICE_ID) : cv.string,
+        vol.Optional(CONF_CLOUD_AUTH_KEY) : cv.string,
+        vol.Optional(CONF_CLOUD_SEREVR) : cv.string,
     })
 }, extra=vol.ALLOW_EXTRA)
 
@@ -340,6 +344,8 @@ def setup(hass, config):
     pys.cb_device_removed.append(_device_removed)
     pys.username = conf.get(CONF_USERNAME)
     pys.password = conf.get(CONF_PASSWORD)
+    pys.cloud_auth_key = conf.get(CONF_CLOUD_AUTH_KEY)
+    pys.cloud_server = conf.get(CONF_CLOUD_SEREVR)
     if additional_info:
         pys.update_status_interval = update_interval
     pys.only_device_id = conf.get(CONF_ONLY_DEVICE_ID)
@@ -386,20 +392,28 @@ class ShellyBlock(Entity):
         if entity_id is not None:
             self.entity_id = "." + slugify(id_prefix + "_" + entity_id + prefix)
             self._unique_id += "_" + slugify(entity_id)
-        self._name = block.type_name()
-        if conf.get(CONF_SHOW_ID_IN_NAME):
-            self._name += " [" + block.id + "]"
+        #self._name = None
+        #block.type_name()
+        #if conf.get(CONF_SHOW_ID_IN_NAME):
+        #    self._name += " [" + block.id + "]"
         self._block = block
         self.hass = hass
         self._block.cb_updated.append(self._updated)
         block.shelly_device = self
-        self._name = _get_specific_config(conf, CONF_NAME, self.name, block.id)
+        self._name = _get_specific_config(conf, CONF_NAME, None, block.id)
+        self._name_ext = None
         self._is_removed = False
 
     @property
     def name(self):
         """Return the display name of this device."""
-        return self._name
+        if self._name is None:
+            name = self._block.friendly_name()
+        else:
+            name = self._name
+        if self._name_ext:
+            name += ' - ' + self._name_ext
+        return name
 
     def _updated(self, _block):
         """Receive events when the switch state changed (by mobile,
@@ -438,14 +452,14 @@ class ShellyDevice(Entity):
         if entity_id is not None:
             self.entity_id = "." + slugify(id_prefix + "_" + entity_id)
             self._unique_id += "_" + slugify(entity_id)
-        self._name = dev.type_name()
-        if conf.get(CONF_SHOW_ID_IN_NAME):
-            self._name += " [" + dev.id + "]"  # 'Test' #light.name
+        #self._name = dev.type_name()
+        #if conf.get(CONF_SHOW_ID_IN_NAME):
+        #    self._name += " [" + dev.id + "]"  # 'Test' #light.name
         self._dev = dev
         self.hass = hass
         self._dev.cb_updated.append(self._updated)
         dev.shelly_device = self
-        self._name = _get_specific_config(conf, CONF_NAME, self._name,
+        self._name = _get_specific_config(conf, CONF_NAME, None,
                                           dev.id, dev.block.id)
 
         self._sensor_conf = _get_sensor_config(conf, dev.id, dev.block.id)
@@ -470,10 +484,14 @@ class ShellyDevice(Entity):
                             conf = self.hass.data[SHELLY_CONFIG]
                             discovery.load_platform(self.hass, 'sensor',
                                                     DOMAIN, attr, conf)
+
     @property
     def name(self):
         """Return the display name of this device."""
-        return self._name
+        if self._name is None:
+            return self._dev.friendly_name()
+        else:
+            return self._name
 
     @property
     def device_state_attributes(self):
