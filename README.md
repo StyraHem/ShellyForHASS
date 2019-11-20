@@ -62,13 +62,6 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 
 Do you you have [HACS](https://community.home-assistant.io/t/custom-component-hacs) installed? Just search for Shelly and install it direct from HACS. HACS will keep track of updates and you can easly upgrade Shelly to latest version.
 
-### Install with Custom Updater (deprecated)
-_We recomend you use HACS as Customer Updater is deprecated._
-
-Do you you have [Custom updater](https://github.com/custom-components/custom_updater) installed? Then you can use the service [custom_updater.install](https://github.com/custom-components/custom_updater/wiki/Services#install-element-cardcomponentpython_script) with the parameter {"element":"shelly"} to install Shelly.
-
-Custom updater also let you to upgrade to latest version. We recomend you to use this.
-
 ### Install manually
 
 1. Install this platform by creating a `custom_components` folder in the same folder as your configuration.yaml, if it doesn't already exist.
@@ -240,8 +233,8 @@ If you running Shellies on different VLAN or network there is a [proxy.py](https
 
 Update the script with the ip-address of your HASS installation and run it on a computer/router etc that are connected to same nettwork as your Shellies. Firewall and routing must be enabled, TCP 80 HASS -> Shelly and UDP 5683 Shelly -> HASS.
 
-## Monster card
-You can use the component with [monstercard](https://github.com/custom-cards/monster-card) to present data in a nice way.
+## Auto entities (before Monster card)
+You can use the component with [auto entities](https://github.com/thomasloven/lovelace-auto-entities) to filter data in a nice way.
 
 ### All shelly devices
 ```yaml
@@ -256,7 +249,7 @@ filter:
     - entity_id: '*firmware*'
   include:
     - entity_id: '*shelly*'
-type: 'custom:monster-card'
+type: 'custom:auto-entities'
 ```
 
 ### Need firmware update (click on the switch to update)
@@ -268,7 +261,7 @@ card:
 filter:
   include:
     - entity_id: '*firmware_update*'
-type: 'custom:monster-card'
+type: 'custom:auto-entities'
 ```
 
 ### WiFi signal of all devices (rssi)
@@ -280,7 +273,7 @@ card:
 filter:
   include:
     - entity_id: '*rssi*'
-type: 'custom:monster-card'
+type: 'custom:auto-entities'
 ```
 
 ## Feedback
