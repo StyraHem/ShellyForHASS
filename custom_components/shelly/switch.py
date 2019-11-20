@@ -71,7 +71,7 @@ class ShellyFirmwareUpdate(ShellyBlock, SwitchDevice):
     def __init__(self, block, hass):
         ShellyBlock.__init__(self, block, hass, "_firmware_update")
         self.entity_id = "switch" + self.entity_id
-        self._name = "Upgrade firmware " + self._name
+        #self._name = "Upgrade firmware " + self._name
         self._updating = False
         block.firmware_switch = self
 
@@ -79,6 +79,10 @@ class ShellyFirmwareUpdate(ShellyBlock, SwitchDevice):
     def should_poll(self):
         """No polling needed."""
         return False
+
+    @property
+    def name(self):
+        return "Upgrade firmware " + ShellyBlock.name(self)
 
     @property
     def is_on(self):
@@ -90,7 +94,7 @@ class ShellyFirmwareUpdate(ShellyBlock, SwitchDevice):
         self._updating = True
         self.schedule_update_ha_state(False)
         self._block.update_firmware()
-            
+
     async def async_turn_off(self, **_kwargs):
         """Do nothing"""
         self.schedule_update_ha_state(False)
