@@ -21,11 +21,11 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.script import Script
 from homeassistant.util import slugify
 
-REQUIREMENTS = ['pyShelly==0.1.7']
+REQUIREMENTS = ['pyShelly==0.1.8']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 VERSION = __version__
 
 DOMAIN = 'shelly'
@@ -396,6 +396,7 @@ class ShellyBlock(Entity):
         #block.type_name()
         #if conf.get(CONF_SHOW_ID_IN_NAME):
         #    self._name += " [" + block.id + "]"
+        self._show_id_in_name = conf.get(CONF_SHOW_ID_IN_NAME)
         self._block = block
         self.hass = hass
         self._block.cb_updated.append(self._updated)
@@ -413,6 +414,8 @@ class ShellyBlock(Entity):
             name = self._name
         if self._name_ext:
             name += ' - ' + self._name_ext
+        if self._show_id_in_name:
+            name += " [" + self._block.id + "]"
         return name
 
     def _updated(self, _block):
@@ -452,6 +455,7 @@ class ShellyDevice(Entity):
         if entity_id is not None:
             self.entity_id = "." + slugify(id_prefix + "_" + entity_id)
             self._unique_id += "_" + slugify(entity_id)
+        self._show_id_in_name = conf.get(CONF_SHOW_ID_IN_NAME)
         #self._name = dev.type_name()
         #if conf.get(CONF_SHOW_ID_IN_NAME):
         #    self._name += " [" + dev.id + "]"  # 'Test' #light.name
@@ -489,9 +493,13 @@ class ShellyDevice(Entity):
     def name(self):
         """Return the display name of this device."""
         if self._name is None:
-            return self._dev.friendly_name()
+            name = self._dev.friendly_name()
         else:
-            return self._name
+            name = self._name
+
+        if self._show_id_in_name:
+            name += " [" + self._dev.id + "]"
+        return name
 
     @property
     def device_state_attributes(self):
