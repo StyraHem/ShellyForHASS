@@ -7,7 +7,7 @@ import struct
 #Require ShellyForHASS 0.0.15 or later
 
 #Change to the ip-address of your HASS server
-HASS_IP = "192.168.1.XXX"
+HASS_IP = "192.168.1.25"
 
 UDP_IP = "224.0.1.187"
 UDP_PORT = 5683
