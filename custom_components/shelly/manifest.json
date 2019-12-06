@@ -4,5 +4,6 @@
   "documentation": "https://github.com/StyraHem/ShellyForHASS/blob/master/README.md",
   "dependencies": [],
   "codeowners": ["@hakana","@StyraHem"],
-  "requirements": ["pyShelly==0.1.8"]
+  "zeroconf": ["_http._tcp.local."],
+  "requirements": ["pyShelly==0.1.9"]
 }

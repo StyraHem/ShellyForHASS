@@ -21,11 +21,11 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.script import Script
 from homeassistant.util import slugify
 
-REQUIREMENTS = ['pyShelly==0.1.8']
+REQUIREMENTS = ['pyShelly==0.1.9']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 VERSION = __version__
 
 DOMAIN = 'shelly'
@@ -45,6 +45,8 @@ CONF_LOCAL_PY_SHELLY = 'debug_local_py_shelly'
 CONF_ONLY_DEVICE_ID = 'debug_only_device_id'
 CONF_CLOUD_AUTH_KEY = 'cloud_auth_key'
 CONF_CLOUD_SEREVR = 'cloud_server'
+CONF_TMPL_NAME = 'tmpl_name'
+CONF_DISCOVER_BY_IP = 'discover_by_ip'
 
 CONF_WIFI_SENSOR = 'wifi_sensor' #deprecated
 CONF_UPTIME_SENSOR = 'uptime_sensor' #deprecated
@@ -124,8 +126,8 @@ CONFIG_SCHEMA = vol.Schema({
                       default=True): cv.boolean,
         vol.Optional(CONF_UNAVALABLE_AFTER_SEC,
                     default=60) : cv.positive_int,
-        vol.Optional(CONF_SENSORS,
-                     default=[SENSOR_POWER]): vol.All(cv.ensure_list, [vol.In(SENSOR_TYPES) ]),
+        vol.Optional(CONF_SENSORS, default=[SENSOR_POWER]):
+                        vol.All(cv.ensure_list, [vol.In(SENSOR_TYPES)]),
         vol.Optional(CONF_ADDITIONAL_INFO,
                      default=True): cv.boolean,
         vol.Optional(CONF_SCAN_INTERVAL,
@@ -136,6 +138,9 @@ CONFIG_SCHEMA = vol.Schema({
         vol.Optional(CONF_ONLY_DEVICE_ID) : cv.string,
         vol.Optional(CONF_CLOUD_AUTH_KEY) : cv.string,
         vol.Optional(CONF_CLOUD_SEREVR) : cv.string,
+        vol.Optional(CONF_TMPL_NAME) : cv.string,
+        vol.Optional(CONF_DISCOVER_BY_IP, default=[]):
+                        vol.All(cv.ensure_list, [cv.string])
     })
 }, extra=vol.ALLOW_EXTRA)
 
@@ -346,12 +351,17 @@ def setup(hass, config):
     pys.password = conf.get(CONF_PASSWORD)
     pys.cloud_auth_key = conf.get(CONF_CLOUD_AUTH_KEY)
     pys.cloud_server = conf.get(CONF_CLOUD_SEREVR)
+    pys.tmpl_name = conf.get(CONF_TMPL_NAME, pys.tmpl_name)
     if additional_info:
         pys.update_status_interval = update_interval
     pys.only_device_id = conf.get(CONF_ONLY_DEVICE_ID)
     pys.igmp_fix_enabled = conf.get(CONF_IGMPFIX)
     pys.open()
     pys.discover()
+
+    discover_by_ip = conf.get(CONF_DISCOVER_BY_IP)
+    for ip_addr in discover_by_ip:
+        pys.add_device_by_ip(ip_addr, 'IP-addr')
 
     if conf.get(CONF_VERSION):
         attr = {'version': VERSION, 'pyShellyVersion': pys.version()}
@@ -430,7 +440,9 @@ class ShellyBlock(Entity):
         """Show state attributes in HASS"""
         attrs = {'ip_address': self._block.ip_addr,
                  'shelly_type': self._block.type_name(),
-                 'shelly_id': self._block.id}
+                 'shelly_id': self._block.id,
+                 'discovery': self._block.discovery_src
+                }
 
         if self._block.info_values is not None:
             for key, value in self._block.info_values.items():
@@ -506,7 +518,9 @@ class ShellyDevice(Entity):
         """Show state attributes in HASS"""
         attrs = {'ip_address': self._dev.ip_addr,
                  'shelly_type': self._dev.type_name(),
-                 'shelly_id': self._dev.id}
+                 'shelly_id': self._dev.id,
+                 'discovery': self._dev.discovery_src
+                }
 
         if self._dev.block.info_values is not None:
             for key, value in self._dev.block.info_values.items():
