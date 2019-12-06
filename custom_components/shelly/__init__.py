@@ -25,7 +25,7 @@ REQUIREMENTS = ['pyShelly==0.1.9']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.4"
+__version__ = "0.1.4.B1"
 VERSION = __version__
 
 DOMAIN = 'shelly'
