@@ -53,7 +53,7 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Shelly RGBW2
 - Shelly 2LED (not verified)
 - Shelly Flood
-- Shelly Dimmer
+- Shelly Dimmer / Dimmer SL
 - Shelly EM
 
 ## Installation
@@ -128,6 +128,14 @@ shelly:
     - id: "7BD5F3"
       name: My cool plug #set friendly name
 ```
+#### Discovery by ip
+
+```yaml
+shelly:
+  discover_by_ip:
+    - '192.168.5.44'
+    - '192.168.32.11'
+```
 
 #### Events
 
@@ -162,13 +170,18 @@ automation:
 | id_prefix              | Change the prefix of the entity id and unique id of the device                                         | shelly  | 0.0.5-  |
 | igmp_fix               | Enable sending out IP_ADD_MEMBERSHIP every minute                                                      | False   | 0.0.5-  |
 | additional_information | Retrieve additional information (rssi, ssid, uptime, ..)                                               | True    | 0.0.6-  |
-| scan_interval          | Update frequency for additional information                                                            | 60      | 0.0.6-  |
+| scan_interval          | Update frequency for polling status and additional information. If the not CoAP supported this will be the delay for status updates. | 60      | 0.0.6-  |
 | _wifi_sensor_          | Add extra sensor for wifi signal of each device. Requires `additional_information` to be `True`.  | False   | 0.0.6 (deprecated) |
 | _uptime_sensor_        | Add extra sensor for device uptime of each devivce. Requires `additional_information` to be `True` | False   | 0.0.6 (deprecated)  |
 | power_decimals         | Round power sensor values to the given number of decimals                                          |         | 0.0.14- |
 | sensors                | A list with sensors to show for each device. See list below.                                        | power | 0.0.15- |
 | upgrade_switch         | Add firmware switches when upgrade needed.                                                           | True  | 0.0.15- |
 | unavailable_after_sec  | Number of seconds before the device will be unavialable      | 60 | 0.0.16- |
+| mdns | Allow the plugin to use mDns to discover devices | True | 0.1.5- |
+| cloud_auth_key | Use this to allow the plugin to connect to your Shelly Cloud. You will find this information at https://my.shelly.cloud/#user_settings and GET KEY | | 0.1.5- |
+| cloud_server | Use this togheter with cloud_auth_key | | 0.1.5- |
+| tmpl_name | Template how to create the friendly name from Shelly Cloud | {room} - {name} | 0.1.5- |
+| discover_by_ip | This is a list of ip-addresses to force the plugin to discover. Use this if not CoAP or mDns discovery working for your device. | | 0.1.5- |
 
 #### Device configuration
 
