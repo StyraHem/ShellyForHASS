@@ -2,6 +2,8 @@
 ## This is a beta version!
 {% endif %}
 
+[![buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/styrahem)
+
 This is a plugin platform for Shelly smart home WiFi devices. The plugin communicate localy with the devices.
 
 ![List](https://raw.githubusercontent.com/StyraHem/ShellyForHASS/master/images/intro.png)
