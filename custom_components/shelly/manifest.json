@@ -5,5 +5,5 @@
   "dependencies": [],
   "codeowners": ["@hakana","@StyraHem"],
   "zeroconf": ["_http._tcp.local."],
-  "requirements": ["pyShelly==0.1.9"]
+  "requirements": ["pyShelly==0.1.10"]
 }

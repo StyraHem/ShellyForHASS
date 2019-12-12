@@ -21,17 +21,18 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.script import Script
 from homeassistant.util import slugify
 
-REQUIREMENTS = ['pyShelly==0.1.9']
+REQUIREMENTS = ['pyShelly==0.1.10']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.4.B1"
+__version__ = "0.1.5"
 VERSION = __version__
 
 DOMAIN = 'shelly'
 
 CONF_ADDITIONAL_INFO = 'additional_information'
 CONF_IGMPFIX = 'igmp_fix'
+CONF_MDNS = 'mdns'
 CONF_LIGHT_SWITCH = 'light_switch'
 CONF_OBJECT_ID_PREFIX = 'id_prefix'
 CONF_ENTITY_ID = 'entity_id'
@@ -56,6 +57,7 @@ DEFAULT_DISCOVERY = True
 DEFAULT_OBJECT_ID_PREFIX = 'shelly'
 DEFAULT_SCAN_INTERVAL = timedelta(seconds=60)
 DEFAULT_SHOW_ID_IN_NAME = True
+DEFAULT_MDNS = True
 
 SHELLY_DEVICES = 'shelly_devices'
 SHELLY_BLOCKS = 'shelly_blocks'
@@ -140,7 +142,9 @@ CONFIG_SCHEMA = vol.Schema({
         vol.Optional(CONF_CLOUD_SEREVR) : cv.string,
         vol.Optional(CONF_TMPL_NAME) : cv.string,
         vol.Optional(CONF_DISCOVER_BY_IP, default=[]):
-                        vol.All(cv.ensure_list, [cv.string])
+                        vol.All(cv.ensure_list, [cv.string]),
+        vol.Optional(CONF_MDNS,
+                       default=DEFAULT_MDNS): cv.boolean,
     })
 }, extra=vol.ALLOW_EXTRA)
 
@@ -356,7 +360,8 @@ def setup(hass, config):
         pys.update_status_interval = update_interval
     pys.only_device_id = conf.get(CONF_ONLY_DEVICE_ID)
     pys.igmp_fix_enabled = conf.get(CONF_IGMPFIX)
-    pys.open()
+    pys.mdns_enabled = conf.get(CONF_MDNS)
+    pys.start()
     pys.discover()
 
     discover_by_ip = conf.get(CONF_DISCOVER_BY_IP)
