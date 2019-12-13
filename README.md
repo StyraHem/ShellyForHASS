@@ -16,6 +16,8 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 
 ![List](https://raw.githubusercontent.com/StyraHem/ShellyForHASS/master/images/intro.png)
 
+If you have any problems please see the [Trouble shootning guide](https://github.com/StyraHem/ShellyForHASS/blob/master/troubleshooting.md)
+
 ## Features
 
 - Automatically discover all Shelly devices
@@ -36,6 +38,9 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Discovery can be turned off (0.0.4)
 - Switch for firmware update trigger (use with monster-card to show a list of devices to need to be update, see examples below)
 - Support proxy to allow Shelly devices in other LANs (0.0.15).
+- Using mDns discovery and polling if CoAP not working (slower status updates) (0.1.5)
+- Receive device names from Shelly Cloud (cloud_auth_key/cloud_server) (0.1.5)
+- Add Shelly devices by IP-address if on different LAN or mDns and CoAP not working for discovery
 
 ## Devices supported
 
@@ -50,7 +55,7 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Shelly Plug
 - Shelly Plug S
 - Shelly RGBWW
-- Shelly RGBW2
+- Shelly RGBW2 (rgb or 4 channels)
 - Shelly 2LED (not verified)
 - Shelly Flood
 - Shelly Dimmer / Dimmer SL
