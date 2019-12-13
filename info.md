@@ -1,7 +1,3 @@
-{% if prerelease %}
-## This is a beta version!
-{% endif %}
-
 [![buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/styrahem)
 
 This is a plugin platform for Shelly smart home WiFi devices. The plugin communicate localy with the devices. You can also enable cloud connection, now it is only used to get the names of the devices.
