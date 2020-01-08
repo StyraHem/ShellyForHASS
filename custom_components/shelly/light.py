@@ -13,6 +13,7 @@ from homeassistant.components.light import (
     SUPPORT_WHITE_VALUE,
     Light
 )
+from homeassistant.helpers.dispatcher import async_dispatcher_connect
 import homeassistant.util.color as color_util
 from homeassistant.util.color import (
     color_temperature_kelvin_to_mired as kelvin_to_mired,
@@ -25,22 +26,40 @@ _LOGGER = logging.getLogger(__name__)
 SUPPORT_SHELLYRGB_COLOR = (SUPPORT_BRIGHTNESS | SUPPORT_COLOR)
 SUPPORT_SHELLYRGB_WHITE = (SUPPORT_BRIGHTNESS)
 
-def setup_platform(hass, _config, add_devices, discovery_info=None):
-    """Setup Shelly Light platform."""
-    dev = get_device_from_hass(hass, discovery_info)
-    if dev.device_type == "RELAY":
-        add_devices([ShellyLight(dev, hass)])
-    elif dev.device_type == "DIMMER":
-        add_devices([ShellyDimmer(dev, hass)])
-    else:
-        add_devices([ShellyRGB(dev, hass)])
+# def setup_platform(hass, _config, add_devices, discovery_info=None):
+#     """Setup Shelly Light platform."""
+#     dev = get_device_from_hass(hass, discovery_info)
+#     if dev.device_type == "RELAY":
+#         add_devices([ShellyLight(dev, hass)])
+#     elif dev.device_type == "DIMMER":
+#         add_devices([ShellyDimmer(dev, hass)])
+#     else:
+#         add_devices([ShellyRGB(dev, hass)])
+
+async def async_setup_entry(hass, config_entry, async_add_entities):
+    """Set up tellduslive sensors dynamically."""
+    async def async_discover_light(dev, instance):
+        print("222222222222222222222222222222:Y")
+        """Discover and add a discovered sensor."""
+        if dev.device_type == "RELAY":
+            async_add_entities([ShellyLight(dev, instance)])
+        elif dev.device_type == "DIMMER":
+            async_add_entities([ShellyDimmer(dev, instance)])
+        else:
+            async_add_entities([ShellyRGB(dev, instance)])
+
+    async_dispatcher_connect(
+        hass,
+        "shelly_new_light",
+        async_discover_light
+    )
 
 class ShellyLight(ShellyDevice, Light):
     """Representation of an Shelly Switch."""
 
-    def __init__(self, dev, hass):
+    def __init__(self, dev, instance):
         """Initialize an ShellyLight."""
-        ShellyDevice.__init__(self, dev, hass)
+        ShellyDevice.__init__(self, dev, instance)
         self._state = None
         self.update()
 
@@ -49,9 +68,11 @@ class ShellyLight(ShellyDevice, Light):
         return self._state
 
     def turn_on(self, **kwargs):
+        print("******************************************************* ON")
         self._dev.turn_on()
 
     def turn_off(self, **kwargs):
+        print("******************************************************* OFF")
         self._dev.turn_off()
 
     def update(self):
@@ -61,9 +82,9 @@ class ShellyLight(ShellyDevice, Light):
 class ShellyDimmer(ShellyDevice, Light):
     """Representation of an Shelly Dimmer."""
 
-    def __init__(self, dev, hass):
+    def __init__(self, dev, instance):
         """Initialize an ShellyDimmer."""
-        ShellyDevice.__init__(self, dev, hass)
+        ShellyDevice.__init__(self, dev, instance)
         self._state = None
         self._brightness = None
         self.update()
@@ -95,13 +116,13 @@ class ShellyDimmer(ShellyDevice, Light):
         """Fetch new state data for this light."""
         self._state = self._dev.state
         self._brightness = self._dev.brightness
-        
+
 class ShellyRGB(ShellyDevice, Light):
     """Representation of an Shelly Light."""
 
-    def __init__(self, dev, hass):
+    def __init__(self, dev, instance):
         """Initialize an ShellyLight."""
-        ShellyDevice.__init__(self, dev, hass)
+        ShellyDevice.__init__(self, dev, instance)
         self._state = None
         self._brightness = None
         self._white_value = None
@@ -110,7 +131,7 @@ class ShellyRGB(ShellyDevice, Light):
         self._temp = None
         self._effect = None
         self.update()
-        
+
     @property
     def supported_features(self):
         """Flag supported features."""
@@ -146,6 +167,7 @@ class ShellyRGB(ShellyDevice, Light):
 
     def turn_on(self, **kwargs):
         """Turn on light"""
+        print("******************************************************* ON")
         brightness = None
         rgb = None
         temp = None
@@ -183,6 +205,7 @@ class ShellyRGB(ShellyDevice, Light):
 
     def turn_off(self, **_kwargs):
         """Turn off light"""
+        print("******************************************************* OFF")
         self._dev.turn_off()
 
     def update(self):

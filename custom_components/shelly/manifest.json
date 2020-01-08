@@ -1,9 +1,10 @@
 {
   "domain": "shelly",
   "name": "Shelly smart home",
+  "config_flow": true,
   "documentation": "https://github.com/StyraHem/ShellyForHASS/blob/master/README.md",
   "dependencies": [],
   "codeowners": ["@hakana","@StyraHem"],
-  "zeroconf": ["_http._tcp.local."],
-  "requirements": ["pyShelly==0.1.10"]
+  //"zeroconf": ["_http._tcp.local."],
+  "requirements": ["pyShelly==0.1.12"]
 }

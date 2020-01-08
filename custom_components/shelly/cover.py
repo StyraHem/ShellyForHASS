@@ -17,14 +17,14 @@ from . import ShellyDevice, get_device_from_hass
 def setup_platform(hass, _config, add_devices, discovery_info=None):
     """Set up the Shelly cover platform."""
     dev = get_device_from_hass(hass, discovery_info)
-    add_devices([ShellyCover(dev, hass)])
+    add_devices([ShellyCover(dev, instance)])
 
 class ShellyCover(ShellyDevice, CoverDevice):
     """Shelly cover device."""
 
-    def __init__(self, dev, hass):
+    def __init__(self, dev, instance):
         """Initialize the cover."""
-        ShellyDevice.__init__(self, dev, hass)
+        ShellyDevice.__init__(self, dev, instance)
         self._position = None
         self._last_direction = None
         self._motion_state = None

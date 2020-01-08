@@ -9,6 +9,8 @@ import logging
 
 from homeassistant.components.switch import SwitchDevice
 from homeassistant.helpers.entity import ToggleEntity
+from homeassistant.helpers.dispatcher import async_dispatcher_connect
+from .const import *
 
 # from .sensor import ShellySensor
 from . import (ShellyDevice, get_device_from_hass,
@@ -16,23 +18,36 @@ from . import (ShellyDevice, get_device_from_hass,
 
 _LOGGER = logging.getLogger(__name__)
 
-def setup_platform(hass, _config, add_devices, discovery_info=None):
-    """Setup the Shelly Switch platform."""
+# def setup_platform(hass, _config, add_devices, discovery_info=None):
+#    """Setup the Shelly Switch platform."""
+#
+#    if 'firmware' in discovery_info:
+#        block = get_block_from_hass(hass, discovery_info)
+#        add_devices([ShellyFirmwareUpdate(block, hass)])
+#        return
+#
+#    dev = get_device_from_hass(hass, discovery_info)
+#    add_devices([ShellySwitch(dev, hass)])
 
-    if 'firmware' in discovery_info:
-        block = get_block_from_hass(hass, discovery_info)
-        add_devices([ShellyFirmwareUpdate(block, hass)])
-        return
+async def async_setup_entry(hass, config_entry, async_add_entities):
+    """Set up tellduslive sensors dynamically."""
+    async def async_discover_switch(dev, instance):
+        """Discover and add a discovered sensor."""
+        print("222222222222222222222222222222:X")
+        async_add_entities([ShellySwitch(dev, instance)])
 
-    dev = get_device_from_hass(hass, discovery_info)
-    add_devices([ShellySwitch(dev, hass)])
+    print("XXXXX")
+    async_dispatcher_connect(
+        hass,
+        "shelly_new_switch",
+        async_discover_switch
+    )
 
 class ShellySwitch(ShellyDevice, SwitchDevice):
     """Representation of an Shelly Switch."""
-
-    def __init__(self, dev, hass):
+    def __init__(self, dev, instance):
         """Initialize an ShellySwitch."""
-        ShellyDevice.__init__(self, dev, hass)
+        ShellyDevice.__init__(self, dev, instance)
         self._state = None
         self.update()
 
@@ -55,10 +70,12 @@ class ShellySwitch(ShellyDevice, SwitchDevice):
 
     def turn_on(self, **_kwargs):
         """Turn on device"""
+        print("******************************************************* ON")
         self._dev.turn_on()
 
     def turn_off(self, **_kwargs):
         """Turn off device"""
+        print("******************************************************* OFF")
         self._dev.turn_off()
 
     def update(self):
@@ -68,9 +85,9 @@ class ShellySwitch(ShellyDevice, SwitchDevice):
 class ShellyFirmwareUpdate(ShellyBlock, SwitchDevice):
     """Representation of a script entity."""
 
-    def __init__(self, block, hass):
+    def __init__(self, block, instance):
         self._updating = False
-        ShellyBlock.__init__(self, block, hass, "_firmware_update")
+        ShellyBlock.__init__(self, block, instance, "_firmware_update")
         self.entity_id = "switch" + self.entity_id
         block.firmware_switch = self
 

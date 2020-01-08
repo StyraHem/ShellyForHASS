@@ -9,6 +9,7 @@ import logging
 import time
 from threading import Timer
 from homeassistant.util import slugify
+from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
 from homeassistant.const import (DEVICE_CLASS_HUMIDITY,
                                  DEVICE_CLASS_TEMPERATURE,
@@ -19,6 +20,8 @@ from homeassistant.helpers.entity import Entity
 from . import (CONF_OBJECT_ID_PREFIX, CONF_POWER_DECIMALS, SHELLY_CONFIG,
                ShellyDevice, get_device_from_hass,
                ShellyBlock, get_block_from_hass)
+
+from .const import *
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -66,48 +69,68 @@ SENSOR_TYPES_CFG = {
         ['Flood', '', 'mdi:water', None, 'bool']
 }
 
+async def async_setup_entry(hass, config_entry, async_add_entities):
+    """Set up tellduslive sensors dynamically."""
+    async def async_discover_sensor(dev, instance):
+        print("222222222222222222222222222222")
+        """Discover and add a discovered sensor."""
+        if isinstance(dev, dict):
+            if 'version' in dev:
+                async_add_entities([ShellyVersion(
+                    instance, dev.get('version'), dev.get('pyShellyVersion'))])
+            return
+        if dev.device_type == "POWERMETER":
+            async_add_entities([
+                ShellySensor(dev, instance, SENSOR_TYPE_POWER, 'consumption'),
+            ])
+        elif dev.device_type == "SENSOR":
+            async_add_entities([
+                ShellySensor(dev, instance, dev.sensor_type, dev.sensor_type)
+            ])
+        elif dev.device_type == "SWITCH":
+            async_add_entities([ShellySwitch(dev, instance)])
+
+    print("XXXXX sensor")
+    async_dispatcher_connect(
+        hass,
+        "shelly_new_sensor",
+        async_discover_sensor
+    )
+
 def setup_platform(hass, _config, add_devices, discovery_info=None):
     """Setup the Shelly Sensor platform."""
-    if 'version' in discovery_info:
-        add_devices([ShellyVersion(hass, discovery_info.get('version'),
-                                   discovery_info.get('pyShellyVersion'))])
-        return
+    # if 'version' in discovery_info:
+    #     add_devices([ShellyVersion(hass, discovery_info.get('version'),
+    #                                discovery_info.get('pyShellyVersion'))])
+    #     return
 
-    if 'sensor_type' in discovery_info:
-        sensor_type = discovery_info['sensor_type']
-        block = get_block_from_hass(hass, discovery_info)
-        if block is not None:
-            add_devices([ShellyInfoSensor(block, hass,
-                                          sensor_type, sensor_type)])
-        else:
-            dev = get_device_from_hass(hass, discovery_info)
-            add_devices([ShellyInfoSensor(dev, hass, sensor_type, sensor_type)])
-        return
+    # if 'sensor_type' in discovery_info:
+    #     sensor_type = discovery_info['sensor_type']
+    #     block = get_block_from_hass(hass, discovery_info)
+    #     if block is not None:
+    #         add_devices([ShellyInfoSensor(block, hass,
+    #                                       sensor_type, sensor_type)])
+    #     else:
+    #         dev = get_device_from_hass(hass, discovery_info)
+    #         add_devices([ShellyInfoSensor(dev, hass, sensor_type, sensor_type)])
+    #     return
 
-    dev = get_device_from_hass(hass, discovery_info)
+    #dev = get_device_from_hass(hass, discovery_info)
 
-    if dev.device_type == "POWERMETER":
-        add_devices([
-            ShellySensor(dev, hass, SENSOR_TYPE_POWER, 'consumption'),
-        ])
-    elif dev.device_type == "SENSOR":
-        add_devices([ShellySensor(dev, hass, dev.sensor_type, dev.sensor_type)])
-    elif dev.device_type == "SWITCH":
-        add_devices([ ShellySwitch(dev, hass) ])
 
 class ShellySensor(ShellyDevice, Entity):
     """Representation of a Shelly Sensor."""
 
-    def __init__(self, dev, hass, sensor_type, sensor_name):
+    def __init__(self, dev, instance, sensor_type, sensor_name):
         """Initialize an ShellySensor."""
         self._sensor_cfg = SENSOR_TYPES_CFG[SENSOR_TYPE_DEFAULT]
-        ShellyDevice.__init__(self, dev, hass)
+        ShellyDevice.__init__(self, dev, instance)
         self._unique_id += "_" + sensor_name
         self.entity_id += "_" + sensor_name
         self._sensor_type = sensor_type
         self._sensor_name = sensor_name
         self._battery = None
-        self._config = hass.data[SHELLY_CONFIG]
+        self._config = instance.conf
         self._state = None
         if self._sensor_type in SENSOR_TYPES_CFG:
             self._sensor_cfg = SENSOR_TYPES_CFG[self._sensor_type]
@@ -158,9 +181,9 @@ class ShellySensor(ShellyDevice, Entity):
 class ShellySwitch(ShellyDevice, Entity):
     """Representation of a Shelly Swwitch state."""
 
-    def __init__(self, dev, hass):
+    def __init__(self, dev, instance):
         """Initialize an ShellySwitch."""
-        ShellyDevice.__init__(self, dev, hass)
+        ShellyDevice.__init__(self, dev, instance)
         self._unique_id += "_switch"
         self.entity_id += "_switch"
         self._state = None
@@ -216,9 +239,9 @@ class ShellySwitch(ShellyDevice, Entity):
 class ShellyInfoSensor(ShellyBlock, Entity):
     """Representation of a Shelly Info Sensor."""
 
-    def __init__(self, block, hass, sensor_type, sensor_name):
+    def __init__(self, block, instance, sensor_type, sensor_name):
         self._sensor_cfg = SENSOR_TYPES_CFG[SENSOR_TYPE_DEFAULT]
-        ShellyBlock.__init__(self, block, hass, "_" + sensor_name + "_attr")
+        ShellyBlock.__init__(self, block, instance, "_" + sensor_name + "_attr")
         self.entity_id = "sensor" + self.entity_id
         self._sensor_name = sensor_name
         self._sensor_type = sensor_type
@@ -260,9 +283,9 @@ class ShellyInfoSensor(ShellyBlock, Entity):
 class ShellyVersion(Entity):
     """Representation of a Shelly version sensor."""
 
-    def __init__(self, hass, version, py_shelly_version):
+    def __init__(self, instance, version, py_shelly_version):
         """Initialize the Version sensor."""
-        conf = hass.data[SHELLY_CONFIG]
+        conf = instance.conf
         id_prefix = slugify(conf.get(CONF_OBJECT_ID_PREFIX))
         self._version = version
         self._py_shelly_version = py_shelly_version
@@ -288,3 +311,16 @@ class ShellyVersion(Entity):
     def icon(self):
         """Return the icon to use in the frontend, if any."""
         return None
+
+    @property
+    def device_info(self):
+        return {
+            'identifiers': {
+                (DOMAIN, 'version')
+            },
+            'name': "Shelly version",
+            'manufacturer': DOMAIN,
+            'model': "Shelly version",
+            'sw_version': '0.0.1'
+            #'via_device': (hue.DOMAIN, self.api.bridgeid),
+        }
