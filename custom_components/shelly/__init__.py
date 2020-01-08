@@ -31,7 +31,7 @@ REQUIREMENTS = ['pyShelly==0.1.13']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.6.b1"
+__version__ = "0.1.6.b2"
 VERSION = __version__
 
 BLOCKS = {}
@@ -153,7 +153,7 @@ class ShellyInstance():
 
     async def start_up(self):
         print("STARTING wait...")
-        #await asyncio.sleep(60)
+        await asyncio.sleep(120)
         print("STARTING")
         conf = self.conf
         if conf.get(CONF_LOCAL_PY_SHELLY):
