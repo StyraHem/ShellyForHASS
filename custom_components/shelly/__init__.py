@@ -197,8 +197,8 @@ class ShellyInstance():
 
     async def _stop(self, _):
         """Stop Shelly."""
-        await _LOGGER.info("Shutting down Shelly")
-        await self.pys.close()
+        _LOGGER.info("Shutting down Shelly")
+        self.pys.close()
 
     def _get_specific_config_root(self, key, *ids):
         item = self._get_specific_config(key, None, *ids)
