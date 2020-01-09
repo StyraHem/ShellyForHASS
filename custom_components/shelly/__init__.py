@@ -31,7 +31,7 @@ REQUIREMENTS = ['pyShelly==0.1.13']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.6.b2"
+__version__ = "0.1.6.b3"
 VERSION = __version__
 
 BLOCKS = {}
@@ -39,11 +39,11 @@ DEVICES = {}
 BLOCK_SENSORS = []
 DEVICE_SENSORS = []
 
-def _get_block_key(block):
-    key = block.id
-    if not key in BLOCKS:
-        BLOCKS[key] = block
-    return key
+#def _get_block_key(block):
+#    key = block.id
+#    if not key in BLOCKS:
+#        BLOCKS[key] = block
+#    return key
 
 def get_block_from_hass(hass, discovery_info):
     """Get block from HASS"""
@@ -57,11 +57,11 @@ def _dev_key(dev):
         key += "-" + dev.device_sub_type
     return key
 
-def _get_device_key(dev):
-    key = _dev_key(dev)
-    if not key in DEVICES:
-        DEVICES[key] = dev
-    return key
+#def _get_device_key(dev):
+#    key = _dev_key(dev)
+#    if not key in DEVICES:
+#        DEVICES[key] = dev
+#    return key
 
 def get_device_from_hass(hass, discovery_info):
     """Get device from HASS"""
@@ -73,13 +73,6 @@ async def async_setup(hass, config):
     if DOMAIN not in config:
         return True
     hass.data[DOMAIN] = config
-    #print(CONFIG_SCHEMA(config.get(DOMAIN, {})))
-    #Hacs.hass = hass
-    #Hacs.configuration = Configuration.from_dict(
-    #    config[DOMAIN], config[DOMAIN].get("options")
-    #)
-    #Hacs.configuration.config_type = "yaml"
-    #await startup_wrapper_for_yaml(Hacs)
     hass.async_create_task(
         hass.config_entries.flow.async_init(
             DOMAIN, context={"source": config_entries.SOURCE_IMPORT}, data={}
@@ -109,14 +102,7 @@ async def async_setup_entry(hass, config_entry):
         _LOGGER.warning("uptime_sensor is deprecated, use uptime in sensors instead.")
         if conf.get(CONF_UPTIME_SENSOR) and SENSOR_UPTIME not in conf[CONF_SENSORS]:
             conf[CONF_SENSORS].append(SENSOR_UPTIME)
-            #    )
-        #discovery.load_platform(hass, 'sensor', DOMAIN, attr, config)
 
-    #hass.config_entries.async_forward_entry_setup(config_entry, "switch")
-    #hass.config_entries.async_forward_entry_setup(config_entry, "sensor")
-    #hass.config_entries.async_forward_entry_setup(config_entry, "light")
-
-    print(conf)
     hass.data["SHELLY_INSTANCE"] = ShellyInstance(hass, config_entry, conf)
 
     #def update_status_information():
@@ -140,7 +126,7 @@ class ShellyInstance():
     def __init__(self, hass, config_entry, conf):
         self.hass = hass
         self.config_entry = config_entry
-        self.platforms = []
+        self.platforms = {}
         self.pys = None
         self.conf = conf
         self.discover = conf.get(CONF_DISCOVERY)
@@ -152,9 +138,6 @@ class ShellyInstance():
         )
 
     async def start_up(self):
-        print("STARTING wait...")
-        await asyncio.sleep(120)
-        print("STARTING")
         conf = self.conf
         if conf.get(CONF_LOCAL_PY_SHELLY):
             _LOGGER.info("Loading local pyShelly")
@@ -190,7 +173,6 @@ class ShellyInstance():
             pys.add_device_by_ip(ip_addr, 'IP-addr')
 
         if conf.get(CONF_VERSION):
-            print("????????????????????????????????????????")
             attr = {'version': VERSION, 'pyShellyVersion': pys.version()}
             self._add_device("sensor", attr)
 
@@ -244,11 +226,12 @@ class ShellyInstance():
 
     async def _async_add_device(self, platform, dev):
         if platform not in self.platforms:
-            self.platforms.append(platform)
-            print("========================= ADD " + platform)
+            self.platforms[platform] = asyncio.Event()
             await self.hass.config_entries.async_forward_entry_setup(
                     self.config_entry, platform)
-        print("11111111111111111111111111111111111")
+            self.platforms[platform].set()
+
+        await self.platforms[platform].wait()
         async_dispatcher_send(self.hass, "shelly_new_" + platform \
                                 , dev, self)
 
@@ -256,19 +239,17 @@ class ShellyInstance():
         hass_data = block.hass_data
 
         if hass_data['discover']:
-            if hass_data['allow_upgrade_switch']:
+            if not hass_data['allow_upgrade_switch']:
                 has_update = block.info_values.get('has_firmware_update', False)
                 update_switch = getattr(block, 'firmware_switch', None)
                 if has_update:
                     if update_switch is None:
-                        attr = {'firmware': True,
-                                SHELLY_BLOCK_ID : _get_block_key(block)}
-                        #discovery.load_platform(hass, 'switch',
-                        #                        DOMAIN, attr, conf)
+                        attr = {'firmware': True, 'block':block}
+                        self._add_device("switch", attr)
                 elif update_switch is not None:
                     update_switch.remove()
 
-            block_key = _get_block_key(block)
+            #block_key = _get_block_key(block)
             for key, _value in block.info_values.items():
                 ukey = block.id + '-' + key
                 if not ukey in BLOCK_SENSORS:
@@ -276,19 +257,14 @@ class ShellyInstance():
                     for sensor in hass_data['sensor_cfg']:
                         if SENSOR_TYPES[sensor].get('attr') == key:
                             attr = {'sensor_type':key,
-                                    SHELLY_BLOCK_ID : block_key}
-                            #discovery.load_platform(hass, 'sensor',
-                            #                        DOMAIN, attr, conf)
+                                    'itm': block}
+                            self._add_device("sensor", attr)
 
     def _block_added(self, block):
         self.hass.add_job(self._async_block_added(block))
 
     async def _async_block_added(self, block):
         block.cb_updated.append(self._block_updated)
-        _get_block_key(block)
-
-        print("****** ADD BLOCK " + block.id)
-
         discover_block = self.discover \
                          or self._get_device_config(block.id) != {}
 
@@ -305,7 +281,6 @@ class ShellyInstance():
                 = self._get_specific_config_root(CONF_UNAVALABLE_AFTER_SEC,
                                             block.id)
 
-        print("****** ADD BLOCK DONE " + block.id)
         #if conf.get(CONF_ADDITIONAL_INFO):
             #block.update_status_information()
             # cfg_sensors = conf.get(CONF_SENSORS)
@@ -321,18 +296,12 @@ class ShellyInstance():
         self.hass.add_job(self._async_device_added(dev, _code))
 
     async def _async_device_added(self, dev, _code):
-        #device_key = 
-        _get_device_key(dev)
-        #attr = {SHELLY_DEVICE_ID : device_key, instance : instance}
-
         device_config = self._get_device_config(dev.id, dev.block.id)
         if not self.discover and device_config == {}:
             return
 
-        print("****** ADD DEVICE " + dev.device_type)
-
-        #if dev.device_type == "ROLLER":
-        #    await discovery.async_load_platform(hass, 'cover', DOMAIN, attr, config)
+        if dev.device_type == "ROLLER":
+            self._add_device("cover", dev)
         if dev.device_type == "RELAY":
             if device_config.get(CONF_LIGHT_SWITCH):
                 self._add_device("light", dev)
@@ -351,13 +320,12 @@ class ShellyInstance():
         elif dev.device_type in ["LIGHT", "DIMMER"]:
             self._add_device("light", dev)
 
-        print("****** ADD DEVICE DONE " + dev.device_type)
-
     def _device_removed(self, dev, _code):
         dev.shelly_device.remove()
         try:
-            key = _dev_key(dev)
-            del DEVICES[key]
+            pass
+            #key = _dev_key(dev)
+            #del DEVICES[key]
         except KeyError:
             pass
 
@@ -500,7 +468,7 @@ class ShellyDevice(Entity):
                     for sensor in self._sensor_conf:
                         if SENSOR_TYPES[sensor].get('attr') == key:
                             attr = {'sensor_type':key,
-                                    SHELLY_DEVICE_ID:_get_device_key(self._dev)}
+                                    'itm':self._dev}
                             conf = self.hass.data[SHELLY_CONFIG]
                             #discovery.load_platform(self.hass, 'sensor',
                             #                        DOMAIN, attr, conf)

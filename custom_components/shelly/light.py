@@ -37,9 +37,8 @@ SUPPORT_SHELLYRGB_WHITE = (SUPPORT_BRIGHTNESS)
 #         add_devices([ShellyRGB(dev, hass)])
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
-    """Set up tellduslive sensors dynamically."""
+    """Set up Shelly light sensors dynamically."""
     async def async_discover_light(dev, instance):
-        print("222222222222222222222222222222:Y")
         """Discover and add a discovered sensor."""
         if dev.device_type == "RELAY":
             async_add_entities([ShellyLight(dev, instance)])
@@ -68,11 +67,9 @@ class ShellyLight(ShellyDevice, Light):
         return self._state
 
     def turn_on(self, **kwargs):
-        print("******************************************************* ON")
         self._dev.turn_on()
 
     def turn_off(self, **kwargs):
-        print("******************************************************* OFF")
         self._dev.turn_off()
 
     def update(self):
@@ -167,7 +164,6 @@ class ShellyRGB(ShellyDevice, Light):
 
     def turn_on(self, **kwargs):
         """Turn on light"""
-        print("******************************************************* ON")
         brightness = None
         rgb = None
         temp = None
@@ -205,7 +201,6 @@ class ShellyRGB(ShellyDevice, Light):
 
     def turn_off(self, **_kwargs):
         """Turn off light"""
-        print("******************************************************* OFF")
         self._dev.turn_off()
 
     def update(self):

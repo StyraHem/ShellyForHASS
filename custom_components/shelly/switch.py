@@ -30,13 +30,16 @@ _LOGGER = logging.getLogger(__name__)
 #    add_devices([ShellySwitch(dev, hass)])
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
-    """Set up tellduslive sensors dynamically."""
+    """Set up Shelly switch dynamically."""
     async def async_discover_switch(dev, instance):
         """Discover and add a discovered sensor."""
-        print("222222222222222222222222222222:X")
+        if isinstance(dev, dict):
+            if 'firmware' in dev:
+                async_add_entities(
+                    [ShellyFirmwareUpdate(dev['block'], instance)])
+            return
         async_add_entities([ShellySwitch(dev, instance)])
 
-    print("XXXXX")
     async_dispatcher_connect(
         hass,
         "shelly_new_switch",
@@ -70,12 +73,10 @@ class ShellySwitch(ShellyDevice, SwitchDevice):
 
     def turn_on(self, **_kwargs):
         """Turn on device"""
-        print("******************************************************* ON")
         self._dev.turn_on()
 
     def turn_off(self, **_kwargs):
         """Turn off device"""
-        print("******************************************************* OFF")
         self._dev.turn_off()
 
     def update(self):
@@ -103,6 +104,7 @@ class ShellyFirmwareUpdate(ShellyBlock, SwitchDevice):
     @property
     def is_on(self):
         """Return true if is on."""
+        self.remove()
         return self._updating
 
     async def async_turn_on(self, **_kwargs):

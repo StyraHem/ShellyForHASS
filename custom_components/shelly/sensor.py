@@ -70,14 +70,17 @@ SENSOR_TYPES_CFG = {
 }
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
-    """Set up tellduslive sensors dynamically."""
+    """Set up Shelly sensor dynamically."""
     async def async_discover_sensor(dev, instance):
-        print("222222222222222222222222222222")
         """Discover and add a discovered sensor."""
         if isinstance(dev, dict):
             if 'version' in dev:
                 async_add_entities([ShellyVersion(
                     instance, dev.get('version'), dev.get('pyShellyVersion'))])
+            if 'sensor_type' in dev:
+                sensor_type = dev['sensor_type']
+                async_add_entities([ShellyInfoSensor(dev['itm'], instance,
+                                           sensor_type, sensor_type)])
             return
         if dev.device_type == "POWERMETER":
             async_add_entities([
@@ -90,7 +93,6 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         elif dev.device_type == "SWITCH":
             async_add_entities([ShellySwitch(dev, instance)])
 
-    print("XXXXX sensor")
     async_dispatcher_connect(
         hass,
         "shelly_new_sensor",
@@ -167,7 +169,7 @@ class ShellySensor(ShellyDevice, Entity):
         """Fetch new state data for this sensor."""
         if self._dev.sensor_values is not None:
             self._state = self._dev.sensor_values.get(self._sensor_name, None)
-            power_decimals = self._config.get(CONF_POWER_DECIMALS, None)
+            power_decimals = self._config.get(CONF_POWER_DECIMALS, 0)
             if self._state is not None \
                 and self._sensor_type == SENSOR_TYPE_POWER \
                 and power_decimals is not None:
@@ -176,7 +178,6 @@ class ShellySensor(ShellyDevice, Entity):
                 elif power_decimals == 0:
                     self._state = round(self._state)
             self._battery = self._dev.sensor_values.get('battery', None)
-
 
 class ShellySwitch(ShellyDevice, Entity):
     """Representation of a Shelly Swwitch state."""
