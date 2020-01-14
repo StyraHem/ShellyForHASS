@@ -14,6 +14,9 @@ This is a plugin platform for Shelly smart home WiFi devices. The plugin communi
 - If CoAP not working in the network mDns is used to discover device and REST to poll status
 - Sensors for all information (battery, power, rssi, uptime, over power/temp, device temperaure, cloud & mqtt connectivity)
 
+## Support the development
+Please support us by joining on [Patereon](https://www.patreon.com/shelly4hass) or buying us [some cups of coffee](https://www.buymeacoffee.com/styrahem).
+
 # Links
 - [Documentation](https://github.com/StyraHem/ShellyForHASS/blob/master/README.md)
 - [Configuration](https://github.com/StyraHem/ShellyForHASS/blob/master/README.md#configure)
