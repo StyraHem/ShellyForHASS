@@ -11,6 +11,9 @@
 This Facebook group are used to anounce new releases etc. Please join it to be updated of new releases.
 [https://www.facebook.com/groups/shellyforhass/](https://www.facebook.com/groups/shellyforhass/)
 
+## Support the development
+We spending lot of effort to make this plugin better and supporting new devices. Please support us by joining on [Patereon](https://www.patreon.com/shelly4hass) or buying us [some cups of coffee](https://www.buymeacoffee.com/styrahem).
+
 ## Intro
 This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices is local. You can use this plugin and continue to use Shelly Cloud, MQTT and Shelly app in your mobile if you want. A proxy can also be used to include Shellies on different LAN's.
 
