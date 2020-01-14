@@ -52,6 +52,7 @@ SENSOR_CLOUD = 'cloud'
 SENSOR_MQTT = 'mqtt'
 SENSOR_BATTERY = 'battery'
 SENSOR_SWITCH = 'switch'
+SENSOR_LUX = 'lux'
 
 SENSOR_TYPES = {
     SENSOR_ALL: {},
@@ -64,5 +65,6 @@ SENSOR_TYPES = {
     SENSOR_CLOUD:  {'attr':'cloud_status'},
     SENSOR_MQTT:  {'attr':'mqtt_connected'},
     SENSOR_BATTERY : {'attr':'battery'},
-    SENSOR_SWITCH : {}
+    SENSOR_SWITCH : {},
+    SENSOR_LUX : {'attr':'lux'},
 }

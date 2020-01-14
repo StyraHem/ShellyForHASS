@@ -16,6 +16,8 @@ from homeassistant.const import (DEVICE_CLASS_HUMIDITY,
                                  TEMP_CELSIUS, POWER_WATT,
                                  STATE_ON, STATE_OFF)
 from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.restore_state import RestoreEntity
+from homeassistant.core import callback
 
 from . import (CONF_OBJECT_ID_PREFIX, CONF_POWER_DECIMALS, SHELLY_CONFIG,
                ShellyDevice, get_device_from_hass,
@@ -38,6 +40,7 @@ SENSOR_TYPE_CLOUD_STATUS = 'cloud_status'
 SENSOR_TYPE_MQTT_CONNECTED = 'mqtt_connected'
 SENSOR_TYPE_SWITCH = 'switch'
 SENSOR_TYPE_FLOOD = 'flood'
+SENSOR_TYPE_DOOR_WINDOW = 'door_window'
 SENSOR_TYPE_DEFAULT = 'default'
 
 SENSOR_TYPES_CFG = {
@@ -66,7 +69,9 @@ SENSOR_TYPES_CFG = {
     SENSOR_TYPE_MQTT_CONNECTED:
         ['MQTT connected', '', 'mdi:transit-connection-variant', None, None],
     SENSOR_TYPE_FLOOD:
-        ['Flood', '', 'mdi:water', None, 'bool']
+        ['Flood', '', 'mdi:water', None, 'bool'],
+    SENSOR_TYPE_DOOR_WINDOW:
+        ['Door/Window', '', 'mdi:door', None, 'bool']
 }
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
@@ -120,7 +125,7 @@ def setup_platform(hass, _config, add_devices, discovery_info=None):
     #dev = get_device_from_hass(hass, discovery_info)
 
 
-class ShellySensor(ShellyDevice, Entity):
+class ShellySensor(ShellyDevice, RestoreEntity):
     """Representation of a Shelly Sensor."""
 
     def __init__(self, dev, instance, sensor_type, sensor_name):
@@ -180,7 +185,7 @@ class ShellySensor(ShellyDevice, Entity):
             self._battery = self._dev.sensor_values.get('battery', None)
 
 class ShellySwitch(ShellyDevice, Entity):
-    """Representation of a Shelly Swwitch state."""
+    """Representation of a Shelly Switch state."""
 
     def __init__(self, dev, instance):
         """Initialize an ShellySwitch."""
@@ -237,7 +242,7 @@ class ShellySwitch(ShellyDevice, Entity):
                 self._click_timer.start()
             self._state = new_state
 
-class ShellyInfoSensor(ShellyBlock, Entity):
+class ShellyInfoSensor(ShellyBlock):
     """Representation of a Shelly Info Sensor."""
 
     def __init__(self, block, instance, sensor_type, sensor_name):
@@ -275,11 +280,6 @@ class ShellyInfoSensor(ShellyBlock, Entity):
     def icon(self):
         """Return the icon."""
         return self._sensor_cfg[2]
-
-    #@property
-    #def device_state_attributes(self):
-    #    return None
-
 
 class ShellyVersion(Entity):
     """Representation of a Shelly version sensor."""

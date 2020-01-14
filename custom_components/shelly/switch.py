@@ -104,7 +104,6 @@ class ShellyFirmwareUpdate(ShellyBlock, SwitchDevice):
     @property
     def is_on(self):
         """Return true if is on."""
-        self.remove()
         return self._updating
 
     async def async_turn_on(self, **_kwargs):

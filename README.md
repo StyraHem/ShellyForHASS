@@ -58,6 +58,7 @@ If you have any problems please see the [Trouble shootning guide](https://github
 - Shelly RGBW2 (rgb or 4 channels)
 - Shelly 2LED (not verified)
 - Shelly Flood
+- Shelly Door/Window
 - Shelly Dimmer / Dimmer SL
 - Shelly EM
 

@@ -27,11 +27,11 @@ from homeassistant.util import slugify
 from .const import *
 from .configuration_schema import CONFIG_SCHEMA
 
-REQUIREMENTS = ['pyShelly==0.1.13']
+REQUIREMENTS = ['pyShelly==0.1.14']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.6.b3"
+__version__ = "0.1.6.b4"
 VERSION = __version__
 
 BLOCKS = {}
@@ -176,6 +176,15 @@ class ShellyInstance():
             attr = {'version': VERSION, 'pyShellyVersion': pys.version()}
             self._add_device("sensor", attr)
 
+        fake_block = {
+            'id' : "694908",
+            'fake_block': True,
+            'info_values': {'temperature':5},
+            'cb_updated' : [],
+        }
+        attr = {'sensor_type':'temperature', 'itm': fake_block}
+        self._add_device("sensor", fake_block)
+
 
     async def _stop(self, _):
         """Stop Shelly."""
@@ -239,7 +248,7 @@ class ShellyInstance():
         hass_data = block.hass_data
 
         if hass_data['discover']:
-            if not hass_data['allow_upgrade_switch']:
+            if hass_data['allow_upgrade_switch']:
                 has_update = block.info_values.get('has_firmware_update', False)
                 update_switch = getattr(block, 'firmware_switch', None)
                 if has_update:
@@ -346,6 +355,7 @@ class ShellyBlock(Entity):
         #block.type_name()
         #if conf.get(CONF_SHOW_ID_IN_NAME):
         #    self._name += " [" + block.id + "]"
+        self.fake_block = isinstance(block, dict) #:'fake_block' in block
         self._show_id_in_name = conf.get(CONF_SHOW_ID_IN_NAME)
         self._block = block
         self.hass = instance.hass
@@ -363,8 +373,8 @@ class ShellyBlock(Entity):
         dev_reg.async_get_or_create(
             config_entry_id=self.entity_id,
             identifiers={(DOMAIN, block.id)},
-            manufacturer="ShellyX",
-            name=block.id,
+            manufacturer="Shelly",
+            name=block.friendly_name(),
             model=block.type_name(),
             sw_version="0.0.1",
         )
@@ -372,6 +382,8 @@ class ShellyBlock(Entity):
     @property
     def name(self):
         """Return the display name of this device."""
+        if self.fake_block:
+            name = 'Fake'
         if self._name is None:
             name = self._block.friendly_name()
         else:
@@ -392,6 +404,8 @@ class ShellyBlock(Entity):
     @property
     def device_state_attributes(self):
         """Show state attributes in HASS"""
+        if self.fake_block:
+            return {}
         attrs = {'ip_address': self._block.ip_addr,
                  'shelly_type': self._block.type_name(),
                  'shelly_id': self._block.id,
@@ -413,12 +427,12 @@ class ShellyBlock(Entity):
         return {
             'identifiers': {
                 (DOMAIN, self._block.id)
-            },
-            'name': self.name,
-            'manufacturer': DOMAIN,
-            'model': self._block.type,
-            'sw_version': '0.0.1',
-            #'via_device': (hue.DOMAIN, self.api.bridgeid),
+            }
+            # 'name': self.name,
+            # 'manufacturer': "Shelly",
+            # 'model': self._block.type,
+            # 'sw_version': '0.0.1',
+            # #'via_device': (hue.DOMAIN, self.api.bridgeid),
         }
 
     def remove(self):
@@ -519,10 +533,10 @@ class ShellyDevice(Entity):
                 # Serial numbers are unique identifiers within a specific domain
                 (DOMAIN, self._dev.block.id)
             },
-            'name': self._dev.block.friendly_name(),
-            'manufacturer': "Shelly",
-            'model': self._dev.block.type_name(),
-            'sw_version': '0.0.1',
+            # 'name': self._dev.block.friendly_name(),
+            # 'manufacturer': "Shelly",
+            # 'model': self._dev.block.type_name(),
+            # 'sw_version': '0.0.1',
             #'via_device': (hue.DOMAIN, self.api.bridgeid),
         }
 
