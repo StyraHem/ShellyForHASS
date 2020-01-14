@@ -1,7 +1,7 @@
 # Shelly smart home platform for HASS and HASSIO
 
 [![founder-wip](https://img.shields.io/badge/founder-Håkan_Åkerberg@StyraHem.se-green.svg?style=for-the-badge)](https://www.styrahem.se)
-[![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20me%20a%20coffee-orange.svg?style=for-the-badge)](https://www.buymeacoffee.com/styrahem)
+[![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20us%20a%20coffee-orange.svg?style=for-the-badge)](https://www.buymeacoffee.com/styrahem)
 
 ![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge)
 ![version-wip](https://img.shields.io/badge/latest_version-0.1.5-green.svg?style=for-the-badge)
@@ -10,6 +10,9 @@
 ## Join Facebook group:
 This Facebook group are used to anounce new releases etc. Please join it to be updated of new releases.
 [https://www.facebook.com/groups/shellyforhass/](https://www.facebook.com/groups/shellyforhass/)
+
+## Support the development
+We spending lots of effort to make this plugin better and supporting new devices. Please support us by joining on [Patereon](https://www.patreon.com/shelly4hass) or buying us [some cups of coffee](https://www.buymeacoffee.com/styrahem).
 
 ## Intro
 This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices is local. You can use this plugin and continue to use Shelly Cloud, MQTT and Shelly app in your mobile if you want. A proxy can also be used to include Shellies on different LAN's.
@@ -46,6 +49,7 @@ If you have any problems please see the [Trouble shootning guide](https://github
 
 - Shelly 1
 - Shelly 1 PM
+- Temperature addon for Shelly 1(PM)
 - Shelly 2 (relay or roller mode)
 - Shelly 2.5 (relay or roller mode)
 - Shelly 4
