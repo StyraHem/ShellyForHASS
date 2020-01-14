@@ -75,7 +75,7 @@ Do you you have [HACS](https://community.home-assistant.io/t/custom-component-ha
 ### Install manually
 
 1. Install this platform by creating a `custom_components` folder in the same folder as your configuration.yaml, if it doesn't already exist.
-2. Create another folder `shelly` in the `custom_components` folder. Copy all 5 Python (.py) files from custom_components into the `shelly` folder. Use `raw version` if you copy and paste the files from the browser.
+2. Create another folder `shelly` in the `custom_components` folder. Copy all files from custom_components into the `shelly` folder. Do not copy files from master branch, download latest release (.zip) from [here](https://github.com/StyraHem/ShellyForHASS/releases).
 
 ## Configure
 
