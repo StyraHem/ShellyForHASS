@@ -27,11 +27,11 @@ from homeassistant.util import slugify
 from .const import *
 from .configuration_schema import CONFIG_SCHEMA
 
-REQUIREMENTS = ['pyShelly==0.1.15']
+REQUIREMENTS = ['pyShelly==0.1.16']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.6.b5"
+__version__ = "0.1.6.b6"
 VERSION = __version__
 
 BLOCKS = {}
