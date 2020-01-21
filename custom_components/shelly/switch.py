@@ -13,8 +13,7 @@ from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from .const import *
 
 # from .sensor import ShellySensor
-from . import (ShellyDevice, get_device_from_hass,
-               ShellyBlock, get_block_from_hass)
+from . import (ShellyDevice, ShellyBlock)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -53,18 +52,6 @@ class ShellySwitch(ShellyDevice, SwitchDevice):
         ShellyDevice.__init__(self, dev, instance)
         self._state = None
         self.update()
-
-    @property
-    def current_power_w(self):
-        """Return the current power usage in W."""
-        if hasattr(self._dev, 'sensorValues'):
-            return self._dev.sensorValues['consumption']
-        return None
-
-    @property
-    def today_energy_kwh(self):
-        """Return the today total energy usage in kWh."""
-        return None
 
     @property
     def is_on(self):

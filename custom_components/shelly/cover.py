@@ -11,7 +11,7 @@ from homeassistant.components.cover import (ATTR_POSITION,
                                             SUPPORT_OPEN, SUPPORT_STOP,
                                             SUPPORT_SET_POSITION)
 
-from . import ShellyDevice, get_device_from_hass
+from . import ShellyDevice
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
 #def setup_platform(hass, _config, add_devices, discovery_info=None):

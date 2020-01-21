@@ -3,6 +3,18 @@
 
 from datetime import timedelta
 
+from homeassistant.const import (
+    DEVICE_CLASS_HUMIDITY,
+    DEVICE_CLASS_BATTERY,
+    DEVICE_CLASS_ILLUMINANCE,
+    DEVICE_CLASS_TEMPERATURE,
+    TEMP_CELSIUS, POWER_WATT
+)
+
+from homeassistant.components.binary_sensor import (
+    DEVICE_CLASS_CONNECTIVITY
+)
+
 DOMAIN = 'shelly'
 
 CONF_ADDITIONAL_INFO = 'additional_information'
@@ -32,11 +44,9 @@ DEFAULT_IGMPFIX = False
 DEFAULT_DISCOVERY = True
 DEFAULT_OBJECT_ID_PREFIX = 'shelly'
 DEFAULT_SCAN_INTERVAL = timedelta(seconds=60)
-DEFAULT_SHOW_ID_IN_NAME = True
+DEFAULT_SHOW_ID_IN_NAME = False
 DEFAULT_MDNS = True
 
-SHELLY_DEVICES = 'shelly_devices'
-SHELLY_BLOCKS = 'shelly_blocks'
 SHELLY_CONFIG = 'shelly_cfg'
 SHELLY_DEVICE_ID = 'device_id'
 SHELLY_BLOCK_ID = 'block_id'
@@ -52,7 +62,6 @@ SENSOR_CLOUD = 'cloud'
 SENSOR_MQTT = 'mqtt'
 SENSOR_BATTERY = 'battery'
 SENSOR_SWITCH = 'switch'
-SENSOR_LUX = 'lux'
 
 SENSOR_TYPES = {
     SENSOR_ALL: {},
@@ -66,5 +75,56 @@ SENSOR_TYPES = {
     SENSOR_MQTT:  {'attr':'mqtt_connected'},
     SENSOR_BATTERY : {'attr':'battery'},
     SENSOR_SWITCH : {},
-    SENSOR_LUX : {'attr':'lux'},
+}
+
+SENSOR_TYPE_TEMPERATURE = 'temperature'
+SENSOR_TYPE_HUMIDITY = 'humidity'
+SENSOR_TYPE_POWER = 'consumption'
+SENSOR_TYPE_RSSI = 'rssi'
+SENSOR_TYPE_UPTIME = 'uptime'
+SENSOR_TYPE_BATTERY = 'battery'
+SENSOR_TYPE_OVER_POWER = 'over_power'
+SENSOR_TYPE_DEVICE_TEMP = 'device_temp'
+SENSOR_TYPE_OVER_TEMP = 'over_temp'
+SENSOR_TYPE_CLOUD_STATUS = 'cloud_status'
+SENSOR_TYPE_MQTT_CONNECTED = 'mqtt_connected'
+SENSOR_TYPE_SWITCH = 'switch'
+SENSOR_TYPE_FLOOD = 'flood'
+SENSOR_TYPE_DOOR_WINDOW = 'door_window'
+SENSOR_TYPE_ILLUMINANCE = 'illuminance'
+SENSOR_TYPE_DEFAULT = 'default'
+
+SENSOR_TYPES_CFG = {
+    SENSOR_TYPE_DEFAULT:
+        [None, None, None, None, None],
+    SENSOR_TYPE_TEMPERATURE:
+        ['Temperature', TEMP_CELSIUS, None, DEVICE_CLASS_TEMPERATURE, None],
+    SENSOR_TYPE_HUMIDITY:
+        ['Humidity', '%', None, DEVICE_CLASS_HUMIDITY, None],
+    SENSOR_TYPE_POWER:
+        ['Consumption', POWER_WATT, None, None, None],
+    SENSOR_TYPE_RSSI:
+        ['RSSI', 'dB', 'mdi:wifi', None, None],
+    SENSOR_TYPE_UPTIME:
+        ['Uptime', 's', 'mdi:timer', None, None],
+    SENSOR_TYPE_BATTERY:
+        ['Battery', '%', None, DEVICE_CLASS_BATTERY, None],
+    SENSOR_TYPE_OVER_POWER:
+        ['Over power', '', 'mdi:alert', None, 'bool'],
+    SENSOR_TYPE_DEVICE_TEMP:
+        ['Device temperature', TEMP_CELSIUS, "mdi:oil-temperature", None, None],
+    SENSOR_TYPE_OVER_TEMP:
+        ['Over temperature', '', 'mdi:alert', None, 'bool'],
+    SENSOR_TYPE_CLOUD_STATUS:
+        ['Cloud status', '', 'mdi:transit-connection-variant',
+         DEVICE_CLASS_CONNECTIVITY, 'bool'],
+    SENSOR_TYPE_MQTT_CONNECTED:
+        ['MQTT connected', '', 'mdi:transit-connection-variant',
+         DEVICE_CLASS_CONNECTIVITY, 'bool'],
+    SENSOR_TYPE_FLOOD:
+        ['Flood', '', 'mdi:water', None, 'bool'],
+    SENSOR_TYPE_DOOR_WINDOW:
+        ['Door/Window', '', 'mdi:door', 'window', 'bool'],
+    SENSOR_TYPE_ILLUMINANCE:
+        ['illuminance', 'lux', None, DEVICE_CLASS_ILLUMINANCE, None]
 }

@@ -27,46 +27,15 @@ from homeassistant.util import slugify
 from .const import *
 from .configuration_schema import CONFIG_SCHEMA
 
-REQUIREMENTS = ['pyShelly==0.1.16']
+REQUIREMENTS = ['pyShelly==0.1.17']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.6.b6"
+__version__ = "0.1.6.b7"
 VERSION = __version__
 
-BLOCKS = {}
-DEVICES = {}
-BLOCK_SENSORS = []
-DEVICE_SENSORS = []
-
-#def _get_block_key(block):
-#    key = block.id
-#    if not key in BLOCKS:
-#        BLOCKS[key] = block
-#    return key
-
-def get_block_from_hass(hass, discovery_info):
-    """Get block from HASS"""
-    if SHELLY_BLOCK_ID in discovery_info:
-        key = discovery_info[SHELLY_BLOCK_ID]
-        return hass.data[SHELLY_BLOCKS][key]
-
-def _dev_key(dev):
-    key = dev.id + "-" + dev.device_type
-    if dev.device_sub_type is not None:
-        key += "-" + dev.device_sub_type
-    return key
-
-#def _get_device_key(dev):
-#    key = _dev_key(dev)
-#    if not key in DEVICES:
-#        DEVICES[key] = dev
-#    return key
-
-def get_device_from_hass(hass, discovery_info):
-    """Get device from HASS"""
-    device_key = discovery_info[SHELLY_DEVICE_ID]
-    return hass.data[SHELLY_DEVICES][device_key]
+BLOCK_SENSORS = []  #Keep track dynamic block sensors is added
+DEVICE_SENSORS = []  #Keep track dynamic device sensors is added
 
 async def async_setup(hass, config):
     """Set up this integration using yaml."""
@@ -87,11 +56,7 @@ async def async_setup_entry(hass, config_entry):
     config = hass.data[DOMAIN]
     conf = config.get(DOMAIN, {})
 
-    #todo!
-
     hass.data[SHELLY_CONFIG] = conf
-    hass.data[SHELLY_DEVICES] = DEVICES
-    hass.data[SHELLY_BLOCKS] = BLOCKS
 
     if conf.get(CONF_WIFI_SENSOR) is not None:
         _LOGGER.warning("wifi_sensor is deprecated, use rssi in sensors instead.")
@@ -174,16 +139,16 @@ class ShellyInstance():
 
         if conf.get(CONF_VERSION):
             attr = {'version': VERSION, 'pyShellyVersion': pys.version()}
-            self._add_device("sensor", attr)
+            self.add_device("sensor", attr)
 
-        fake_block = {
-            'id' : "694908",
-            'fake_block': True,
-            'info_values': {'temperature':5},
-            'cb_updated' : [],
-        }
-        attr = {'sensor_type':'temperature', 'itm': fake_block}
-        self._add_device("sensor", fake_block)
+        # fake_block = {
+        #     'id' : "694908",
+        #     'fake_block': True,
+        #     'info_values': {'temperature':5},
+        #     'cb_updated' : [],
+        # }
+        # attr = {'sensor_type':'temperature', 'itm': fake_block}
+        # self.add_device("sensor", fake_block)
 
 
     async def _stop(self, _):
@@ -230,10 +195,10 @@ class ShellyInstance():
             return {}
         return sensors
 
-    def _add_device(self, platform, dev):
-        self.hass.add_job(self._async_add_device(platform, dev))
+    def add_device(self, platform, dev):
+        self.hass.add_job(self._asyncadd_device(platform, dev))
 
-    async def _async_add_device(self, platform, dev):
+    async def _asyncadd_device(self, platform, dev):
         if platform not in self.platforms:
             self.platforms[platform] = asyncio.Event()
             await self.hass.config_entries.async_forward_entry_setup(
@@ -254,7 +219,7 @@ class ShellyInstance():
                 if has_update:
                     if update_switch is None:
                         attr = {'firmware': True, 'block':block}
-                        self._add_device("switch", attr)
+                        self.add_device("switch", attr)
                 elif update_switch is not None:
                     update_switch.remove()
 
@@ -267,7 +232,11 @@ class ShellyInstance():
                         if SENSOR_TYPES[sensor].get('attr') == key:
                             attr = {'sensor_type':key,
                                     'itm': block}
-                            self._add_device("sensor", attr)
+                            if key in SENSOR_TYPES_CFG and \
+                                SENSOR_TYPES_CFG[key][4] == 'bool':
+                                self.add_device("binary_sensor", attr)
+                            else:
+                                self.add_device("sensor", attr)
 
     def _block_added(self, block):
         self.hass.add_job(self._async_block_added(block))
@@ -290,6 +259,15 @@ class ShellyInstance():
                 = self._get_specific_config_root(CONF_UNAVALABLE_AFTER_SEC,
                                             block.id)
 
+        # dev_reg = await self.hass.helpers.device_registry.async_get_registry()
+        # dev_reg.async_get_or_create(
+        #     config_entry_id=block.id,
+        #     identifiers={(DOMAIN, block.id)},
+        #     manufacturer="Allterco",
+        #     name=block.friendly_name(),
+        #     model=block.type_name(),
+        #     sw_version=block.fw_version(),
+        # )
         #if conf.get(CONF_ADDITIONAL_INFO):
             #block.update_status_information()
             # cfg_sensors = conf.get(CONF_SENSORS)
@@ -304,30 +282,43 @@ class ShellyInstance():
     def _device_added(self, dev, _code):
         self.hass.add_job(self._async_device_added(dev, _code))
 
+    def build_device_info(self, item):
+        return {
+            'identifiers': {
+                (DOMAIN, item.unit_id)
+            },
+            'name': item.friendly_name(),
+            'manufacturer': 'Allterco',
+            'model': item.type_name(),
+            'sw_version': item.fw_version()
+        }
+
     async def _async_device_added(self, dev, _code):
         device_config = self._get_device_config(dev.id, dev.block.id)
         if not self.discover and device_config == {}:
             return
 
         if dev.device_type == "ROLLER":
-            self._add_device("cover", dev)
+            self.add_device("cover", dev)
         if dev.device_type == "RELAY":
             if device_config.get(CONF_LIGHT_SWITCH):
-                self._add_device("light", dev)
+                self.add_device("light", dev)
             else:
-                self._add_device("switch", dev)
+                self.add_device("switch", dev)
         elif dev.device_type == 'POWERMETER':
             sensor_cfg = self._get_sensor_config(dev.id, dev.block.id)
             if SENSOR_POWER in sensor_cfg:
-                self._add_device("sensor", dev)
+                self.add_device("sensor", dev)
         elif dev.device_type == 'SWITCH':
             sensor_cfg = self._get_sensor_config(dev.id, dev.block.id)
             if SENSOR_SWITCH in sensor_cfg:
-                self._add_device("sensor", dev)
-        elif dev.device_type in ["SENSOR"]: #, "INFOSENSOR"]:
-            self._add_device("sensor", dev)
+                self.add_device("binary_sensor", dev)
+        elif dev.device_type == "SENSOR":
+            self.add_device("sensor", dev)
+        elif dev.device_type == "BINARY_SENSOR":
+            self.add_device("binary_sensor", dev)
         elif dev.device_type in ["LIGHT", "DIMMER"]:
-            self._add_device("light", dev)
+            self.add_device("light", dev)
 
     def _device_removed(self, dev, _code):
         dev.shelly_device.remove()
@@ -347,7 +338,8 @@ class ShellyBlock(Entity):
         self._unique_id = slugify(id_prefix + "_" + block.type + "_" +
                                   block.id + prefix)
         self.entity_id = "." + self._unique_id
-        entity_id = instance._get_specific_config(CONF_ENTITY_ID , None, block.id)
+        entity_id = \
+            instance._get_specific_config(CONF_ENTITY_ID, None, block.id)
         if entity_id is not None:
             self.entity_id = "." + slugify(id_prefix + "_" + entity_id + prefix)
             self._unique_id += "_" + slugify(entity_id)
@@ -366,18 +358,18 @@ class ShellyBlock(Entity):
         self._name_ext = None
         self._is_removed = False
 
-        self.hass.add_job(self.setup_device(block))
+        #self.hass.add_job(self.setup_device(block))
 
-    async def setup_device(self, block):
-        dev_reg = await self.hass.helpers.device_registry.async_get_registry()
-        dev_reg.async_get_or_create(
-            config_entry_id=self.entity_id,
-            identifiers={(DOMAIN, block.id)},
-            manufacturer="Shelly",
-            name=block.friendly_name(),
-            model=block.type_name(),
-            sw_version="0.0.1",
-        )
+    # async def setup_device(self, block):
+    #     dev_reg = await self.hass.helpers.device_registry.async_get_registry()
+    #     dev_reg.async_get_or_create(
+    #         config_entry_id=self.entity_id,
+    #         identifiers={(DOMAIN, block.id)},
+    #         manufacturer="Allterco",
+    #         name=block.friendly_name(),
+    #         model=block.type_name(),
+    #         sw_version=block.fw_version(),
+    #     )
 
     @property
     def name(self):
@@ -424,16 +416,12 @@ class ShellyBlock(Entity):
 
     @property
     def device_info(self):
-        return {
-            'identifiers': {
-                (DOMAIN, self._block.id)
-            }
-            # 'name': self.name,
-            # 'manufacturer': "Shelly",
-            # 'model': self._block.type,
-            # 'sw_version': '0.0.1',
-            # #'via_device': (hue.DOMAIN, self.api.bridgeid),
-        }
+        return self.instance.build_device_info(self._block)
+
+    @property
+    def unique_id(self):
+        """Return the ID of this device."""
+        return self._unique_id
 
     def remove(self):
         self._is_removed = True
@@ -453,6 +441,7 @@ class ShellyDevice(Entity):
             self.entity_id = "." + slugify(id_prefix + "_" + entity_id)
             self._unique_id += "_" + slugify(entity_id)
         self._show_id_in_name = conf.get(CONF_SHOW_ID_IN_NAME)
+        self._name_ext = None
         #self._name = dev.type_name()
         #if conf.get(CONF_SHOW_ID_IN_NAME):
         #    self._name += " [" + dev.id + "]"  # 'Test' #light.name
@@ -483,9 +472,11 @@ class ShellyDevice(Entity):
                         if SENSOR_TYPES[sensor].get('attr') == key:
                             attr = {'sensor_type':key,
                                     'itm':self._dev}
-                            conf = self.hass.data[SHELLY_CONFIG]
-                            #discovery.load_platform(self.hass, 'sensor',
-                            #                        DOMAIN, attr, conf)
+                            if key in SENSOR_TYPES_CFG and \
+                                SENSOR_TYPES_CFG[key][4] == 'bool':
+                                self.instance.add_device("binary_sensor", attr)
+                            else:
+                                self.instance.add_device("sensor", attr)
 
     @property
     def name(self):
@@ -494,7 +485,8 @@ class ShellyDevice(Entity):
             name = self._dev.friendly_name()
         else:
             name = self._name
-
+        if self._name_ext:
+            name += ' - ' + self._name_ext
         if self._show_id_in_name:
             name += " [" + self._dev.id + "]"
         return name
@@ -528,17 +520,7 @@ class ShellyDevice(Entity):
 
     @property
     def device_info(self):
-        return {
-            'identifiers': {
-                # Serial numbers are unique identifiers within a specific domain
-                (DOMAIN, self._dev.block.id)
-            },
-            # 'name': self._dev.block.friendly_name(),
-            # 'manufacturer': "Shelly",
-            # 'model': self._dev.block.type_name(),
-            # 'sw_version': '0.0.1',
-            #'via_device': (hue.DOMAIN, self.api.bridgeid),
-        }
+        return self.instance.build_device_info(self._dev)
 
     @property
     def unique_id(self):
