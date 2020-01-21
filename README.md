@@ -171,6 +171,7 @@ automation:
 
 | Parameter              | Description                                                                                            | Default | Version |
 |------------------------|--------------------------------------------------------------------------------------------------------|---------|---------|
+| host_ip | Use this to listen on right interface, should be the ip address of Home Assistant | | 0.1.6- |
 | username               | User name to use for restrict login                                                                    |         | 0.0.3-  |
 | password               | Password to use for restrict login                                                                     |         | 0.0.3-  |
 | discovery              | Enable or disable discovery                                                                            | True    | 0.0.4-  |
