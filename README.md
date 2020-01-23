@@ -91,6 +91,15 @@ It is very easy, just add `shelly:` to your `configuration.yaml`
 shelly:
 ```
 
+#### Get device name from Shelly Cloud
+
+```yaml
+shelly:
+  cloud_auth_key: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  cloud_server: "shelly-XXXXX.shelly.cloud"
+```
+You will get the information for the keys above from [Shelly Cloud, User settings](https://my.shelly.cloud/#user_settings) and click GET KEY.
+
 #### Without discovery - manually specify devices
 
 ```yaml
