@@ -31,7 +31,7 @@ REQUIREMENTS = ['pyShelly==0.1.17']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.6.b7"
+__version__ = "0.1.6.b8"
 VERSION = __version__
 
 BLOCK_SENSORS = []  #Keep track dynamic block sensors is added
@@ -141,14 +141,27 @@ class ShellyInstance():
             attr = {'version': VERSION, 'pyShellyVersion': pys.version()}
             self.add_device("sensor", attr)
 
-        # fake_block = {
-        #     'id' : "694908",
-        #     'fake_block': True,
-        #     'info_values': {'temperature':5},
-        #     'cb_updated' : [],
-        # }
-        # attr = {'sensor_type':'temperature', 'itm': fake_block}
-        # self.add_device("sensor", fake_block)
+        #Remove entities that have change type
+        entity_reg = \
+            await self.hass.helpers.entity_registry.async_get_registry()
+        entities_to_remove = []
+        for entity in entity_reg.entities.values():
+            if entity.platform == "shelly" and \
+               (entity.entity_id.startswith("sensor.") and \
+                (entity.entity_id.endswith("_switch") or \
+                 entity.entity_id.endswith("_door_window") or \
+                 entity.entity_id.endswith("_flood") or \
+                 entity.entity_id.endswith("_mqtt_connected_attr") or \
+                 entity.entity_id.endswith("_over_temp_attr") or \
+                 entity.entity_id.endswith("_over_power_attr") \
+                )
+               ) or \
+               (entity.entity_id.startswith("binary_sensor.") and \
+                (entity.entity_id.endswith("_cloud_status_attr")) \
+               ):
+                 entities_to_remove.append(entity.entity_id)
+        for entity_id in entities_to_remove:
+            entity_reg.async_remove(entity_id)
 
 
     async def _stop(self, _):
@@ -282,17 +295,6 @@ class ShellyInstance():
     def _device_added(self, dev, _code):
         self.hass.add_job(self._async_device_added(dev, _code))
 
-    def build_device_info(self, item):
-        return {
-            'identifiers': {
-                (DOMAIN, item.unit_id)
-            },
-            'name': item.friendly_name(),
-            'manufacturer': 'Allterco',
-            'model': item.type_name(),
-            'sw_version': item.fw_version()
-        }
-
     async def _async_device_added(self, dev, _code):
         device_config = self._get_device_config(dev.id, dev.block.id)
         if not self.discover and device_config == {}:
@@ -416,6 +418,16 @@ class ShellyBlock(Entity):
 
     @property
     def device_info(self):
+        return {
+            'identifiers': {
+                (DOMAIN, self._block.unit_id)
+            },
+            'name': self._block.friendly_name(),
+            'manufacturer': 'Allterco',
+            'model': self._block.type_name(),
+            'sw_version': self._block.fw_version()
+        }
+
         return self.instance.build_device_info(self._block)
 
     @property
@@ -520,7 +532,15 @@ class ShellyDevice(Entity):
 
     @property
     def device_info(self):
-        return self.instance.build_device_info(self._dev)
+        return {
+            'identifiers': {
+                (DOMAIN, self._dev.block.id)
+            },
+            'name': self._dev.block.friendly_name(),
+            'manufacturer': 'Allterco',
+            'model': self._dev.type_name(),
+            'sw_version': self._dev.fw_version()
+        }
 
     @property
     def unique_id(self):

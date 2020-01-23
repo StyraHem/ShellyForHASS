@@ -116,8 +116,7 @@ SENSOR_TYPES_CFG = {
     SENSOR_TYPE_OVER_TEMP:
         ['Over temperature', '', 'mdi:alert', None, 'bool'],
     SENSOR_TYPE_CLOUD_STATUS:
-        ['Cloud status', '', 'mdi:transit-connection-variant',
-         DEVICE_CLASS_CONNECTIVITY, 'bool'],
+        ['Cloud status', '', 'mdi:transit-connection-variant', None, None],
     SENSOR_TYPE_MQTT_CONNECTED:
         ['MQTT connected', '', 'mdi:transit-connection-variant',
          DEVICE_CLASS_CONNECTIVITY, 'bool'],

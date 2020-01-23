@@ -42,6 +42,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_discover_sensor
     )
 
+    
+
 class ShellySwitch(ShellyDevice, BinarySensorDevice):
     """Representation of a Shelly Switch state."""
 
