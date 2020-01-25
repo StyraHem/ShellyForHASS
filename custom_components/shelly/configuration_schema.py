@@ -16,7 +16,7 @@ DEVICE_SCHEMA = vol.Schema({
     vol.Optional(CONF_NAME): cv.string,
     vol.Optional(CONF_LIGHT_SWITCH, default=False): cv.boolean,
     vol.Optional(CONF_SENSORS):
-            vol.All(cv.ensure_list, [vol.In(SENSOR_TYPES)]),
+            vol.All(cv.ensure_list, [vol.In(ALL_SENSORS)]),
     vol.Optional(CONF_UPGRADE_SWITCH): cv.boolean,
     vol.Optional(CONF_UNAVALABLE_AFTER_SEC) : cv.positive_int,
     vol.Optional(CONF_ENTITY_ID): cv.string,
@@ -44,8 +44,11 @@ CONFIG_SCHEMA = vol.Schema({
                       default=True): cv.boolean,
         vol.Optional(CONF_UNAVALABLE_AFTER_SEC,
                     default=60) : cv.positive_int,
-        vol.Optional(CONF_SENSORS, default=[SENSOR_POWER]):
-                        vol.All(cv.ensure_list, [vol.In(SENSOR_TYPES)]),
+        vol.Optional(CONF_SENSORS, default=DEFAULT_SENSORS):
+                        vol.All(cv.ensure_list, [vol.In(ALL_SENSORS)]),
+        vol.Optional(CONF_ATTRIBUTES, default=DEFAULT_ATTRIBUTES):
+                        vol.All(cv.ensure_list,
+                                [vol.In(ALL_ATTRIBUTES | EXTRA_ATTRIBUTES)]),
         vol.Optional(CONF_ADDITIONAL_INFO,
                      default=True): cv.boolean,
         vol.Optional(CONF_SCAN_INTERVAL,

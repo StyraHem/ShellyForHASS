@@ -6,32 +6,33 @@ https://home-assistant.io/components/shelly/
 """
 # pylint: disable=broad-except, bare-except, invalid-name, import-error
 
-from datetime import timedelta
+from datetime import timedelta, datetime
 import logging
 import time
+import pytz
 import asyncio
-
 import voluptuous as vol
 
+from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.const import (
     CONF_DEVICES, CONF_DISCOVERY, CONF_ID, CONF_NAME, CONF_PASSWORD,
     CONF_SCAN_INTERVAL, CONF_USERNAME, EVENT_HOMEASSISTANT_STOP)
 from homeassistant import config_entries
 from homeassistant.helpers import discovery
 from homeassistant.helpers.dispatcher import async_dispatcher_send
-
+from homeassistant.helpers.restore_state import RestoreStateData
+from homeassistant.helpers.entity_registry import ATTR_RESTORED
 from homeassistant.helpers.entity import Entity
-from homeassistant.helpers.script import Script
-from homeassistant.util import slugify
+from homeassistant.util import slugify, dt as dt_util
 
 from .const import *
 from .configuration_schema import CONFIG_SCHEMA
 
-REQUIREMENTS = ['pyShelly==0.1.17']
+REQUIREMENTS = ['pyShelly==0.1.18']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.6.b8"
+__version__ = "0.1.6.b9"
 VERSION = __version__
 
 BLOCK_SENSORS = []  #Keep track dynamic block sensors is added
@@ -96,6 +97,18 @@ class ShellyInstance():
         self.conf = conf
         self.discover = conf.get(CONF_DISCOVERY)
 
+        self.conf_attributes = set(conf.get(CONF_ATTRIBUTES))
+        if ATTRIBUTE_ALL in self.conf_attributes:
+            self.conf_attributes |= ALL_ATTRIBUTES
+        if ATTRIBUTE_DEFAULT in self.conf_attributes:
+            self.conf_attributes |= DEFAULT_ATTRIBUTES
+        if ATTRIBUTE_SWITCH in self.conf_attributes:
+            self.conf_attributes.add(ATTRIBUTE_SWITCH + "_1")
+            self.conf_attributes.add(ATTRIBUTE_SWITCH + "_2")
+        if ATTRIBUTE_CONSUMPTION in self.conf_attributes:
+            self.conf_attributes.add(ATTRIBUTE_CURRENT_CONSUMPTION)
+            self.conf_attributes.add(ATTRIBUTE_TOTAL_CONSUMPTION)
+
         hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, self._stop)
 
         hass.loop.create_task(
@@ -145,21 +158,39 @@ class ShellyInstance():
         entity_reg = \
             await self.hass.helpers.entity_registry.async_get_registry()
         entities_to_remove = []
+        restore_expired = dt_util.as_utc(datetime.now()) - timedelta(hours=12)
         for entity in entity_reg.entities.values():
-            if entity.platform == "shelly" and \
-               (entity.entity_id.startswith("sensor.") and \
-                (entity.entity_id.endswith("_switch") or \
-                 entity.entity_id.endswith("_door_window") or \
-                 entity.entity_id.endswith("_flood") or \
-                 entity.entity_id.endswith("_mqtt_connected_attr") or \
-                 entity.entity_id.endswith("_over_temp_attr") or \
-                 entity.entity_id.endswith("_over_power_attr") \
-                )
-               ) or \
-               (entity.entity_id.startswith("binary_sensor.") and \
-                (entity.entity_id.endswith("_cloud_status_attr")) \
-               ):
-                 entities_to_remove.append(entity.entity_id)
+            if entity.platform == "shelly":
+                if entity.entity_id.startswith("sensor.") and \
+                  (entity.entity_id.endswith("_switch") or \
+                     entity.entity_id.endswith("_door_window") or \
+                     entity.entity_id.endswith("_flood") or \
+                     entity.entity_id.endswith("_mqtt_connected_attr") or \
+                     entity.entity_id.endswith("_over_temp_attr") or \
+                     entity.entity_id.endswith("_over_power_attr") \
+                  ):
+                    entities_to_remove.append(entity.entity_id)
+                if entity.entity_id.startswith("binary_sensor.") and \
+                   entity.entity_id.endswith("_cloud_status_attr"):
+                    entities_to_remove.append(entity.entity_id)
+                if entity.entity_id.startswith("switch.") and \
+                   entity.entity_id.endswith("_firmware_update"):
+                    entities_to_remove.append(entity.entity_id)
+                if "_shdw_" in entity.entity_id or \
+                   "_shwt_" in entity.entity_id or \
+                   "_shht_" in entity.entity_id:
+                    #todo check last_seen
+                    data = await RestoreStateData.async_get_instance(self.hass)
+                    if entity.entity_id in data.last_states:
+                        data = data.last_states[entity.entity_id]
+                        last_seen = dt_util.as_utc(data.last_seen)
+                        if last_seen > restore_expired:
+                            state = data.state
+                            attr = dict(state.attributes)
+                            attr[ATTR_RESTORED] = True
+                            self.hass.states.async_set(entity.entity_id, \
+                                                        state.state, attr)
+
         for entity_id in entities_to_remove:
             entity_reg.async_remove(entity_id)
 
@@ -202,11 +233,14 @@ class ShellyInstance():
         sensors = self._get_specific_config(CONF_SENSORS, None, *ids)
         if sensors is None:
             sensors = self.conf.get(CONF_SENSORS)
-        if SENSOR_ALL in sensors:
-            return [*SENSOR_TYPES.keys()]
         if sensors is None:
             return {}
+        if SENSOR_ALL in sensors:
+            return [*ALL_SENSORS.keys()]
         return sensors
+
+    def conf_attribute(self, key):
+        return key in self.conf_attributes
 
     def add_device(self, platform, dev):
         self.hass.add_job(self._asyncadd_device(platform, dev))
@@ -242,7 +276,7 @@ class ShellyInstance():
                 if not ukey in BLOCK_SENSORS:
                     BLOCK_SENSORS.append(ukey)
                     for sensor in hass_data['sensor_cfg']:
-                        if SENSOR_TYPES[sensor].get('attr') == key:
+                        if ALL_SENSORS[sensor].get('attr') == key:
                             attr = {'sensor_type':key,
                                     'itm': block}
                             if key in SENSOR_TYPES_CFG and \
@@ -285,7 +319,7 @@ class ShellyInstance():
             #block.update_status_information()
             # cfg_sensors = conf.get(CONF_SENSORS)
             # for sensor in cfg_sensors:
-            #     sensor_type = SENSOR_TYPES[sensor]
+            #     sensor_type = ALL_SENSORS[sensor]
             #     if 'attr' in sensor_type:
             #         attr = {'sensor_type':sensor_type['attr'],
             #                 SHELLY_BLOCK_ID : block_key}
@@ -309,8 +343,15 @@ class ShellyInstance():
                 self.add_device("switch", dev)
         elif dev.device_type == 'POWERMETER':
             sensor_cfg = self._get_sensor_config(dev.id, dev.block.id)
-            if SENSOR_POWER in sensor_cfg:
+            if SENSOR_CURRENT_CONSUMPTION in sensor_cfg or \
+                SENSOR_CONSUMPTION in sensor_cfg or \
+                SENSOR_POWER in sensor_cfg: #POWER deprecated
                 self.add_device("sensor", dev)
+            if SENSOR_TOTAL_CONSUMPTION in sensor_cfg or \
+                SENSOR_CONSUMPTION in sensor_cfg or \
+                SENSOR_POWER in sensor_cfg: #POWER deprecated
+                self.add_device("sensor", {'sensor_type' : 'total_consumption',
+                                            'itm': dev})
         elif dev.device_type == 'SWITCH':
             sensor_cfg = self._get_sensor_config(dev.id, dev.block.id)
             if SENSOR_SWITCH in sensor_cfg:
@@ -331,7 +372,7 @@ class ShellyInstance():
         except KeyError:
             pass
 
-class ShellyBlock(Entity):
+class ShellyBlock(RestoreEntity):
     """Base class for Shelly entities"""
 
     def __init__(self, block, instance, prefix=""):
@@ -349,7 +390,6 @@ class ShellyBlock(Entity):
         #block.type_name()
         #if conf.get(CONF_SHOW_ID_IN_NAME):
         #    self._name += " [" + block.id + "]"
-        self.fake_block = isinstance(block, dict) #:'fake_block' in block
         self._show_id_in_name = conf.get(CONF_SHOW_ID_IN_NAME)
         self._block = block
         self.hass = instance.hass
@@ -376,8 +416,6 @@ class ShellyBlock(Entity):
     @property
     def name(self):
         """Return the display name of this device."""
-        if self.fake_block:
-            name = 'Fake'
         if self._name is None:
             name = self._block.friendly_name()
         else:
@@ -398,8 +436,6 @@ class ShellyBlock(Entity):
     @property
     def device_state_attributes(self):
         """Show state attributes in HASS"""
-        if self.fake_block:
-            return {}
         attrs = {'ip_address': self._block.ip_addr,
                  'shelly_type': self._block.type_name(),
                  'shelly_id': self._block.id,
@@ -412,7 +448,8 @@ class ShellyBlock(Entity):
 
         if self._block.info_values is not None:
             for key, value in self._block.info_values.items():
-                attrs[key] = value
+                if self.instance.conf_attribute(key):
+                    attrs[key] = value
 
         return attrs
 
@@ -439,7 +476,7 @@ class ShellyBlock(Entity):
         self._is_removed = True
         self.hass.add_job(self.async_remove)
 
-class ShellyDevice(Entity):
+class ShellyDevice(RestoreEntity):
     """Base class for Shelly entities"""
 
     def __init__(self, dev, instance):
@@ -481,7 +518,7 @@ class ShellyDevice(Entity):
                 if not ukey in DEVICE_SENSORS:
                     DEVICE_SENSORS.append(ukey)
                     for sensor in self._sensor_conf:
-                        if SENSOR_TYPES[sensor].get('attr') == key:
+                        if ALL_SENSORS[sensor].get('attr') == key:
                             attr = {'sensor_type':key,
                                     'itm':self._dev}
                             if key in SENSOR_TYPES_CFG and \
@@ -511,22 +548,24 @@ class ShellyDevice(Entity):
                  'shelly_id': self._dev.id,
                  'discovery': self._dev.discovery_src
                 }
-
         room = self._dev.room_name()
         if room:
             attrs['room'] = room
 
         if self._dev.block.info_values is not None:
             for key, value in self._dev.block.info_values.items():
-                attrs[key] = value
+                if self.instance.conf_attribute(key):
+                    attrs[key] = value
 
         if self._dev.info_values is not None:
             for key, value in self._dev.info_values.items():
-                attrs[key] = value
+                if self.instance.conf_attribute(key):
+                    attrs[key] = value
 
         if self._dev.sensor_values is not None:
             for key, value in self._dev.sensor_values.items():
-                attrs[key] = value
+                if self.instance.conf_attribute(key):
+                    attrs[key] = value
 
         return attrs
 

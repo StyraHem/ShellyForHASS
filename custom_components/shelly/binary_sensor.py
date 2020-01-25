@@ -11,6 +11,7 @@ from threading import Timer
 from homeassistant.util import slugify
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.components.binary_sensor import BinarySensorDevice
+from homeassistant.helpers.restore_state import RestoreStateData
 
 from . import (CONF_OBJECT_ID_PREFIX, CONF_POWER_DECIMALS, SHELLY_CONFIG,
                ShellyDevice, ShellyBlock)
@@ -41,8 +42,6 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         "shelly_new_binary_sensor",
         async_discover_sensor
     )
-
-    
 
 class ShellySwitch(ShellyDevice, BinarySensorDevice):
     """Representation of a Shelly Switch state."""

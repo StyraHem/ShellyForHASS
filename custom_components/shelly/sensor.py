@@ -18,7 +18,6 @@ from homeassistant.const import (DEVICE_CLASS_HUMIDITY,
                                  TEMP_CELSIUS, POWER_WATT,
                                  STATE_ON, STATE_OFF)
 from homeassistant.helpers.entity import Entity
-from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.core import callback
 from homeassistant.components.binary_sensor import BinarySensorDevice
 
