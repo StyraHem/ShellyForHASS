@@ -46,7 +46,7 @@ CONFIG_SCHEMA = vol.Schema({
                     default=60) : cv.positive_int,
         vol.Optional(CONF_SENSORS, default=DEFAULT_SENSORS):
                         vol.All(cv.ensure_list, [vol.In(ALL_SENSORS)]),
-        vol.Optional(CONF_ATTRIBUTES, default=DEFAULT_ATTRIBUTES):
+        vol.Optional(CONF_ATTRIBUTES, default=list(DEFAULT_ATTRIBUTES)):
                         vol.All(cv.ensure_list,
                                 [vol.In(ALL_ATTRIBUTES | EXTRA_ATTRIBUTES)]),
         vol.Optional(CONF_ADDITIONAL_INFO,
