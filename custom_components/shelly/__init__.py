@@ -170,6 +170,11 @@ class ShellyInstance():
                      entity.entity_id.endswith("_over_power_attr") \
                   ):
                     entities_to_remove.append(entity.entity_id)
+                if entity.entity_id.startswith("sensor.") and \
+                    entity.entity_id.endswith("_consumption") and \
+                    not entity.entity_id.endswith("total_consumption") and \
+                    not entity.entity_id.endswith("current_consumption"):
+                    entities_to_remove.append(entity.entity_id)
                 if entity.entity_id.startswith("binary_sensor.") and \
                    entity.entity_id.endswith("_cloud_status_attr"):
                     entities_to_remove.append(entity.entity_id)
