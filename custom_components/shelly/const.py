@@ -11,7 +11,7 @@ from homeassistant.const import (
     DEVICE_CLASS_POWER,
     TEMP_CELSIUS,
     POWER_WATT,
-    ENERGY_KILO_WATT_HOUR
+    ENERGY_WATT_HOUR
 )
 
 from homeassistant.components.binary_sensor import (
@@ -210,6 +210,6 @@ SENSOR_TYPES_CFG = {
     SENSOR_TYPE_ILLUMINANCE:
         ['Illuminance', 'lux', None, DEVICE_CLASS_ILLUMINANCE, None],
     SENSOR_TYPE_TOTAL_CONSUMPTION:
-        ['Total consumption', ENERGY_KILO_WATT_HOUR,
+        ['Total consumption', ENERGY_WATT_HOUR,
          'mdi:flash-circle', DEVICE_CLASS_POWER, None]
 }

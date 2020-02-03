@@ -42,8 +42,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
                                            sensor_type, sensor_type)])
             return
         if dev.device_type == "POWERMETER":
-            async_add_entities([
-                ShellySensor(dev, instance, SENSOR_TYPE_POWER, 'consumption'),
+            async_add_entities([ShellySensor(dev, instance, SENSOR_TYPE_POWER,
+                                'current_consumption'),
             ])
         elif dev.device_type == "SENSOR":
             async_add_entities([

@@ -28,11 +28,11 @@ from homeassistant.util import slugify, dt as dt_util
 from .const import *
 from .configuration_schema import CONFIG_SCHEMA
 
-REQUIREMENTS = ['pyShelly==0.1.18']
+REQUIREMENTS = ['pyShelly==0.1.19']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.6.b9"
+__version__ = "0.1.6.b10"
 VERSION = __version__
 
 BLOCK_SENSORS = []  #Keep track dynamic block sensors is added
