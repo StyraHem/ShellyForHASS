@@ -4,7 +4,7 @@
 [![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20us%20a%20coffee-orange.svg?style=for-the-badge)](https://www.buymeacoffee.com/styrahem)
 
 ![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge)
-![version-wip](https://img.shields.io/badge/latest_version-0.1.5-green.svg?style=for-the-badge)
+![version-wip](https://img.shields.io/badge/latest_version-0.1.6-green.svg?style=for-the-badge)
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-green.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 
 ## Join Facebook group:
@@ -194,7 +194,8 @@ automation:
 | _wifi_sensor_          | Add extra sensor for wifi signal of each device. Requires `additional_information` to be `True`.  | False   | 0.0.6 (deprecated) |
 | _uptime_sensor_        | Add extra sensor for device uptime of each devivce. Requires `additional_information` to be `True` | False   | 0.0.6 (deprecated)  |
 | power_decimals         | Round power sensor values to the given number of decimals                                          |         | 0.0.14- |
-| sensors                | A list with sensors to show for each device. See list below.                                        | power | 0.0.15- |
+| sensors                | A list with sensors to show for each device. See list below.                                        | current_consumption | 0.0.15- |
+| attributes             | A list with attributes to show for each device. See list below.                                        | default | 0.0.16- |
 | upgrade_switch         | Add firmware switches when upgrade needed.                                                           | True  | 0.0.15- |
 | unavailable_after_sec  | Number of seconds before the device will be unavialable      | 60 | 0.0.16- |
 | mdns | Allow the plugin to use mDns to discover devices | True | 0.1.5- |
@@ -215,11 +216,39 @@ automation:
 | upgrade_switch | Add firmware switches when upgrade needed. Override global configuration.               | False    | 0.0.15- |
 | unavailable_after_sec  | Overide number of seconds before the device will be unavialable.    | 120 | 0.0.16- | 
 
+#### Attributes (0.1.6-)
+| Sensor       | Description                                               | Default |
+|--------------|-----------------------------------------------------------|---------|
+| all          | Show all available attributes                             ||
+| default      | Attributes with the mark in default column                ||
+| ip_address   | IP address of the Shelly device                       | x |
+| shelly_type  | Type of Shelly (Shelly 1, Shelly 2 etc)               | x |
+| shelly_id    | Shelly id of the device, 6 or 12 digits hex number    | x |
+| ssid         | SSID the device is connected to                       ||
+| rssi         | WiFi quality for the device  ||
+| uptime       | Total uptime (s) for device ||
+| has_firmware_update | Indicate if the device have a new firmware available | x |
+| latest_fw_version | The newest firmware for the device type ||
+| firmware_version | Current firmware version on device ||
+| cloud_enabled | Shelly cloud enabled for device ||
+| cloud_connected | Device connected to the cloud ||
+| cloud_status | Shelly cloud status (disabled/disconnected/connected) | x |
+| mqtt_connected | Device connected to MQTT server ||
+| switch       | Show state of the actual switch button | x |
+| current_consumption | Show power consumtion sensors     ||
+| total_consumption | Show total power consumtion sensors ||
+| over_power   | Show over power sensors               | x |
+| device_temp  | Show device inner temperature sensors ||
+| over_temp    | Show over temperature sensors         | x |
+| battery      | Show battery percentage               | x |
+| payload | Show the latest CoAP message received (DEBUG) ||
+
 #### Sensors
 | Sensor       | Description                           | Values / Unit     |
 |--------------|---------------------------------------|-------------------|
 | all          | Show all available sensors            |                   |
-| power        | Show power consumtion sensors         | W                 |
+| current_consumption | Show power consumtion sensors     | W              |
+| total_consumption | Show total power consumtion sensors | Wh             |
 | rssi         | Show WiFi quality sensors             | dB                |
 | uptime       | Show uptime sensors                   | s                 |
 | over_power   | Show over power sensors               | True, False       |
@@ -230,7 +259,7 @@ automation:
 | battery      | Show battery percentage (H&T)         | %                 |
 | switch       | Show state of the actual switch button| True, False       |
 
-All of the sensors (not power) require additional_information to be True to work.
+All of the sensors (not current_consumption) require additional_information to be True to work.
 
 If you disable discovery only Shellies under devices will be added.
 
