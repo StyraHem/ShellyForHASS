@@ -19,7 +19,7 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 
 ![List](https://raw.githubusercontent.com/StyraHem/ShellyForHASS/master/images/intro.png)
 
-If you have any problems please see the [Trouble shootning guide](https://github.com/StyraHem/ShellyForHASS/blob/master/troubleshooting.md)
+If you have any problems please see the [troubleshooting guide](https://github.com/StyraHem/ShellyForHASS/blob/master/troubleshooting.md)
 
 ## Features
 
