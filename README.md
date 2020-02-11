@@ -352,7 +352,7 @@ This plugin is created by the StyraHem.se, the Swedish distributor of Shelly. In
 - [@tefinger](https://github.com/tefinger) that have test and add functinallity to improve this component.
 - Allterco that have developed all nice Shellies and also response quickly on requests and bugfixes.
 
-## Screen shots
+## Screenshots
 
 ![List](https://raw.githubusercontent.com/StyraHem/ShellyForHASS/master/screenshots/List.PNG)
 ![RGB](https://raw.githubusercontent.com/StyraHem/ShellyForHASS/master/screenshots/RGB.PNG)
