@@ -5,10 +5,10 @@ This is a plugin platform for Shelly smart home WiFi devices. The plugin communi
 {%- if version_installed == "master" %}
 ## You are running master!
 This is **only** intended for development!
-{%- elif (version_installed.indexOf(".b") | int) > 0 %}
+{% endif %}
+
 ## This is a beta version
 Please be careful and do NOT install this on production systems. Also make sure to take a backup/snapshot before installing. Check the [change log](https://github.com/StyraHem/ShellyForHASS/releases) for more information.
-{% endif %}
 
 ![List](https://raw.githubusercontent.com/StyraHem/ShellyForHASS/master/images/intro.png)
 
