@@ -13,8 +13,9 @@ from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.components.binary_sensor import BinarySensorDevice
 from homeassistant.helpers.restore_state import RestoreStateData
 
-from . import (CONF_OBJECT_ID_PREFIX, CONF_POWER_DECIMALS, SHELLY_CONFIG,
-               ShellyDevice, ShellyBlock)
+from . import (CONF_OBJECT_ID_PREFIX, CONF_POWER_DECIMALS)
+from .device import ShellyDevice
+from .block import ShellyBlock
 
 from .const import *
 

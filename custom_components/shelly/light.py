@@ -19,7 +19,7 @@ from homeassistant.util.color import (
     color_temperature_kelvin_to_mired as kelvin_to_mired,
     color_temperature_mired_to_kelvin as mired_to_kelvin)
 
-from . import ShellyDevice
+from .device import ShellyDevice
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -30,7 +30,7 @@ SUPPORT_SHELLYRGB_WHITE = (SUPPORT_BRIGHTNESS)
 #     """Setup Shelly Light platform."""
 #     dev = get_device_from_hass(hass, discovery_info)
 #     if dev.device_type == "RELAY":
-#         add_devices([ShellyLight(dev, hass)])
+#         add_devices([ShellyLightRelay(dev, hass)])
 #     elif dev.device_type == "DIMMER":
 #         add_devices([ShellyDimmer(dev, hass)])
 #     else:
@@ -41,11 +41,13 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     async def async_discover_light(dev, instance):
         """Discover and add a discovered sensor."""
         if dev.device_type == "RELAY":
-            async_add_entities([ShellyLight(dev, instance)])
+            async_add_entities([ShellyLightRelay(dev, instance)])
         elif dev.device_type == "DIMMER":
             async_add_entities([ShellyDimmer(dev, instance)])
-        else:
+        elif dev.device_type == "RGBLIGHT":
             async_add_entities([ShellyRGB(dev, instance)])
+        else:
+            async_add_entities([ShellyDimmer(dev, instance)])
 
     async_dispatcher_connect(
         hass,
@@ -53,11 +55,11 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_discover_light
     )
 
-class ShellyLight(ShellyDevice, Light):
+class ShellyLightRelay(ShellyDevice, Light):
     """Representation of an Shelly Switch."""
 
     def __init__(self, dev, instance):
-        """Initialize an ShellyLight."""
+        """Initialize an ShellyLightRelay."""
         ShellyDevice.__init__(self, dev, instance)
         self._state = None
         self.update()
@@ -84,12 +86,21 @@ class ShellyDimmer(ShellyDevice, Light):
         ShellyDevice.__init__(self, dev, instance)
         self._state = None
         self._brightness = None
+        self._color_temp = None
+        self._color_temp_min = None
+        self._color_temp_max = None
         self.update()
+
+        self._features = SUPPORT_BRIGHTNESS
+        if getattr(dev, "support_color_temp", False):
+            self._color_temp_min = dev._color_temp_min
+            self._color_temp_max = dev._color_temp_max
+            self._features |= SUPPORT_COLOR_TEMP
 
     @property
     def supported_features(self):
         """Flag supported features."""
-        return SUPPORT_BRIGHTNESS
+        return self._features
 
     @property
     def is_on(self):
@@ -97,9 +108,16 @@ class ShellyDimmer(ShellyDevice, Light):
 
     def turn_on(self, **kwargs):
         brightness = None
+        color_temp = None
         if ATTR_BRIGHTNESS in kwargs:
             brightness = int(kwargs[ATTR_BRIGHTNESS] / 2.55)
-        self._dev.turn_on(brightness)
+        if ATTR_COLOR_TEMP in kwargs:
+            color_temp = int(mired_to_kelvin(kwargs[ATTR_COLOR_TEMP]))
+            if color_temp > self._color_temp_max:
+                color_temp = self._color_temp_max
+            if color_temp < self._color_temp_min:
+                color_temp = self._color_temp_min
+        self._dev.turn_on(brightness, color_temp)
 
     def turn_off(self, **_kwargs):
         self._dev.turn_off()
@@ -109,23 +127,42 @@ class ShellyDimmer(ShellyDevice, Light):
         """Return the brightness of the light."""
         return int(self._brightness * 2.55)
 
+    @property
+    def color_temp(self):
+        """Return the CT color value in mireds."""
+        if self._color_temp is None:
+            return None
+        return int(kelvin_to_mired(self._color_temp))
+
+    @property
+    def min_mireds(self):
+        """Return the coldest color_temp that this light supports."""
+        return kelvin_to_mired(self._color_temp_max)
+
+    @property
+    def max_mireds(self):
+        """Return the warmest color_temp that this light supports."""
+        return kelvin_to_mired(self._color_temp_min)
+
     def update(self):
         """Fetch new state data for this light."""
         self._state = self._dev.state
         self._brightness = self._dev.brightness
+        if hasattr(self._dev, 'color_temp'):
+            self._color_temp = self._dev.color_temp
 
 class ShellyRGB(ShellyDevice, Light):
     """Representation of an Shelly Light."""
 
     def __init__(self, dev, instance):
-        """Initialize an ShellyLight."""
+        """Initialize an ShellyLightRelay."""
         ShellyDevice.__init__(self, dev, instance)
         self._state = None
         self._brightness = None
         self._white_value = None
         self._rgb = None
         self._mode = None
-        self._temp = None
+        self._color_temp = None
         self._effect = None
         self.update()
 
@@ -166,7 +203,7 @@ class ShellyRGB(ShellyDevice, Light):
         """Turn on light"""
         brightness = None
         rgb = None
-        temp = None
+        color_temp = None
         effect_nr = None
         mode = None
         white_value = None
@@ -183,7 +220,12 @@ class ShellyRGB(ShellyDevice, Light):
             rgb = [red, green, blue]
 
         if ATTR_COLOR_TEMP in kwargs:
-            temp = int(mired_to_kelvin(kwargs[ATTR_COLOR_TEMP]))
+            color_temp = int(mired_to_kelvin(kwargs[ATTR_COLOR_TEMP]))
+            if color_temp > 6500:
+                color_temp = 6500
+            if color_temp < 3000:
+                color_temp = 3000
+
 
         if ATTR_EFFECT in kwargs:
             affect_attr = kwargs.get(ATTR_EFFECT)
@@ -196,8 +238,8 @@ class ShellyRGB(ShellyDevice, Light):
             if 'effect' in effect:
                 effect_nr = effect['effect']
 
-        self._dev.turn_on(brightness=brightness, rgb=rgb, temp=temp, mode=mode,
-                          effect=effect_nr, white_value=white_value)
+        self._dev.turn_on(brightness=brightness, rgb=rgb, color_temp=color_temp,
+                          mode=mode, effect=effect_nr, white_value=white_value)
 
     def turn_off(self, **_kwargs):
         """Turn off light"""
@@ -209,7 +251,7 @@ class ShellyRGB(ShellyDevice, Light):
         self._rgb = self._dev.rgb
         self._brightness = self._dev.brightness
         self._white_value = self._dev.white_value
-        self._temp = self._dev.temp
+        self._color_temp = self._dev.color_temp
         self._effect = self._dev.effect
         self._mode = self._dev.mode
 
@@ -221,9 +263,9 @@ class ShellyRGB(ShellyDevice, Light):
     @property
     def color_temp(self):
         """Return the CT color value in mireds."""
-        if self._temp is None:
+        if self._color_temp is None:
             return None
-        return int(kelvin_to_mired(self._temp))
+        return int(kelvin_to_mired(self._color_temp))
 
     @property
     def min_mireds(self):

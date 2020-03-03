@@ -13,7 +13,8 @@ from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from .const import *
 
 # from .sensor import ShellySensor
-from . import (ShellyDevice, ShellyBlock)
+from .device import ShellyDevice
+from .block import ShellyBlock
 
 _LOGGER = logging.getLogger(__name__)
 

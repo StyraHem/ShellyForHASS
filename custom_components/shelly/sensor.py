@@ -21,8 +21,9 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.core import callback
 from homeassistant.components.binary_sensor import BinarySensorDevice
 
-from . import (CONF_OBJECT_ID_PREFIX, CONF_POWER_DECIMALS, SHELLY_CONFIG,
-               ShellyDevice, ShellyBlock)
+from . import (CONF_OBJECT_ID_PREFIX, CONF_POWER_DECIMALS)
+from .device import ShellyDevice
+from .block import ShellyBlock
 
 from .const import *
 
@@ -35,7 +36,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         if isinstance(dev, dict):
             if 'version' in dev:
                 async_add_entities([ShellyVersion(
-                    instance, dev.get('version'), dev.get('pyShellyVersion'))])
+                    instance, dev.get('version'), dev.get('pyShellyVersion'),
+                    dev.get('extra'))])
             if 'sensor_type' in dev:
                 sensor_type = dev['sensor_type']
                 async_add_entities([ShellyInfoSensor(dev['itm'], instance,
@@ -160,11 +162,10 @@ class ShellyInfoSensor(ShellyBlock, Entity):
         """Return the device class."""
         return self._sensor_cfg[3]
 
-
 class ShellyVersion(Entity):
     """Representation of a Shelly version sensor."""
 
-    def __init__(self, instance, version, py_shelly_version):
+    def __init__(self, instance, version, py_shelly_version, extra):
         """Initialize the Version sensor."""
         conf = instance.conf
         id_prefix = slugify(conf.get(CONF_OBJECT_ID_PREFIX))
@@ -172,6 +173,7 @@ class ShellyVersion(Entity):
         self._py_shelly_version = py_shelly_version
         self.entity_id = "sensor." + id_prefix + "_version"
         self._name = "ShellyForHass"
+        self._extra = extra
         #self.instance = instance
 
     @property
@@ -187,8 +189,12 @@ class ShellyVersion(Entity):
     @property
     def device_state_attributes(self):
         """Return attributes for the sensor."""
-        return {'shelly': self._version, 'pyShelly': self._py_shelly_version,
+        attribs = {'shelly': self._version,
+                'pyShelly': self._py_shelly_version,
                 'developed_by': "StyraHem.se"}
+        if self._extra:
+            attribs.update(self._extra)
+        return attribs
 
     @property
     def icon(self):
