@@ -39,5 +39,8 @@ Please support us by joining on [Patereon](https://www.patreon.com/shelly4hass) 
 - [Facebook group](https://www.facebook.com/groups/shellyforhass)
 
 {%- if version_installed == "master" %}
-Test
+Master
+{% endif %}
+{%- if version_installed.indexOf(".b") > 0 %}
+Beta
 {% endif %}
