@@ -1,12 +1,7 @@
 [![buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/styrahem)
 
-{%- if version_installed == "master" %}
-## You are running master!
-This is **only** intended for development!
-{%- elif (version_installed.indexOf(".b") | int) > 0 %}
 ## This is a beta version
 Please be careful and do NOT install this on production systems. Also make sure to take a backup/snapshot before installing. Check the [change log](https://github.com/StyraHem/ShellyForHASS/releases) for more information.
-{% endif %}
 
 This is a plugin platform for Shelly smart home WiFi devices. The plugin communicate localy with the devices. You can also enable cloud connection, now it is only used to get the names of the devices.
 
@@ -33,3 +28,7 @@ Please support us by joining on [Patereon](https://www.patreon.com/shelly4hass) 
 - [Configuration](https://github.com/StyraHem/ShellyForHASS/blob/master/README.md#configure)
 - [Wiki, FAQ](https://github.com/StyraHem/ShellyForHASS/wiki)
 - [Change log](https://github.com/StyraHem/ShellyForHASS/releases)
+
+{%- if version_installed == "master" %}
+Test
+{% endif %}
