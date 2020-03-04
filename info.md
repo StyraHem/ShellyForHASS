@@ -1,19 +1,22 @@
 [![buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/styrahem)
 
+This is a plugin platform for Shelly smart home WiFi devices. The plugin communicate localy with the devices. You can also enable cloud connection, now it is only used to get the names of the devices.
+
 {%- if version_installed == "master" %}
 ## You are running master!
 This is **only** intended for development!
-{%- elif (version_installed.indexOf(".b") | int) > 0 %}
-## This is a beta version
-Please be careful and do NOT install this on production systems. Also make sure to take a backup/snapshot before installing. Check the [change log](https://github.com/StyraHem/ShellyForHASS/releases) for more information.
 {% endif %}
 
-This is a plugin platform for Shelly smart home WiFi devices. The plugin communicate localy with the devices. You can also enable cloud connection, now it is only used to get the names of the devices.
+## This is a beta version
+Please be careful and do NOT install this on production systems. Also make sure to take a backup/snapshot before installing. Check the [change log](https://github.com/StyraHem/ShellyForHASS/releases) for more information.
 
 ![List](https://raw.githubusercontent.com/StyraHem/ShellyForHASS/master/images/intro.png)
 
 # Changes
 You can found change log under [releases](https://github.com/StyraHem/ShellyForHASS/releases)
+
+# Community and support
+Please join our [Facebook group](https://www.facebook.com/groups/shellyforhass) for support and information about ShellyForHass.
 
 # Features
 - Support all Shelly devices (temperature & humidity, switch, RGB, effects etc)
@@ -31,5 +34,13 @@ Please support us by joining on [Patereon](https://www.patreon.com/shelly4hass) 
 # Links
 - [Documentation](https://github.com/StyraHem/ShellyForHASS/blob/master/README.md)
 - [Configuration](https://github.com/StyraHem/ShellyForHASS/blob/master/README.md#configure)
-- [Wiki, FAQ](https://github.com/StyraHem/ShellyForHASS/wiki)
 - [Change log](https://github.com/StyraHem/ShellyForHASS/releases)
+- [Wiki, FAQ](https://github.com/StyraHem/ShellyForHASS/wiki)
+- [Facebook group](https://www.facebook.com/groups/shellyforhass)
+
+{%- if version_installed == "master" %}
+Master
+{% endif %}
+{%- if version_installed.indexOf(".b") > 0 %}
+Beta
+{% endif %}

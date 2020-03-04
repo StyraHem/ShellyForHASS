@@ -3,8 +3,9 @@
 [![founder-wip](https://img.shields.io/badge/founder-Håkan_Åkerberg@StyraHem.se-green.svg?style=for-the-badge)](https://www.styrahem.se)
 [![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20us%20a%20coffee-orange.svg?style=for-the-badge)](https://www.buymeacoffee.com/styrahem)
 
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/StyraHem/ShellyForHass?style=for-the-badge)
 ![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge)
-![version-wip](https://img.shields.io/badge/latest_version-0.1.6-green.svg?style=for-the-badge)
+![GitHub Releases](https://img.shields.io/github/downloads/StyraHem/ShellyForHass/latest/total?label=Downloads&style=for-the-badge)
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-green.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 
 ## Join Facebook group:
@@ -65,6 +66,8 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Shelly Door/Window
 - Shelly Dimmer / Dimmer SL
 - Shelly EM
+- Shelly 3EM (0.1.7)
+- Shelly DUO (0.1.7)
 
 ## Installation
 
@@ -217,8 +220,8 @@ automation:
 | unavailable_after_sec  | Overide number of seconds before the device will be unavialable.    | 120 | 0.0.16- | 
 
 #### Attributes (0.1.6-)
-| Sensor       | Description                                               | Default |
-|--------------|-----------------------------------------------------------|---------|
+| Sensor       | Description                                               | Default | Version |
+|--------------|-----------------------------------------------------------|---------|---------|
 | all          | Show all available attributes                             ||
 | default      | Attributes with the mark in default column                ||
 | ip_address   | IP address of the Shelly device                       | x |
@@ -235,8 +238,12 @@ automation:
 | cloud_status | Shelly cloud status (disabled/disconnected/connected) | x |
 | mqtt_connected | Device connected to MQTT server ||
 | switch       | Show state of the actual switch button | x |
-| current_consumption | Show power consumtion sensors     ||
-| total_consumption | Show total power consumtion sensors ||
+| current_consumption | Show power consumtion  ||
+| total_consumption | Show total power consumtion  ||
+| total_returned | Show total power returned  (EM/3EM) ||0.1.7-|
+| voltage | Show current voltage (V) ||0.1.7-|
+| current | Show current current (A) ||0.1.7-|
+| phase factor | Show current phase factor ||0.1.7-|
 | over_power   | Show over power sensors               | x |
 | device_temp  | Show device inner temperature sensors ||
 | over_temp    | Show over temperature sensors         | x |
@@ -244,8 +251,8 @@ automation:
 | payload | Show the latest CoAP message received (DEBUG) ||
 
 #### Sensors
-| Sensor       | Description                           | Values / Unit     |
-|--------------|---------------------------------------|-------------------|
+| Sensor       | Description                           | Values / Unit     | Version |
+|--------------|---------------------------------------|-------------------|---------|
 | all          | Show all available sensors            |                   |
 | current_consumption | Show power consumtion sensors     | W              |
 | total_consumption | Show total power consumtion sensors | Wh             |
@@ -258,6 +265,10 @@ automation:
 | mqtt         | Show mqtt connection state            | True, False       |
 | battery      | Show battery percentage (H&T)         | %                 |
 | switch       | Show state of the actual switch button| True, False       |
+| total_returned | Show total power returned  (EM/3EM) ||0.1.7-|
+| voltage | Show current voltage |V|0.1.7-|
+| current | Show current current |A|0.1.7-|
+| phase factor | Show current phase factor ||0.1.7-|
 
 All of the sensors (not current_consumption) require additional_information to be True to work.
 
