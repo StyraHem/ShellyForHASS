@@ -41,6 +41,3 @@ Please support us by joining on [Patereon](https://www.patreon.com/shelly4hass) 
 {%- if version_installed == "master" %}
 Master
 {% endif %}
-{%- if version_installed.indexOf(".b") > 0 %}
-Beta
-{% endif %}
