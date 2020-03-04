@@ -314,7 +314,8 @@ class ShellyInstance():
                 if not ukey in self.block_sensors:
                     self.block_sensors.append(ukey)
                     for sensor in hass_data['sensor_cfg']:
-                        if ALL_SENSORS[sensor].get('attr') == key:
+                        if sensor in ALL_SENSORS and \
+                            ALL_SENSORS[sensor].get('attr') == key:
                             attr = {'sensor_type':key,
                                     'itm': block}
                             if key in SENSOR_TYPES_CFG and \
@@ -403,8 +404,10 @@ class ShellyInstance():
             self.add_device("sensor", dev)
         elif dev.device_type == "BINARY_SENSOR":
             self.add_device("binary_sensor", dev)
-        elif dev.device_type in ["LIGHT", "DIMMER"]:
+        elif dev.device_type in ["LIGHT", "DIMMER", "RGBLIGHT"]:
             self.add_device("light", dev)
+        else:
+            _LOGGER.error("Unknown device type, " + dev.device_type)
 
     def _device_removed(self, dev, _code):
         dev.shelly_device.remove()
