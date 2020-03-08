@@ -160,7 +160,8 @@ class ShellyInstance():
         pys.mdns_enabled = conf.get(CONF_MDNS)
         host_ip = conf.get(CONF_HOST_IP)
         if host_ip:
-            pys.host_ip = host_ip
+            if host_ip != '-':
+                pys.host_ip = host_ip
         else:
             pys.host_ip = get_local_ip()
         pys.start()
@@ -375,7 +376,7 @@ class ShellyInstance():
 
         if dev.device_type == "ROLLER":
             self.add_device("cover", dev)
-        if dev.device_type == "RELAY":
+        elif dev.device_type == "RELAY":
             if device_config.get(CONF_LIGHT_SWITCH):
                 self.add_device("light", dev)
             else:
@@ -407,7 +408,7 @@ class ShellyInstance():
         elif dev.device_type in ["LIGHT", "DIMMER", "RGBLIGHT"]:
             self.add_device("light", dev)
         else:
-            _LOGGER.error("Unknown device type, " + dev.device_type)
+            _LOGGER.error("Unknown device type, %s", dev.device_type)
 
     def _device_removed(self, dev, _code):
         dev.shelly_device.remove()

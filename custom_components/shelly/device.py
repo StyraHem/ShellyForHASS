@@ -90,7 +90,8 @@ class ShellyDevice(RestoreEntity):
             attrs['room'] = room
 
         if self._dev.block.info_values is not None:
-            for key, value in self._dev.block.info_values.items():
+            info_values = self._dev.block.info_values.copy()
+            for key, value in info_values.items():
                 if self.instance.conf_attribute(key):
                     attrs[key] = value
 
