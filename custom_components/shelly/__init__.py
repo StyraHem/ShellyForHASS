@@ -34,7 +34,7 @@ REQUIREMENTS = ['pyShelly==0.1.20']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.7.b1"
+__version__ = "0.1.7.b2"
 VERSION = __version__
 
 async def async_setup(hass, config):
@@ -160,10 +160,10 @@ class ShellyInstance():
         pys.mdns_enabled = conf.get(CONF_MDNS)
         host_ip = conf.get(CONF_HOST_IP)
         if host_ip:
-            if host_ip != '-':
+            if host_ip == 'ha':
+                pys.host_ip = get_local_ip()
+            else:
                 pys.host_ip = host_ip
-        else:
-            pys.host_ip = get_local_ip()
         pys.start()
         pys.discover()
 
@@ -387,16 +387,16 @@ class ShellyInstance():
                 SENSOR_CONSUMPTION in sensor_cfg or \
                 SENSOR_POWER in sensor_cfg: #POWER deprecated
                 self.add_device("sensor", dev)
-            if SENSOR_TOTAL_CONSUMPTION in sensor_cfg or \
-                SENSOR_CONSUMPTION in sensor_cfg or \
-                SENSOR_POWER in sensor_cfg: #POWER deprecated
-                self.add_device("sensor", {'sensor_type' : 'total_consumption',
-                                            'itm': dev})
-            if SENSOR_TOTAL_RETURNED in sensor_cfg or \
-                SENSOR_CONSUMPTION in sensor_cfg or \
-                SENSOR_POWER in sensor_cfg: #POWER deprecated
-                self.add_device("sensor", {'sensor_type' : 'total_returned',
-                                            'itm': dev})
+            # if SENSOR_TOTAL_CONSUMPTION in sensor_cfg or \
+            #     SENSOR_CONSUMPTION in sensor_cfg or \
+            #     SENSOR_POWER in sensor_cfg: #POWER deprecated
+            #     self.add_device("sensor", {'sensor_type' : 'total_consumption',
+            #                                 'itm': dev})
+            # if SENSOR_TOTAL_RETURNED in sensor_cfg or \
+            #     SENSOR_CONSUMPTION in sensor_cfg or \
+            #     SENSOR_POWER in sensor_cfg: #POWER deprecated
+            #     self.add_device("sensor", {'sensor_type' : 'total_returned',
+            #                                 'itm': dev})
         elif dev.device_type == 'SWITCH':
             sensor_cfg = self._get_sensor_config(dev.id, dev.block.id)
             if SENSOR_SWITCH in sensor_cfg:

@@ -41,6 +41,7 @@ class ShellyDevice(RestoreEntity):
         self._sensor_conf = instance._get_sensor_config(dev.id, dev.block.id)
 
         self._is_removed = False
+        self._master_unit = False
 
     def _updated(self, _block):
         """Receive events when the switch state changed (by mobile,
@@ -80,30 +81,33 @@ class ShellyDevice(RestoreEntity):
     @property
     def device_state_attributes(self):
         """Show state attributes in HASS"""
-        attrs = {'ip_address': self._dev.ip_addr,
-                 'shelly_type': self._dev.type_name(),
+        attrs = {'shelly_type': self._dev.type_name(),
                  'shelly_id': self._dev.id,
-                 'discovery': self._dev.discovery_src
+                 'ip_address': self._dev.ip_addr
                 }
         room = self._dev.room_name()
         if room:
             attrs['room'] = room
 
-        if self._dev.block.info_values is not None:
-            info_values = self._dev.block.info_values.copy()
-            for key, value in info_values.items():
-                if self.instance.conf_attribute(key):
-                    attrs[key] = value
+        if self._master_unit:
 
-        if self._dev.info_values is not None:
-            for key, value in self._dev.info_values.items():
-                if self.instance.conf_attribute(key):
-                    attrs[key] = value
+            attrs['protocols'] = self._dev.protocols
 
-        if self._dev.sensor_values is not None:
-            for key, value in self._dev.sensor_values.items():
-                if self.instance.conf_attribute(key):
-                    attrs[key] = value
+            if self._dev.block.info_values is not None:
+                info_values = self._dev.block.info_values.copy()
+                for key, value in info_values.items():
+                    if self.instance.conf_attribute(key):
+                        attrs[key] = value
+
+            if self._dev.info_values is not None:
+                for key, value in self._dev.info_values.items():
+                    if self.instance.conf_attribute(key):
+                        attrs[key] = value
+
+            if self._dev.sensor_values is not None:
+                for key, value in self._dev.sensor_values.items():
+                    if self.instance.conf_attribute(key):
+                        attrs[key] = value
 
         return attrs
 

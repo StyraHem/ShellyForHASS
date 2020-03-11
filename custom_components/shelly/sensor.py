@@ -45,11 +45,12 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             return
         if dev.device_type == "POWERMETER":
             async_add_entities([ShellySensor(dev, instance, SENSOR_TYPE_POWER,
-                                'current_consumption'),
+                                'current_consumption', False),
             ])
         elif dev.device_type == "SENSOR":
             async_add_entities([
-                ShellySensor(dev, instance, dev.sensor_type, dev.sensor_type)
+                ShellySensor(dev, instance, dev.sensor_type, dev.sensor_type,
+                             True)
             ])
 
     async_dispatcher_connect(
@@ -61,7 +62,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 class ShellySensor(ShellyDevice, Entity):
     """Representation of a Shelly Sensor."""
 
-    def __init__(self, dev, instance, sensor_type, sensor_name):
+    def __init__(self, dev, instance, sensor_type, sensor_name, master_unit):
         """Initialize an ShellySensor."""
         self._sensor_cfg = SENSOR_TYPES_CFG[SENSOR_TYPE_DEFAULT]
         ShellyDevice.__init__(self, dev, instance)
@@ -74,6 +75,9 @@ class ShellySensor(ShellyDevice, Entity):
         self._state = None
         if self._sensor_type in SENSOR_TYPES_CFG:
             self._sensor_cfg = SENSOR_TYPES_CFG[self._sensor_type]
+        self._decimals = (instance._get_specific_config_root(
+            CONF_POWER_DECIMALS, dev.id, dev.block.id) or 0)
+        self._master_unit = master_unit
         self.update()
 
     @property
@@ -107,13 +111,13 @@ class ShellySensor(ShellyDevice, Entity):
         """Fetch new state data for this sensor."""
         #if self._dev.sensor_values is not None:
         self._state = self._dev.state #sensor_values.get(self._sensor_name, None)
-        power_decimals = self._config.get(CONF_POWER_DECIMALS, 0)
         if self._state is not None \
             and self._sensor_type == SENSOR_TYPE_POWER \
-            and power_decimals is not None:
-            if power_decimals > 0:
-                self._state = round(self._state, power_decimals)
-            elif power_decimals == 0:
+            and self._decimals is not None:
+            #power_decimals = self._config.get(CONF_POWER_DECIMALS, 0)
+            if self._decimals > 0:
+                self._state = round(self._state, self._decimals)
+            elif self._decimals == 0:
                 self._state = round(self._state)
         if self._dev.info_values is not None:
             self._battery = self._dev.info_values.get('battery', None)

@@ -62,6 +62,7 @@ class ShellyLightRelay(ShellyDevice, Light):
         """Initialize an ShellyLightRelay."""
         ShellyDevice.__init__(self, dev, instance)
         self._state = None
+        self._master_unit = True
         self.update()
 
     @property
@@ -89,6 +90,7 @@ class ShellyDimmer(ShellyDevice, Light):
         self._color_temp = None
         self._color_temp_min = None
         self._color_temp_max = None
+        self._master_unit = True
         self.update()
 
         self._features = SUPPORT_BRIGHTNESS
@@ -117,7 +119,10 @@ class ShellyDimmer(ShellyDevice, Light):
                 color_temp = self._color_temp_max
             if color_temp < self._color_temp_min:
                 color_temp = self._color_temp_min
-        self._dev.turn_on(brightness, color_temp)
+        if color_temp:
+            self._dev.turn_on(brightness, color_temp)
+        else:
+            self._dev.turn_on(brightness)
 
     def turn_off(self, **_kwargs):
         self._dev.turn_off()
@@ -130,18 +135,22 @@ class ShellyDimmer(ShellyDevice, Light):
     @property
     def color_temp(self):
         """Return the CT color value in mireds."""
-        if self._color_temp is None:
+        if self._color_temp:
             return None
         return int(kelvin_to_mired(self._color_temp))
 
     @property
     def min_mireds(self):
         """Return the coldest color_temp that this light supports."""
+        if self._color_temp_max:
+            return None
         return kelvin_to_mired(self._color_temp_max)
 
     @property
     def max_mireds(self):
         """Return the warmest color_temp that this light supports."""
+        if self._color_temp_min:
+            return None
         return kelvin_to_mired(self._color_temp_min)
 
     def update(self):
@@ -164,6 +173,7 @@ class ShellyRGB(ShellyDevice, Light):
         self._mode = None
         self._color_temp = None
         self._effect = None
+        self._master_unit = True
         self.update()
 
     @property
@@ -263,7 +273,7 @@ class ShellyRGB(ShellyDevice, Light):
     @property
     def color_temp(self):
         """Return the CT color value in mireds."""
-        if self._color_temp is None:
+        if self._color_temp:
             return None
         return int(kelvin_to_mired(self._color_temp))
 

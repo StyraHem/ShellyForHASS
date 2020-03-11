@@ -22,6 +22,7 @@ DEVICE_SCHEMA = vol.Schema({
     vol.Optional(CONF_UPGRADE_SWITCH): cv.boolean,
     vol.Optional(CONF_UNAVALABLE_AFTER_SEC) : cv.positive_int,
     vol.Optional(CONF_ENTITY_ID): cv.string,
+    vol.Optional(CONF_POWER_DECIMALS): cv.positive_int,
 })
 
 STEP_SCHEMA = vol.Schema({

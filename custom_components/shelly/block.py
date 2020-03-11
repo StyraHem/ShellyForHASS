@@ -36,6 +36,7 @@ class ShellyBlock(RestoreEntity):
         self._name_ext = None
         self._is_removed = False
         self.async_on_remove(self._remove_handler)
+        self._master_unit = False
 
     def _remove_handler(self):
         self._is_removed = True
@@ -65,20 +66,23 @@ class ShellyBlock(RestoreEntity):
     @property
     def device_state_attributes(self):
         """Show state attributes in HASS"""
-        attrs = {'ip_address': self._block.ip_addr,
-                 'shelly_type': self._block.type_name(),
+        attrs = {'shelly_type': self._block.type_name(),
                  'shelly_id': self._block.id,
-                 'discovery': self._block.discovery_src
+                 'ip_address': self._block.ip_addr
                 }
 
         room = self._block.room_name()
         if room:
             attrs['room'] = room
 
-        if self._block.info_values is not None:
-            for key, value in self._block.info_values.items():
-                if self.instance.conf_attribute(key):
-                    attrs[key] = value
+        if self._master_unit:
+
+            attrs['protocols'] = self._block.protocols
+
+            if self._block.info_values is not None:
+                for key, value in self._block.info_values.items():
+                    if self.instance.conf_attribute(key):
+                        attrs[key] = value
 
         return attrs
 

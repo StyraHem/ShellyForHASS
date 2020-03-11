@@ -35,7 +35,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             async_add_entities([ShellySwitch(dev, instance)])
         elif dev.device_type == "BINARY_SENSOR":
             async_add_entities([
-                ShellyBinarySensor(dev, instance, dev.sensor_type, dev.sensor_type)
+                ShellyBinarySensor(dev, instance, dev.sensor_type,
+                                   dev.sensor_type)
             ])
 
     async_dispatcher_connect(
@@ -118,6 +119,7 @@ class ShellyBinarySensor(ShellyDevice, BinarySensorDevice):
         self._state = None
         if self._sensor_type in SENSOR_TYPES_CFG:
             self._sensor_cfg = SENSOR_TYPES_CFG[self._sensor_type]
+        self._master_unit = True
         self.update()
 
     @property
