@@ -30,7 +30,7 @@ from homeassistant.util import get_local_ip
 from .const import *
 from .configuration_schema import CONFIG_SCHEMA, CONFIG_SCHEMA_ROOT
 
-REQUIREMENTS = ['pyShelly==0.1.20']
+REQUIREMENTS = ['pyShelly==0.1.21']
 
 _LOGGER = logging.getLogger(__name__)
 
