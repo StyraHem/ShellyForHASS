@@ -14,7 +14,6 @@ import asyncio
 import pytz
 import voluptuous as vol
 
-from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.const import (
     CONF_DEVICES, CONF_DISCOVERY, CONF_ID, CONF_PASSWORD,
     CONF_SCAN_INTERVAL, CONF_USERNAME, EVENT_HOMEASSISTANT_STOP)
