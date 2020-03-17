@@ -9,4 +9,4 @@ deploy:
   api_key: $GITHUB_OAUTH_TOKEN
   skip_cleanup: true
   on:
-    tags: true
+    tags: false
