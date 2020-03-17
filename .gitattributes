@@ -2,6 +2,6 @@
 .git*           export-ignore
 # exclude CI configurations (useless outside the repo)
 .travis-ci.yml  export-ignore
-images/*        export-ignore
-screenshoots/*  export-ignore
-util/*          export-ignore
+images          export-ignore
+screenshots     export-ignore
+util            export-ignore
