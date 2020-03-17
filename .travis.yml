@@ -8,5 +8,7 @@ deploy:
   provider: releases
   api_key: $GITHUB_OAUTH_TOKEN
   skip_cleanup: true
+  draft: true
+  prerelease: true
   on:
     tags: false
