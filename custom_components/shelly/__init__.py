@@ -28,12 +28,13 @@ from homeassistant.util import get_local_ip
 
 from .const import *
 from .configuration_schema import CONFIG_SCHEMA, CONFIG_SCHEMA_ROOT
+#from .frontend import setup_frontend
 
-REQUIREMENTS = ['pyShelly==0.1.22']
+REQUIREMENTS = ['pyShelly==0.1.23']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.7.b2"
+__version__ = "0.1.7.b3"
 VERSION = __version__
 
 async def async_setup(hass, config):
@@ -90,7 +91,7 @@ async def async_setup_entry(hass, config_entry):
 async def async_unload_entry(hass, config_entry):
     """Unload a config entry."""
     instance = hass.data[DOMAIN][config_entry.entry_id]
-    await instance._stop()
+    await instance.stop()
     return True
 
 class ShellyInstance():
@@ -122,11 +123,15 @@ class ShellyInstance():
         if SENSOR_ALL in sensors:
             self.conf[CONF_SENSORS] = [*ALL_SENSORS.keys()]
 
-        hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, self._stop)
+        hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, self.stop)
 
         hass.loop.create_task(
             self.start_up()
         )
+
+        #hass.loop.create_task(
+        #    setup_frontend(self)
+        #)
 
     async def start_up(self):
         conf = self.conf
@@ -224,7 +229,7 @@ class ShellyInstance():
             entity_reg.async_remove(entity_id)
 
 
-    async def _stop(self, _=None):
+    async def stop(self, _=None):
         """Stop Shelly."""
         _LOGGER.info("Shutting down Shelly")
         self.pys.close()

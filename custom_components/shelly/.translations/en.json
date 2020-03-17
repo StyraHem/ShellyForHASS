@@ -67,8 +67,8 @@
                     "current": "Current",
                     "power_factor": "Power factor"
                 },
-                "title": "Shelly - Settings [2/3]",
-                "description": "Select attributes to show for each Shelly entry. Be careful, every attributes trig and store extra information to database {steps}"
+                "title": "Shelly - Settings [2/3] - Attributes",
+                "description": "Select attributes to show for each Shelly entry. Be careful, every attributes trig and store extra information to database. {steps}"
             },
             "sensors": {
                 "data": {
@@ -88,8 +88,8 @@
                     "current": "Current",
                     "power_factor": "Power factor"
                 },
-                "title": "Shelly - Settings [3/3]",
-                "description": "Select sensors to create for Shelly devices"
+                "title": "Shelly - Settings [3/3] - Sensors",
+                "description": "Select sensors to create for Shelly devices. {steps}"
             },
             "yaml": {
                 "data": {

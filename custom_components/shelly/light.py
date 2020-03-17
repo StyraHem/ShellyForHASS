@@ -135,21 +135,21 @@ class ShellyDimmer(ShellyDevice, Light):
     @property
     def color_temp(self):
         """Return the CT color value in mireds."""
-        if self._color_temp:
+        if not self._color_temp:
             return None
         return int(kelvin_to_mired(self._color_temp))
 
     @property
     def min_mireds(self):
         """Return the coldest color_temp that this light supports."""
-        if self._color_temp_max:
+        if not self._color_temp_max:
             return None
         return kelvin_to_mired(self._color_temp_max)
 
     @property
     def max_mireds(self):
         """Return the warmest color_temp that this light supports."""
-        if self._color_temp_min:
+        if not self._color_temp_min:
             return None
         return kelvin_to_mired(self._color_temp_min)
 
@@ -273,7 +273,7 @@ class ShellyRGB(ShellyDevice, Light):
     @property
     def color_temp(self):
         """Return the CT color value in mireds."""
-        if self._color_temp:
+        if not self._color_temp:
             return None
         return int(kelvin_to_mired(self._color_temp))
 

@@ -172,27 +172,36 @@ class ShellyOptionsFlowHandler(config_entries.OptionsFlow):
             self._step_cnt += 1
             return await self.async_step_attributes()
         else:
+            self._step_cnt = 0
             return await self.async_step_sensors()
 
     async def async_step_sensors(self, user_input=None):
 
         if not user_input:
             sensors = {}
-            for sensor in ALL_SENSORS:
+            pos = self._step_cnt * 10
+            for sensor in list(ALL_SENSORS)[pos:pos+10]:
                 default = sensor in self.instance.conf[CONF_SENSORS]
                 sensors[vol.Optional(sensor, default=default)] = bool
 
-            return self.async_show_form(step_id="sensors",
-                                        data_schema=vol.Schema(sensors))
+            steps = "(" + str(self._step_cnt+1) +"/2)"
+            return self.async_show_form(
+                step_id="sensors",
+                data_schema=vol.Schema(sensors),
+                description_placeholders={"steps": steps})
 
-        sensors = []
+        sensors = self._options.get("sensors", [])
         for sensor, value in user_input.items():
             if value:
                 sensors.append(sensor)
 
         self._options["sensors"] = sensors
 
-        return await self.async_step_final()
+        if self._step_cnt < 1:
+            self._step_cnt += 1
+            return await self.async_step_sensors()
+        else:
+            return await self.async_step_final()
 
     async def async_step_final(self):
 
