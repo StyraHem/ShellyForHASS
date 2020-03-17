@@ -4,9 +4,11 @@ script: echo "Nothing to test" && true
 before_deploy:
   - cd custom_components/shelly
   - zip -r shelly4hass *
+  - ls
 deploy:
   provider: releases
   api_key: $GITHUB_OAUTH_TOKEN
+  file: shelly4hass.zip
   skip_cleanup: true
   draft: true
   prerelease: true
