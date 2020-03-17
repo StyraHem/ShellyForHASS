@@ -1,2 +1,5 @@
 language: python
-install:
+install: echo "Nothing to install"
+before_deploy:
+  - cd custom_components/shelly
+  - zip -r shelly4hass *
