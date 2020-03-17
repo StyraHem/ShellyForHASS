@@ -13,4 +13,5 @@ deploy:
   draft: true
   prerelease: true
   on:
-    tags: false
+    tags: true
+    condition: "$TRAVIS_TAG =~ ^\d\.\d\.\d(-beta\.\d)?$"
