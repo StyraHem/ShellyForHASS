@@ -8,10 +8,12 @@ before_deploy:
 deploy:
   provider: releases
   api_key: $GITHUB_OAUTH_TOKEN
+  tag_name: $TRAVIS_TAG
+  name: $TRAVIS_TAG
   file: shelly4hass.zip
   skip_cleanup: true
   draft: true
   prerelease: true
   on:
     tags: true
-    condition: "$TRAVIS_TAG =~ ^\d\.\d\.\d(-beta\.\d)?$"
+    condition: $TRAVIS_TAG =~ ^\d\.\d\.\d(-beta\.\d)?$
