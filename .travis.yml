@@ -4,7 +4,7 @@ script: echo "Nothing to test" && true
 before_deploy:
   - cd custom_components/shelly
   - zip -r shelly4hass .
-  - ls
+  - echo $TRAVIS_TAG
 deploy:
   provider: releases
   api_key: $GITHUB_OAUTH_TOKEN
@@ -16,4 +16,4 @@ deploy:
   prerelease: true
   on:
     tags: true
-    condition: $TRAVIS_TAG =~ ^\d\.\d\.\d(-beta\.\d)?$
+    condition: "$TRAVIS_TAG =~ ^\d\.\d\.\d(-beta\.\d)?$"
