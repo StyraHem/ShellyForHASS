@@ -1,5 +1,12 @@
 language: python
 install: echo "Nothing to install"
+script: echo "Nothing to test" && true
 before_deploy:
   - cd custom_components/shelly
   - zip -r shelly4hass *
+deploy:
+  provider: releases
+  api_key: $GITHUB_OAUTH_TOKEN
+  skip_cleanup: true
+  on:
+    tags: true
