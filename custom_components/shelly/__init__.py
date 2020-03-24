@@ -34,7 +34,7 @@ REQUIREMENTS = ['pyShelly==0.1.23']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.7.b3"
+__version__ = "0.1.7.b4"
 VERSION = __version__
 
 async def async_setup(hass, config):
@@ -60,7 +60,7 @@ async def async_setup_entry(hass, config_entry):
 
     if config_entry.source == "import":
         if config_entry.options: #config.yaml
-            data = config_entry.options
+            data = config_entry.options.copy()
         else:
             if "yaml_shelly" in hass.data:
                 data = hass.data["yaml_shelly"]
