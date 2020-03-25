@@ -1,6 +1,6 @@
 {
     "name": "ShellyForHass (Shelly integration)",
-    "hide_default_branch": true,
+    "hide_default_branch": false,
     "zip_release": true,
     "filename": "shelly4hass.zip",
     "homeassistant": "0.104.0"
