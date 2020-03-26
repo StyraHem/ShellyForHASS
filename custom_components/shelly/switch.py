@@ -76,11 +76,11 @@ class ShellyFirmwareUpdate(ShellyBlock, SwitchDevice):
     """Representation of a script entity."""
 
     def __init__(self, block, instance):
+        block.firmware_switch = self
         self._updating = False
         ShellyBlock.__init__(self, block, instance, "_firmware_update")
         self.entity_id = "switch" + self.entity_id
         self._master_unit = False
-        block.firmware_switch = self
 
     @property
     def should_poll(self):

@@ -13,7 +13,7 @@ from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.components.binary_sensor import BinarySensorDevice
 from homeassistant.helpers.restore_state import RestoreStateData
 
-from . import (CONF_OBJECT_ID_PREFIX, CONF_POWER_DECIMALS)
+from . import (CONF_OBJECT_ID_PREFIX)
 from .device import ShellyDevice
 from .block import ShellyBlock
 
@@ -156,7 +156,7 @@ class ShellyBinaryInfoSensor(ShellyBlock, BinarySensorDevice):
 
     def __init__(self, block, instance, sensor_type, sensor_name):
         self._sensor_cfg = SENSOR_TYPES_CFG[SENSOR_TYPE_DEFAULT]
-        ShellyBlock.__init__(self, block, instance, "_" + sensor_name + "_attr")
+        ShellyBlock.__init__(self, block, instance, "_" + sensor_name)
         self.entity_id = "sensor" + self.entity_id
         self._sensor_name = sensor_name
         self._sensor_type = sensor_type

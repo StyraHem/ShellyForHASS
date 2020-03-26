@@ -13,6 +13,24 @@ SENSOR_SCHEMA = vol.Schema({
     vol.Optional(CONF_NAME): cv.string,
 })
 
+
+SETTING_SCHEMA = vol.Schema({
+    vol.Optional(CONF_DECIMALS): cv.positive_int,
+    vol.Optional(CONF_DIV): cv.positive_int,
+    vol.Optional(CONF_UNIT): cv.string
+})
+
+SETTINGS_SCHEMA = vol.Schema({
+    vol.Optional('temperature'): SETTING_SCHEMA,
+    vol.Optional('humidity'): SETTING_SCHEMA,
+    vol.Optional('total_consumption'): SETTING_SCHEMA,
+    vol.Optional('total_returned'): SETTING_SCHEMA,
+    vol.Optional('current_consumption'): SETTING_SCHEMA,
+    vol.Optional('voltage'): SETTING_SCHEMA,
+    vol.Optional('power_factor'): SETTING_SCHEMA,
+    vol.Optional('uptime'): SETTING_SCHEMA,
+})
+
 DEVICE_SCHEMA = vol.Schema({
     vol.Required(CONF_ID): cv.string,
     vol.Optional(CONF_NAME): cv.string,
@@ -22,7 +40,8 @@ DEVICE_SCHEMA = vol.Schema({
     vol.Optional(CONF_UPGRADE_SWITCH): cv.boolean,
     vol.Optional(CONF_UNAVALABLE_AFTER_SEC) : cv.positive_int,
     vol.Optional(CONF_ENTITY_ID): cv.string,
-    vol.Optional(CONF_POWER_DECIMALS): cv.positive_int,
+    vol.Optional(CONF_POWER_DECIMALS): cv.positive_int, #deprecated
+    vol.Optional(CONF_SETTINGS, default={}): SETTINGS_SCHEMA
 })
 
 STEP_SCHEMA = vol.Schema({
@@ -58,7 +77,7 @@ CONFIG_SCHEMA_ROOT = vol.Schema({
                      default=True): cv.boolean,
         vol.Optional(CONF_SCAN_INTERVAL,
                      default=DEFAULT_SCAN_INTERVAL): cv.positive_int,
-        vol.Optional(CONF_POWER_DECIMALS): cv.positive_int,
+        vol.Optional(CONF_POWER_DECIMALS): cv.positive_int, #deprecated
         vol.Optional(CONF_LOCAL_PY_SHELLY,
                      default=False): cv.boolean,
         vol.Optional(CONF_ONLY_DEVICE_ID) : cv.string,
@@ -69,6 +88,7 @@ CONFIG_SCHEMA_ROOT = vol.Schema({
                      vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(CONF_MDNS, default=DEFAULT_MDNS): cv.boolean,
         vol.Optional(CONF_HOST_IP, default='') : cv.string,
+        vol.Optional(CONF_SETTINGS, default={}): SETTINGS_SCHEMA
     })
 
 CONFIG_SCHEMA = vol.Schema({

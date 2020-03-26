@@ -30,11 +30,11 @@ from .const import *
 from .configuration_schema import CONFIG_SCHEMA, CONFIG_SCHEMA_ROOT
 #from .frontend import setup_frontend
 
-REQUIREMENTS = ['pyShelly==0.1.24']
+REQUIREMENTS = ['pyShelly==0.1.25']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.7"
+__version__ = "0.1.7.b6"
 VERSION = __version__
 
 async def async_setup(hass, config):
@@ -184,6 +184,7 @@ class ShellyInstance():
         entity_reg = \
             await self.hass.helpers.entity_registry.async_get_registry()
         entities_to_remove = []
+        entities_to_fix_attr = []
         restore_expired = dt_util.as_utc(datetime.now()) - timedelta(hours=12)
         for entity in entity_reg.entities.values():
             if entity.platform == "shelly":
@@ -199,17 +200,19 @@ class ShellyInstance():
                      entity_id.endswith("_over_power_attr") \
                   ):
                     entities_to_remove.append(entity.entity_id)
-                if entity_id.startswith("sensor.") and \
+                elif entity_id.startswith("sensor.") and \
                     entity_id.endswith("_consumption") and \
                     not entity_id.endswith("total_consumption") and \
                     not entity_id.endswith("current_consumption"):
                     entities_to_remove.append(entity.entity_id)
-                if entity_id.startswith("binary_sensor.") and \
+                elif entity_id.startswith("binary_sensor.") and \
                    entity_id.endswith("_cloud_status_attr"):
                     entities_to_remove.append(entity.entity_id)
-                if entity_id.startswith("switch.") and \
+                elif entity_id.startswith("switch.") and \
                    entity_id.endswith("_firmware_update"):
                     entities_to_remove.append(entity.entity_id)
+                elif entity_id.endswith("_attr"):
+                    entities_to_fix_attr.append(entity.entity_id)
                 if "_shdw_" in entity_id or \
                    "_shwt_" in entity_id or \
                    "_shht_" in entity_id:
@@ -228,6 +231,14 @@ class ShellyInstance():
         for entity_id in entities_to_remove:
             entity_reg.async_remove(entity_id)
 
+        for entity_id in entities_to_fix_attr:
+            new_id = entity_id[0:-5]
+            entity_reg.async_update_entity(
+                entity_id,
+                new_entity_id=new_id,
+                new_unique_id=new_id
+            )
+
 
     async def stop(self, _=None):
         """Stop Shelly."""
@@ -236,6 +247,33 @@ class ShellyInstance():
 
     def update_options(self, options):
         pass
+
+    def format_value(self, settings, value, add_unit=False):
+        if settings is not None \
+            and (isinstance(value, int) or isinstance(value, float)):
+            decimals = settings.get(CONF_DECIMALS, 0)
+            div = settings.get(CONF_DIV)
+            if div:
+                value = value / div
+            if decimals is not None:
+                if decimals > 0:
+                    value = round(value, decimals)
+                elif decimals == 0:
+                    value = round(value)
+            if add_unit and CONF_UNIT in settings:
+                value = str(value) + ' '  + settings[CONF_UNIT]
+        return value
+
+    def get_settings(self, *ids):
+        settings = DEFAULT_SETTINGS.copy()
+        conf_settings = self.conf.get(CONF_SETTINGS)
+        settings.update(conf_settings)
+        for device_id in ids:
+            device_cfg = self._find_device_config(device_id)
+            if device_cfg:
+                conf_settings = device_cfg.get(CONF_SETTINGS)
+                settings.update(conf_settings)
+        return settings
 
     def _get_specific_config_root(self, key, *ids):
         item = self._get_specific_config(key, None, *ids)

@@ -40,6 +40,10 @@ CONF_TMPL_NAME = 'tmpl_name'
 CONF_DISCOVER_BY_IP = 'discover_by_ip'
 CONF_HOST_IP = 'host_ip'
 CONF_ATTRIBUTES = 'attributes'
+CONF_SETTINGS = 'settings'
+CONF_DECIMALS = 'decimals'
+CONF_DIV = 'div'
+CONF_UNIT = 'unit'
 
 CONF_WIFI_SENSOR = 'wifi_sensor' #deprecated
 CONF_UPTIME_SENSOR = 'uptime_sensor' #deprecated
@@ -50,6 +54,23 @@ DEFAULT_OBJECT_ID_PREFIX = 'shelly'
 DEFAULT_SCAN_INTERVAL = 60 #timedelta(seconds=60)
 DEFAULT_SHOW_ID_IN_NAME = False
 DEFAULT_MDNS = True
+
+DEFAULT_SETTINGS = \
+{
+    'default' : {},
+    'temperature' : {CONF_UNIT:'°C'},
+    'device_temp' : {CONF_UNIT:'°C'},
+    'illuminance' : {CONF_UNIT:'lux'},
+    'humidity' : {CONF_UNIT:'%'},
+    'total_consumption' : {CONF_DECIMALS:2, CONF_DIV:1000, CONF_UNIT:'kWh'},
+    'total_returned' : {CONF_DECIMALS:2, CONF_DIV:1000, CONF_UNIT:'kWh'},
+    'current' : {CONF_DECIMALS:1},
+    'current_consumption' : {CONF_UNIT:'W'},
+    'voltage' : {CONF_UNIT:'V'},
+    'power_factor' : {CONF_DECIMALS:1},
+    'uptime': {CONF_DIV:3600, CONF_UNIT:'h'},
+    'rssi': {CONF_UNIT:'dB'},
+}
 
 SHELLY_DEVICE_ID = 'device_id'
 SHELLY_BLOCK_ID = 'block_id'
@@ -126,8 +147,8 @@ DEFAULT_ATTRIBUTES = {
     ATTRIBUTE_SWITCH,
     ATTRIBUTE_OVER_POWER,
     ATTRIBUTE_OVER_TEMP,
-    ATTRIBUTE_TOTAL_CONSUMPTION,
-    ATTRIBUTE_VOLTAGE,
+    #ATTRIBUTE_TOTAL_CONSUMPTION,
+    #ATTRIBUTE_VOLTAGE,
     ATTRIBUTE_BATTERY
 }
 
@@ -181,7 +202,7 @@ DEFAULT_SENSORS = [
 
 SENSOR_TYPE_TEMPERATURE = 'temperature'
 SENSOR_TYPE_HUMIDITY = 'humidity'
-SENSOR_TYPE_POWER = 'consumption'
+SENSOR_TYPE_POWER = 'current_consumption'
 SENSOR_TYPE_RSSI = 'rssi'
 SENSOR_TYPE_UPTIME = 'uptime'
 SENSOR_TYPE_BATTERY = 'battery'

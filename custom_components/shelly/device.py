@@ -43,6 +43,8 @@ class ShellyDevice(RestoreEntity):
         self._is_removed = False
         self._master_unit = False
 
+        self._settings = instance.get_settings(dev.id, dev.block.id)
+
     def _updated(self, _block):
         """Receive events when the switch state changed (by mobile,
         switch etc)"""
@@ -97,16 +99,22 @@ class ShellyDevice(RestoreEntity):
                 info_values = self._dev.block.info_values.copy()
                 for key, value in info_values.items():
                     if self.instance.conf_attribute(key):
+                        settings = self._settings.get(key)
+                        value = self.instance.format_value(settings, value, True)
                         attrs[key] = value
 
             if self._dev.info_values is not None:
                 for key, value in self._dev.info_values.items():
                     if self.instance.conf_attribute(key):
+                        settings = self._settings.get(key)
+                        value = self.instance.format_value(settings, value, True)
                         attrs[key] = value
 
             if self._dev.sensor_values is not None:
                 for key, value in self._dev.sensor_values.items():
                     if self.instance.conf_attribute(key):
+                        settings = self._settings.get(key)
+                        value = self.instance.format_value(settings, value, True)
                         attrs[key] = value
 
         return attrs

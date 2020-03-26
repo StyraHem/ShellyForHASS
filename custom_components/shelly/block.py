@@ -37,6 +37,7 @@ class ShellyBlock(RestoreEntity):
         self._is_removed = False
         self.async_on_remove(self._remove_handler)
         self._master_unit = False
+        self._settings = instance.get_settings(block.id)
 
     def _remove_handler(self):
         self._is_removed = True
