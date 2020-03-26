@@ -233,10 +233,11 @@ class ShellyInstance():
 
         for entity_id in entities_to_fix_attr:
             new_id = entity_id[0:-5]
+            new_unique = new_id.split('.', 1)[1]
             entity_reg.async_update_entity(
                 entity_id,
                 new_entity_id=new_id,
-                new_unique_id=new_id
+                new_unique_id=new_unique
             )
 
 
