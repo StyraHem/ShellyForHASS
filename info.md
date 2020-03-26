@@ -16,7 +16,7 @@ Please be careful and do NOT install this on production systems. Also make sure 
 ![List](https://raw.githubusercontent.com/StyraHem/ShellyForHASS/master/images/intro.png)
 
 # Changes
-You can found change log under [releases](https://github.com/StyraHem/ShellyForHASS/releases)
+You can find change log under [releases](https://github.com/StyraHem/ShellyForHASS/releases)
 
 # Community and support
 Please join our [Facebook group](https://www.facebook.com/groups/shellyforhass) for support and information about ShellyForHass.
