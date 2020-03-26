@@ -108,12 +108,12 @@ class ShellyFirmwareUpdate(ShellyBlock, SwitchDevice):
     async def async_turn_on(self, **_kwargs):
         """Trig the firmware update"""
         self._updating = True
-        self.schedule_update_ha_state(False)
+        self.schedule_update_ha_state()
         self._block.update_firmware()
 
     async def async_turn_off(self, **_kwargs):
         """Do nothing"""
-        self.schedule_update_ha_state(False)
+        self.schedule_update_ha_state()
 
     def remove(self):
         self._block.firmware_switch = None
