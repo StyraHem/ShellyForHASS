@@ -23,12 +23,16 @@ SETTING_SCHEMA = vol.Schema({
 SETTINGS_SCHEMA = vol.Schema({
     vol.Optional('temperature'): SETTING_SCHEMA,
     vol.Optional('humidity'): SETTING_SCHEMA,
+    vol.Optional('illuminance'): SETTING_SCHEMA,
+    vol.Optional('current'): SETTING_SCHEMA,
     vol.Optional('total_consumption'): SETTING_SCHEMA,
     vol.Optional('total_returned'): SETTING_SCHEMA,
     vol.Optional('current_consumption'): SETTING_SCHEMA,
+    vol.Optional('device_temp'): SETTING_SCHEMA,
     vol.Optional('voltage'): SETTING_SCHEMA,
     vol.Optional('power_factor'): SETTING_SCHEMA,
     vol.Optional('uptime'): SETTING_SCHEMA,
+    vol.Optional('rssi'): SETTING_SCHEMA
 })
 
 DEVICE_SCHEMA = vol.Schema({
