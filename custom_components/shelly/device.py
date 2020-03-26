@@ -49,7 +49,7 @@ class ShellyDevice(RestoreEntity):
         """Receive events when the switch state changed (by mobile,
         switch etc)"""
         if self.entity_id is not None and not self._is_removed:
-            self.schedule_update_ha_state()
+            self.schedule_update_ha_state(True)
 
         if self._dev.info_values is not None:
             device_sensors = self.instance.device_sensors

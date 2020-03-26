@@ -62,7 +62,7 @@ class ShellyBlock(RestoreEntity):
         disabled = self.registry_entry and self.registry_entry.disabled_by
         if self.entity_id is not None and not self._is_removed \
             and not disabled:
-            self.schedule_update_ha_state()
+            self.schedule_update_ha_state(True)
 
     @property
     def device_state_attributes(self):
