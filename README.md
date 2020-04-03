@@ -80,21 +80,33 @@ Do you you have [HACS](https://community.home-assistant.io/t/custom-component-ha
 1. Install this platform by creating a `custom_components` folder in the same folder as your configuration.yaml, if it doesn't already exist.
 2. Create another folder `shelly` in the `custom_components` folder. Copy all files from custom_components into the `shelly` folder. Do not copy files from master branch, download latest release (.zip) from [here](https://github.com/StyraHem/ShellyForHASS/releases).
 
-## Configure
+## Setup
+
+You can setup this component by using HA integration or config.yaml. Most of settings is available from integration but things like decimals, device specific configuration is only available when using config.yaml.
+
+If you have the configuration in config.yaml you can convert it to internal setting by clicking the settings gear for the integration and follow the instructions. If you use advanced settings they will be lost. After conversion the settings in config.yaml will be ignored. To go back to config.yaml just delete the integration and restart HA.
+
+### HA Integration
+
+When you have installed Shelly you can add it in GUI under HA integration. Use the plus buttan and search for Shelly. You need to specify the prefix that is used as first part of the entity_id to avoid conflicts. Default is shelly.
+
+When you have added Shelly to HA you can do the configuration by clicking the settings gear for this integration.
+
+### Configure in config.yaml
 
 When you have installed shelly and make sure it exists under `custom_components` folder it is time to configure it in Home Assistant.
 
 It is very easy, just add `shelly:` to your `configuration.yaml`
 
-### Examples
+#### Examples
 
-#### Default with discovery and power sensors
+##### Default with discovery and power sensors
 
 ```yaml
 shelly:
 ```
 
-#### Get device name from Shelly Cloud
+##### Get device name from Shelly Cloud
 
 ```yaml
 shelly:
@@ -103,7 +115,7 @@ shelly:
 ```
 You will get the information for the keys above from [Shelly Cloud, User settings](https://my.shelly.cloud/#user_settings) and click GET KEY.
 
-#### Without discovery - manually specify devices
+##### Without discovery - manually specify devices
 
 ```yaml
 shelly:
@@ -121,7 +133,7 @@ shelly:
          - device_temp
 ```
 
-#### With discovery - adjust some devices
+##### With discovery - adjust some devices
 
 ```yaml
 shelly:
@@ -137,7 +149,7 @@ shelly:
       name: My cool plug #set friendly name
 ```
 
-#### Sensor, global and per device
+##### Sensor, global and per device
 
 ```yaml
 shelly:
@@ -150,7 +162,7 @@ shelly:
     - id: "7BD5F3"
       name: My cool plug #set friendly name
 ```
-#### Discovery by ip
+##### Discovery by ip
 
 ```yaml
 shelly:
@@ -159,7 +171,7 @@ shelly:
     - '192.168.32.11'
 ```
 
-#### Events
+##### Events
 
 ```yaml
 automation:
@@ -179,7 +191,7 @@ automation:
         click_cnt: 4        
 ```
 
-### Parameters
+#### Parameters
 
 | Parameter              | Description                                                                                            | Default | Version |
 |------------------------|--------------------------------------------------------------------------------------------------------|---------|---------|
@@ -207,7 +219,7 @@ automation:
 | tmpl_name | Template how to create the friendly name from Shelly Cloud | {room} - {name} | 0.1.5- |
 | discover_by_ip | This is a list of ip-addresses to force the plugin to discover. Use this if not CoAP or mDns discovery working for your device. | | 0.1.5- |
 
-#### Device configuration
+##### Device configuration
 
 | Parameter    | Description                                                                               | Example        | Version |
 |--------------|-------------------------------------------------------------------------------------------|----------------|---------|
@@ -219,7 +231,7 @@ automation:
 | upgrade_switch | Add firmware switches when upgrade needed. Override global configuration.               | False    | 0.0.15- |
 | unavailable_after_sec  | Overide number of seconds before the device will be unavialable.    | 120 | 0.0.16- | 
 
-#### Attributes (0.1.6-)
+##### Attributes (0.1.6-)
 | Sensor       | Description                                               | Default | Version |
 |--------------|-----------------------------------------------------------|---------|---------|
 | all          | Show all available attributes                             ||
@@ -250,7 +262,7 @@ automation:
 | battery      | Show battery percentage               | x |
 | payload | Show the latest CoAP message received (DEBUG) ||
 
-#### Sensors
+##### Sensors
 | Sensor       | Description                           | Values / Unit     | Version |
 |--------------|---------------------------------------|-------------------|---------|
 | all          | Show all available sensors            |                   |
