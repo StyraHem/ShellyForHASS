@@ -34,7 +34,7 @@ REQUIREMENTS = ['pyShelly==0.1.25']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.7.b6"
+__version__ = "0.1.7"
 VERSION = __version__
 
 async def async_setup(hass, config):
