@@ -182,6 +182,13 @@ automation:
       event_data:
         click_cnt: 2
         state: True
+  - alias: "Shelly single click (momentary) on a specific switch"
+    trigger:
+      platform: event
+      event_type: shelly_switch_click
+      event_data:
+        entity_id: sensor.shelly_shsw_1_XXXXXX_switch
+        click_cnt: 2        
   - alias: "Shelly double click (momentary) on a specific switch"
     trigger:
       platform: event
@@ -189,6 +196,17 @@ automation:
       event_data:
         entity_id: sensor.shelly_shsw_1_XXXXXX_switch
         click_cnt: 4        
+```
+##### Decimal and unit settings
+```yaml
+shelly:
+  settings:
+    temperature: { decimals: 1 }
+    current: { decimals:0, div:1000, unit:'mA' }  #Show current as mA
+  devices:
+    - id: 123456
+      settings:
+        total_consumption: { decimals: 3, div:1000000, unit:'MWh' }   #Show MWh for a specific device
 ```
 
 #### Parameters
@@ -219,7 +237,7 @@ automation:
 | tmpl_name | Template how to create the friendly name from Shelly Cloud | {room} - {name} | 0.1.5- |
 | discover_by_ip | This is a list of ip-addresses to force the plugin to discover. Use this if not CoAP or mDns discovery working for your device. | | 0.1.5- |
 
-##### Device configuration
+#### Device configuration
 
 | Parameter    | Description                                                                               | Example        | Version |
 |--------------|-------------------------------------------------------------------------------------------|----------------|---------|
@@ -231,7 +249,7 @@ automation:
 | upgrade_switch | Add firmware switches when upgrade needed. Override global configuration.               | False    | 0.0.15- |
 | unavailable_after_sec  | Overide number of seconds before the device will be unavialable.    | 120 | 0.0.16- | 
 
-##### Attributes (0.1.6-)
+#### Attributes (0.1.6-)
 | Sensor       | Description                                               | Default | Version |
 |--------------|-----------------------------------------------------------|---------|---------|
 | all          | Show all available attributes                             ||
@@ -262,7 +280,7 @@ automation:
 | battery      | Show battery percentage               | x |
 | payload | Show the latest CoAP message received (DEBUG) ||
 
-##### Sensors
+#### Sensors
 | Sensor       | Description                           | Values / Unit     | Version |
 |--------------|---------------------------------------|-------------------|---------|
 | all          | Show all available sensors            |                   |
@@ -284,11 +302,28 @@ automation:
 
 All of the sensors (not current_consumption) require additional_information to be True to work.
 
+#### Types (decimal, units) and default settings (0.1.7)
+| value | unit | decimals | divider |
+--------|-----|-----------|---------|
+| temperature | °C | 0 |    |
+| device_temp | °C | 0 |    |
+| illuminance | lux | 0 |    |
+| humidity | % | 0 |    |
+| total_consumption | kWh | 2 |  1000 |
+| total_returned | kWh | 2 |  1000  |
+| current_consumption | W | 0 |    |
+| current | A | 1 |    |
+| humidity | % | 0 |    |
+| voltage | V | 0 | |
+| power_factor | | 1 |
+| uptime | h | 0 | 3600 |
+| rssi | dB | 0 |  |
+
 If you disable discovery only Shellies under devices will be added.
 
 You can only specify one username and password for restrict login. If you enter username and password, access to devices without restrict login will continue to work. Different logins to different devices will be added later.
 
-### Events 
+### Events
 [Events added in release 0.0.16]
 #### shelly_switch_click
 When the switch sensor is enabled an event will be sent for multiple clicks on the switch button. This can be used to trig automations for double clicks etc.
