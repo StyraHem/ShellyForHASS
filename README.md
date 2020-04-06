@@ -273,7 +273,7 @@ shelly:
 | total_returned | Show total power returned  (EM/3EM) ||0.1.7-|
 | voltage | Show current voltage (V) ||0.1.7-|
 | current | Show current current (A) ||0.1.7-|
-| phase factor | Show current phase factor ||0.1.7-|
+| power_factor | Show current power factor ||0.1.7-|
 | over_power   | Show over power sensors               | x |
 | device_temp  | Show device inner temperature sensors ||
 | over_temp    | Show over temperature sensors         | x |
@@ -298,7 +298,7 @@ shelly:
 | total_returned | Show total power returned  (EM/3EM) ||0.1.7-|
 | voltage | Show current voltage |V|0.1.7-|
 | current | Show current current |A|0.1.7-|
-| phase factor | Show current phase factor ||0.1.7-|
+| power_factor | Show current power factor ||0.1.7-|
 
 All of the sensors (not current_consumption) require additional_information to be True to work.
 
