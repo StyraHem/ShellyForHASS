@@ -30,11 +30,11 @@ from .const import *
 from .configuration_schema import CONFIG_SCHEMA, CONFIG_SCHEMA_ROOT
 #from .frontend import setup_frontend
 
-REQUIREMENTS = ['pyShelly==0.1.25']
+REQUIREMENTS = ['pyShelly==0.1.26']
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.7"
+__version__ = "0.1.8-b1"
 VERSION = __version__
 
 async def async_setup(hass, config):

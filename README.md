@@ -68,6 +68,7 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Shelly EM
 - Shelly 3EM (0.1.7)
 - Shelly DUO (0.1.7)
+- Shelly Vintage (0.1.8)
 
 ## Installation
 
