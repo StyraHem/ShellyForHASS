@@ -35,8 +35,11 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         """Discover and add a discovered sensor."""
         if isinstance(dev, dict):
             if 'firmware' in dev:
-                async_add_entities(
-                    [ShellyFirmwareUpdate(dev['block'], instance)])
+                block = dev['block']
+                update_switch = getattr(block, 'firmware_switch', None)
+                if not update_switch:
+                    async_add_entities(
+                        [ShellyFirmwareUpdate(block, instance)])
             return
         async_add_entities([ShellySwitch(dev, instance)])
 

@@ -99,8 +99,6 @@ class ShellyBlock(RestoreEntity):
             'sw_version': self._block.fw_version()
         }
 
-        return self.instance.build_device_info(self._block)
-
     @property
     def unique_id(self):
         """Return the ID of this device."""
