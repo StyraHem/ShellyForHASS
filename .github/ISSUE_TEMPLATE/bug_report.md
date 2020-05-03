@@ -1,38 +1,61 @@
 ---
 name: Bug report
-about: Create a report to help us improve
-title: ''
+about: Create a bug report to help us improve
+title: "[BUG]"
 labels: ''
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+<!-- Please READ THIS FIRST
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+Before opening a new issue, please check if a similar one is already open
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+DO NOT DELETE ANY TEXT from this template! Otherwise, your issue may be closed without comment.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+-->
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+## Environment
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+- ShellyForHASS release with the issue: 
+- Last working ShellyForHASS release (if known): 
+- Home Assistant Core release with the issue: 
+- Operating environment (Home Assistant/Supervised/Docker/venv): 
 
-**Additional context**
-Add any other context about the problem here.
+## Describe the bug
+<!--
+  Make a brief descrition of the problem you are experiencing
+-->
+
+
+## Steps to Reproduce
+<!--
+  Please list the steps needed to reproduce the issue
+-->
+
+
+## Expected behavior
+<!-- 
+  Insert a brief descrition of the expected behaviour is
+-->
+
+
+## Screenshots
+<!-- 
+  If applicable, add screenshots to help explain your problem.
+-->
+
+
+## Traceback/Error logs
+<!--
+  If you come across any trace or error logs, please provide them.
+-->
+
+```txt
+
+```
+
+## Additional context
+<!--
+  Add any other context about the problem here.
+-->
