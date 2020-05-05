@@ -89,7 +89,7 @@ If you have the configuration in config.yaml you can convert it to internal sett
 
 ### HA Integration
 
-When you have installed Shelly you can add it in GUI under HA integration. Use the plus buttan and search for Shelly. You need to specify the prefix that is used as first part of the entity_id to avoid conflicts. Default is shelly.
+When you have installed Shelly you can add it in GUI under HA integration. Use the plus button and search for Shelly. You need to specify the prefix that is used as first part of the entity_id to avoid conflicts. Default is shelly.
 
 When you have added Shelly to HA you can do the configuration by clicking the settings gear for this integration.
 
