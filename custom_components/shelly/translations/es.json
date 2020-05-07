@@ -1,0 +1,101 @@
+{
+    "config": {
+        "title": "Shelly smart home",
+        "abort": {
+            "single_instance_allowed": "Solo se permite una única configuración de Shelly."
+        },
+        "step": {
+            "input": {
+                "data": {
+                    "id_prefix": "Prefijo para todas las entidades",
+                    "discovery": "Habilitar descubrimiento automático"
+                },
+                "description": "Configurar la integración Shelly con Home Assistant.",
+                "title": "Shelly smart home"
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "config_1": {
+                "data": {
+                    "mdns": "Habilite mDns para el descubrimiento, intente esto si no se descubrieron sus dispositivos Shelly",
+                    "version": "Crear una entrada que muestre la versión actual de ShellyForHass",
+                    "upgrade_switch": "Crear un interruptor de actualización para cuando salga una nueva versión del firmware de Shelly",
+                    "igmp_fix": "Envíe repetidamente IGMP ADD_MEMBER, intente esto si la actualización instantánea se detiene unos minutos",
+                    "host_ip": "Dirección IP para Home Assistant"
+                },
+                "title": "Shelly - Configuraciones [1/3]",
+                "description": "Configuración (1/2)"
+            },
+            "config_2": {
+                "data": {
+                    "additional_information": "Encuesta Shelly para obtener información adicional, como temperatura del dispositivo, advertencias, RSSI, tiempo de actividad, firmware, etc..",
+                    "scan_interval": "Intervalo para sondear a Shelly para obtener información adicional",
+                    "cloud_auth_key": "Clave Shelly Cloud, utilizada para conectarse a Shelly Cloud",
+                    "cloud_server": "Shelly Cloud Server Host, utilizado para conectarse a Shelly Cloud",
+                    "tmpl_name": "Plantilla para el nombre descriptivo recibida de Shelly Cloud",
+                    "username": "Nombre de usuario de inicio de sesión restringido",
+                    "password": "Contraseña de inicio de sesión restringida",
+                    "unavailable_after_sec": "Número de segundos antes de configurar el dispositivo como no disponible"
+                },
+                "title": "Shelly - Configuraciones [1/3]",
+                "description": "Configuración (2/2)"
+            },
+            "attributes": {
+                "data": {
+                    "ip_address": "Dirección IP",
+                    "shelly_type": "Tipo de Shelly",
+                    "shelly_id": "ID Shelly",
+                    "ssid": "SSID",
+                    "rssi": "RSSI",
+                    "uptime": "Tiempo de actividad",
+                    "has_firmware_update": "Hay una actualización de firmware",
+                    "latest_fw_version": "Última versión de firmware",
+                    "firmware_version": "Versión actual del firmware",
+                    "mqtt_connected": "MQTT conectado",
+                    "cloud_status": "Estado del Cloud",
+                    "switch": "estado del interruptor",
+                    "total_consumption": "Consumo total",
+                    "current_consumption": "Consumo actual",
+                    "over_power": "Exceso de energia",
+                    "device_temp": "Temperatura del dispositivo",
+                    "over_temp": "Exceso de temperatura",
+                    "battery": "Nivel de la bateria",
+                    "voltage": "Voltaje",
+                    "total_returned": "Total devuelto",
+                    "current": "Corriente",
+                    "power_factor": "Factor de potencia"
+                },
+                "title": "Shelly - Configuraciones [2/3] - Atributos",
+                "description": "Seleccione los atributos para mostrar para cada entrada de Shelly. Tenga cuidado, cada atributo activa y almacena información adicional en la base de datos.. {pasos}"
+            },
+            "sensors": {
+                "data": {
+                    "rssi": "RSSI",
+                    "uptime": "Tiempo de actividad",
+                    "current_consumption": "Consumo actual",
+                    "total_consumption": "Consumo total",
+                    "over_power": "Exceso de energia",
+                    "device_temp": "Temperatura del dispositivo",
+                    "over_temp": "Exceso de temperatura",
+                    "mqtt": "MQTT conectado",
+                    "cloud": "Estado del Cloud",
+                    "battery": "Nivel de la bateria",
+                    "voltage": "Voltaje",
+                    "switch": "estado del interruptor",
+                    "total_returned": "Total devuelto",
+                    "current": "Corriente",
+                    "power_factor": "Factor de potencia"
+                },
+                "title": "Shelly - Configuraciones [3/3] - Sensores",
+                "description": "Seleccione los sensores para crear para los dispositivos Shelly. {pasos}"
+            },
+            "yaml": {
+                "data": {
+                    "convert": "Marque esto si desea mover su configuración a la base de datos para shelly. Si hace esto, puede cambiar la configuración aquí y las configuraciones en config.yaml serán ignoradas y podrá eliminarlas."
+                },
+                "title": "Shelly - config.yaml",
+                "description": "Su configuración para ShellyForHass se almacena en config.yaml."
+            }
+        }
