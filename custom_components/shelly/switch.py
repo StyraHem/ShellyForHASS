@@ -7,7 +7,11 @@ https://home-assistant.io/components/shelly/
 
 import logging
 
-from homeassistant.components.switch import SwitchDevice
+try:
+    from homeassistant.components.switch import SwitchEntity
+except:
+    from homeassistant.components.switch import \
+        SwitchDevice as SwitchEntity
 from homeassistant.helpers.entity import ToggleEntity
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from .const import *
@@ -49,7 +53,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_discover_switch
     )
 
-class ShellySwitch(ShellyDevice, SwitchDevice):
+class ShellySwitch(ShellyDevice, SwitchEntity):
     """Representation of an Shelly Switch."""
     def __init__(self, dev, instance):
         """Initialize an ShellySwitch."""
@@ -66,16 +70,20 @@ class ShellySwitch(ShellyDevice, SwitchDevice):
     def turn_on(self, **_kwargs):
         """Turn on device"""
         self._dev.turn_on()
+        self._state = True
+        self.schedule_update_ha_state()
 
     def turn_off(self, **_kwargs):
         """Turn off device"""
         self._dev.turn_off()
+        self._state = False
+        self.schedule_update_ha_state()
 
     def update(self):
         """Fetch new state data for this switch."""
         self._state = self._dev.state
 
-class ShellyFirmwareUpdate(ShellyBlock, SwitchDevice):
+class ShellyFirmwareUpdate(ShellyBlock, SwitchEntity):
     """Representation of a script entity."""
 
     def __init__(self, block, instance):

@@ -11,8 +11,11 @@ from homeassistant.components.light import (
     ATTR_WHITE_VALUE,
     SUPPORT_BRIGHTNESS, SUPPORT_COLOR, SUPPORT_COLOR_TEMP, SUPPORT_EFFECT,
     SUPPORT_WHITE_VALUE,
-    Light
 )
+try:
+    from homeassistant.components.light import (LightEntity)
+except:
+    from homeassistant.components.light import (Light as LightEntity)
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 import homeassistant.util.color as color_util
 from homeassistant.util.color import (
@@ -55,7 +58,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_discover_light
     )
 
-class ShellyLightRelay(ShellyDevice, Light):
+class ShellyLightRelay(ShellyDevice, LightEntity):
     """Representation of an Shelly Switch."""
 
     def __init__(self, dev, instance):
@@ -71,15 +74,20 @@ class ShellyLightRelay(ShellyDevice, Light):
 
     def turn_on(self, **kwargs):
         self._dev.turn_on()
+        self._state = True
+        self.schedule_update_ha_state()
+
 
     def turn_off(self, **kwargs):
         self._dev.turn_off()
+        self._state = False
+        self.schedule_update_ha_state()
 
     def update(self):
         """Fetch new state data for this light."""
         self._state = self._dev.state
 
-class ShellyDimmer(ShellyDevice, Light):
+class ShellyDimmer(ShellyDevice, LightEntity):
     """Representation of an Shelly Dimmer."""
 
     def __init__(self, dev, instance):
@@ -113,19 +121,25 @@ class ShellyDimmer(ShellyDevice, Light):
         color_temp = None
         if ATTR_BRIGHTNESS in kwargs:
             brightness = int(kwargs[ATTR_BRIGHTNESS] / 2.55)
+            self._brightness = brightness
         if ATTR_COLOR_TEMP in kwargs:
             color_temp = int(mired_to_kelvin(kwargs[ATTR_COLOR_TEMP]))
             if color_temp > self._color_temp_max:
                 color_temp = self._color_temp_max
             if color_temp < self._color_temp_min:
                 color_temp = self._color_temp_min
+            self._color_temp = color_temp
         if color_temp:
             self._dev.turn_on(brightness, color_temp)
         else:
             self._dev.turn_on(brightness)
+        self._state = True
+        self.schedule_update_ha_state()
 
     def turn_off(self, **_kwargs):
         self._dev.turn_off()
+        self._state = False
+        self.schedule_update_ha_state()
 
     @property
     def brightness(self):
@@ -160,7 +174,7 @@ class ShellyDimmer(ShellyDevice, Light):
         if hasattr(self._dev, 'color_temp'):
             self._color_temp = self._dev.color_temp
 
-class ShellyRGB(ShellyDevice, Light):
+class ShellyRGB(ShellyDevice, LightEntity):
     """Representation of an Shelly Light."""
 
     def __init__(self, dev, instance):
@@ -220,14 +234,17 @@ class ShellyRGB(ShellyDevice, Light):
 
         if ATTR_BRIGHTNESS in kwargs:
             brightness = int(kwargs[ATTR_BRIGHTNESS] / 2.55)
+            self._brightness = brightness
 
         if ATTR_WHITE_VALUE in kwargs:
             white_value = int(kwargs[ATTR_WHITE_VALUE])
+            self._white_value = white_value
 
         if ATTR_HS_COLOR in kwargs:
             red, green, blue = \
                 color_util.color_hs_to_RGB(*kwargs[ATTR_HS_COLOR])
             rgb = [red, green, blue]
+            self._rgb = rgb
 
         if ATTR_COLOR_TEMP in kwargs:
             color_temp = int(mired_to_kelvin(kwargs[ATTR_COLOR_TEMP]))
@@ -235,7 +252,7 @@ class ShellyRGB(ShellyDevice, Light):
                 color_temp = 6500
             if color_temp < 3000:
                 color_temp = 3000
-
+            self._color_temp = color_temp
 
         if ATTR_EFFECT in kwargs:
             affect_attr = kwargs.get(ATTR_EFFECT)
@@ -247,13 +264,19 @@ class ShellyRGB(ShellyDevice, Light):
 
             if 'effect' in effect:
                 effect_nr = effect['effect']
+                self._effect = effect_nr
 
         self._dev.turn_on(brightness=brightness, rgb=rgb, color_temp=color_temp,
                           mode=mode, effect=effect_nr, white_value=white_value)
 
+        self._state = True
+        self.schedule_update_ha_state()
+
     def turn_off(self, **_kwargs):
         """Turn off light"""
         self._dev.turn_off()
+        self._state = False
+        self.schedule_update_ha_state()
 
     def update(self):
         """Fetch new state data for this light."""

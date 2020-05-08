@@ -19,7 +19,6 @@ from homeassistant.const import (DEVICE_CLASS_HUMIDITY,
                                  STATE_ON, STATE_OFF)
 from homeassistant.helpers.entity import Entity
 from homeassistant.core import callback
-#from homeassistant.components.binary_sensor import BinarySensorDevice
 
 from . import (CONF_OBJECT_ID_PREFIX)
 from .device import ShellyDevice

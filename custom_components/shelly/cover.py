@@ -7,9 +7,15 @@ https://home-assistant.io/components/shelly/
 
 #pylint: disable=import-error
 from homeassistant.components.cover import (ATTR_POSITION,
-                                            CoverDevice, SUPPORT_CLOSE,
+                                            SUPPORT_CLOSE,
                                             SUPPORT_OPEN, SUPPORT_STOP,
                                             SUPPORT_SET_POSITION)
+
+try:
+    from homeassistant.components.cover import CoverEntity
+except:
+    from homeassistant.components.cover import \
+        CoverDevice as CoverEntity
 
 from .device import ShellyDevice
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
@@ -31,7 +37,7 @@ async def async_setup_entry(hass, _config_entry, async_add_entities):
         async_discover_cover
     )
 
-class ShellyCover(ShellyDevice, CoverDevice):
+class ShellyCover(ShellyDevice, CoverEntity):
     """Shelly cover device."""
 
     def __init__(self, dev, instance):

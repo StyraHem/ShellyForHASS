@@ -10,7 +10,11 @@ import time
 from threading import Timer
 from homeassistant.util import slugify
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
-from homeassistant.components.binary_sensor import BinarySensorDevice
+try:
+    from homeassistant.components.binary_sensor import BinarySensorEntity
+except:
+    from homeassistant.components.binary_sensor import \
+        BinarySensorDevice as BinarySensorEntity
 from homeassistant.helpers.restore_state import RestoreStateData
 
 from . import (CONF_OBJECT_ID_PREFIX)
@@ -45,7 +49,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_discover_sensor
     )
 
-class ShellySwitch(ShellyDevice, BinarySensorDevice):
+class ShellySwitch(ShellyDevice, BinarySensorEntity):
     """Representation of a Shelly Switch state."""
 
     def __init__(self, dev, instance):
@@ -103,7 +107,7 @@ class ShellySwitch(ShellyDevice, BinarySensorDevice):
             self._click_timer.start()
         self._state = new_state
 
-class ShellyBinarySensor(ShellyDevice, BinarySensorDevice):
+class ShellyBinarySensor(ShellyDevice, BinarySensorEntity):
     """Representation of a Shelly Sensor."""
 
     def __init__(self, dev, instance, sensor_type, sensor_name):
@@ -151,7 +155,7 @@ class ShellyBinarySensor(ShellyDevice, BinarySensorDevice):
         """Fetch new state data for this sensor."""
         self._state = self._dev.state
 
-class ShellyBinaryInfoSensor(ShellyBlock, BinarySensorDevice):
+class ShellyBinaryInfoSensor(ShellyBlock, BinarySensorEntity):
     """Representation of a Shelly Info Sensor."""
 
     def __init__(self, block, instance, sensor_type, sensor_name):
