@@ -1,6 +1,5 @@
 {
     "config": {
-        "title": "Shelly smart home",
         "abort": {
             "single_instance_allowed": "Solo se permite una única configuración de Shelly."
         },
