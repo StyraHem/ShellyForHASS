@@ -26,7 +26,7 @@ Please check if the bug is already reported and add more information there inste
 
 ## Describe the bug
 <!--
-  Make a brief descrition of the problem you are experiencing
+  Make a brief description of the problem you are experiencing
 -->
 
 
@@ -38,7 +38,7 @@ Please check if the bug is already reported and add more information there inste
 
 ## Expected behavior
 <!-- 
-  Insert a brief descrition of the expected behaviour is
+  Insert a brief description of the expected behavior is
 -->
 
 
