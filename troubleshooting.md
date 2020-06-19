@@ -17,7 +17,7 @@ If this is not working and the status updates will be slow. You can try to chang
 
 CoAP doesn't seem to work between AiMesh-nodes. Make sure both Home Assistant and all your Shelly-devices are connected to the main AiMesh-router. If you have Shelly-devices that are out of range from your AiMesh-router, they will not be able to push real-time updates via CoAP.
 
-For your Shelly-devices that are in range of the AiMesh-router, you can disable roamaing by adding them to te Roaming Block List:
+For your Shelly-devices that are in range of the AiMesh-router, you can disable roaming by adding them to te Roaming Block List:
 1. Turn off all your AiMesh-nodes and let all your Shelly-devices connect to the main AiMesh-router.
 2. Go to your router's admin-panel and navigate to **Advanced Settings** > **Wireless** > **Roaming Block List**.
 3. Add the MAC-addresses to your Shelly-devices to the block list (you'll find them in the dropdown-list) and click **Apply**.
