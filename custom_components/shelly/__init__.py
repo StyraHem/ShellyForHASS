@@ -39,7 +39,7 @@ from .configuration_schema import CONFIG_SCHEMA, CONFIG_SCHEMA_ROOT
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.9-b2"
+__version__ = "0.1.9-b3"
 VERSION = __version__
 
 async def async_setup(hass, config):
@@ -98,7 +98,6 @@ async def async_unload_entry(hass, config_entry):
     await instance.stop()
     await instance.clean()
     return True
-
 class ShellyInstance():
     """Config instance of Shelly"""
 
@@ -174,6 +173,8 @@ class ShellyInstance():
         if additional_info:
             pys.update_status_interval = timedelta(seconds=update_interval)
         pys.only_device_id = conf.get(CONF_ONLY_DEVICE_ID)
+        if pys.only_device_id:
+            pys.only_device_id = pys.only_device_id.upper()
         pys.igmp_fix_enabled = conf.get(CONF_IGMPFIX)
         pys.mdns_enabled = conf.get(CONF_MDNS)
         host_ip = conf.get(CONF_HOST_IP)
@@ -182,6 +183,7 @@ class ShellyInstance():
                 pys.host_ip = get_local_ip()
             else:
                 pys.host_ip = host_ip
+        pys.mqtt_port = conf.get(CONF_MQTT_PORT, 0)
         pys.start()
         pys.discover()
 
@@ -279,7 +281,7 @@ class ShellyInstance():
                 elif decimals == 0:
                     value = round(value)
             if add_unit and CONF_UNIT in settings:
-                value = str(value) + ' '  + settings[CONF_UNIT]
+                value = str(value) + ' ' + settings[CONF_UNIT]
         return value
 
     def get_settings(self, *ids):

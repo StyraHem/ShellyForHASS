@@ -118,7 +118,8 @@ class ShellyOptionsFlowHandler(config_entries.OptionsFlow):
                 self.v(CONF_VERSION): bool,
                 self.v(CONF_UPGRADE_SWITCH): bool,
                 self.v(CONF_IGMPFIX): bool,
-                self.v(CONF_HOST_IP) : str
+                self.v(CONF_HOST_IP) : str,
+                self.v(CONF_MQTT_PORT) : int
             })
             return self.async_show_form(step_id="config_1", data_schema=schema)
 
