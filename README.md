@@ -350,9 +350,9 @@ Now you should restart Home Assistant to load shelly. Some times you need to res
 Shelly will discover all devices on your LAN and show them as light, switch, sensor and cover in Home Assistant.
 
 ### Proxy for VLAN or different network
-If you running Shellies on different VLAN or network there is a [proxy.py](https://github.com/StyraHem/ShellyForHASS/blob/master/util/proxy.py) that can be used to forward CoAP messages to ShellyForHASS plugin.
+If you're running Shellies on a different VLAN or network there is a [proxy.py](https://github.com/StyraHem/ShellyForHASS/blob/master/util/proxy.py) that can be used to forward CoAP messages to ShellyForHASS plugin.
 
-Update the script with the ip-address of your HASS installation and run it on a computer/router etc that are connected to same nettwork as your Shellies. Firewall and routing must be enabled, TCP 80 HASS -> Shelly and UDP 5683 Shelly -> HASS.
+Update the script with the ip-address of your HASS installation and run it on a computer/router etc that are connected to same network as your Shellies. Firewall and routing must be enabled, TCP 80 HASS -> Shelly and UDP 5683 Shelly -> HASS. If you're using multiple network interfaces, try routing the multicast packets to the right interface (i.e. `ip route add 224.0.1.187/32 dev eth1`).
 
 ## Auto entities (before Monster card)
 You can use the component with [auto entities](https://github.com/thomasloven/lovelace-auto-entities) to filter data in a nice way.
