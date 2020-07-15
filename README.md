@@ -53,21 +53,20 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Temperature addon for Shelly 1(PM)
 - Shelly 2 (relay or roller mode)
 - Shelly 2.5 (relay or roller mode)
+- Shelly 2LED (not verified)
+- Shelly 3EM (0.1.7)
 - Shelly 4
 - Shelly Bulb
+- Shelly DUO (0.1.7)
+- Shelly Dimmer / Dimmer SL
+- Shelly Door/Window
 - Shelly EM
+- Shelly Flood
 - Shelly H&T
 - Shelly Plug
 - Shelly Plug S
-- Shelly RGBWW
 - Shelly RGBW2 (rgb or 4 channels)
-- Shelly 2LED (not verified)
-- Shelly Flood
-- Shelly Door/Window
-- Shelly Dimmer / Dimmer SL
-- Shelly EM
-- Shelly 3EM (0.1.7)
-- Shelly DUO (0.1.7)
+- Shelly RGBWW
 - Shelly Vintage (0.1.8)
 
 ## Installation
