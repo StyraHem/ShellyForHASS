@@ -3,17 +3,19 @@
 [![founder-wip](https://img.shields.io/badge/founder-Håkan_Åkerberg@StyraHem.se-green.svg?style=for-the-badge)](https://www.styrahem.se)
 [![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20us%20a%20coffee-orange.svg?style=for-the-badge)](https://www.buymeacoffee.com/styrahem)
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/StyraHem/ShellyForHass?style=for-the-badge)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-green.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
+![Github All Releases](https://img.shields.io/github/downloads/styrahem/shellyforhass/total.svg?label=Total%20downloads&style=for-the-badge)
+
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/StyraHem/ShellyForHass?label=Latest%20release&style=for-the-badge)
 ![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge)
 ![GitHub Releases](https://img.shields.io/github/downloads/StyraHem/ShellyForHass/latest/total?label=Downloads&style=for-the-badge)
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-green.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 
 ## Join Facebook group:
 This Facebook group are used to anounce new releases etc. Please join it to be updated of new releases.
 [https://www.facebook.com/groups/shellyforhass/](https://www.facebook.com/groups/shellyforhass/)
 
 ## Support the development
-We spending lots of effort to make this plugin better and supporting new devices. Please support us by joining on [Patreon](https://www.patreon.com/shelly4hass) or buying us [some cups of coffee](https://www.buymeacoffee.com/styrahem).
+We spending lots of effort to make this plugin better and supporting new devices. Please support us by joining on [Patreon](https://www.patreon.com/shelly4hass), donate to [Paypal pool](https://www.paypal.com/pools/c/8n6AbR9sNk) or buying us [some cups of coffee](https://www.buymeacoffee.com/styrahem).
 
 ## Intro
 This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices is local. You can use this plugin and continue to use Shelly Cloud, MQTT and Shelly app in your mobile if you want. A proxy can also be used to include Shellies on different LAN's.
@@ -56,13 +58,19 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Shelly 2LED (not verified)
 - Shelly 3EM (0.1.7)
 - Shelly 4
+- Shelly Air (0.1.9)
 - Shelly Bulb
+- Shelly Button-1 (0.1.9)
 - Shelly DUO (0.1.7)
 - Shelly Dimmer / Dimmer SL
+- Shelly Dimmer 2 (0.1.9)
 - Shelly Door/Window
+- Shelly Door/Window 2 (0.1.9)
 - Shelly EM
 - Shelly Flood
+- Shelly Gas (0.1.9)
 - Shelly H&T
+- Shelly i3 (0.1.9)
 - Shelly Plug
 - Shelly Plug S
 - Shelly RGBW2 (rgb or 4 channels)
@@ -71,7 +79,7 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 
 ## Installation
 
-### Install with HACS  (recomended)
+### Install with HACS (recomended)
 
 Do you you have [HACS](https://community.home-assistant.io/t/custom-component-hacs) installed? Just search for Shelly and install it direct from HACS. HACS will keep track of updates and you can easly upgrade Shelly to latest version.
 
