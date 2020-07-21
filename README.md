@@ -56,13 +56,19 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Shelly 2LED (not verified)
 - Shelly 3EM (0.1.7)
 - Shelly 4
+- Shelly Air (0.1.9)
 - Shelly Bulb
+- Shelly Button-1 (0.1.9)
 - Shelly DUO (0.1.7)
 - Shelly Dimmer / Dimmer SL
+- Shelly Dimmer 2 (0.1.9)
 - Shelly Door/Window
+- Shelly Door/Window 2 (0.1.9)
 - Shelly EM
 - Shelly Flood
+- Shelly Gas (0.1.9)
 - Shelly H&T
+- Shelly i3 (0.1.9)
 - Shelly Plug
 - Shelly Plug S
 - Shelly RGBW2 (rgb or 4 channels)
@@ -71,7 +77,7 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 
 ## Installation
 
-### Install with HACS  (recomended)
+### Install with HACS (recomended)
 
 Do you you have [HACS](https://community.home-assistant.io/t/custom-component-hacs) installed? Just search for Shelly and install it direct from HACS. HACS will keep track of updates and you can easly upgrade Shelly to latest version.
 
