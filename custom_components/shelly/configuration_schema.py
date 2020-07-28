@@ -92,7 +92,8 @@ CONFIG_SCHEMA_ROOT = vol.Schema({
                      vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(CONF_MDNS, default=DEFAULT_MDNS): cv.boolean,
         vol.Optional(CONF_HOST_IP, default='') : cv.string,
-        vol.Optional(CONF_SETTINGS, default={}): SETTINGS_SCHEMA
+        vol.Optional(CONF_SETTINGS, default={}): SETTINGS_SCHEMA,
+        vol.Optional(CONF_MQTT_PORT, default=0): cv.positive_int
     })
 
 CONFIG_SCHEMA = vol.Schema({

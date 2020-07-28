@@ -120,7 +120,7 @@ class ShellyFirmwareUpdate(ShellyBlock, SwitchEntity):
         """Trig the firmware update"""
         self._updating = True
         self.schedule_update_ha_state()
-        self._block.update_firmware()
+        await self.hass.async_add_executor_job(self._block.update_firmware)
 
     async def async_turn_off(self, **_kwargs):
         """Do nothing"""

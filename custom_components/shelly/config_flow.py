@@ -12,7 +12,7 @@ from .const import (DOMAIN,
                     ALL_ATTRIBUTES, CONF_ATTRIBUTES,
                     ALL_SENSORS, CONF_SENSORS,
                     CONF_MDNS, CONF_VERSION, CONF_UPGRADE_SWITCH,
-                    CONF_IGMPFIX, CONF_HOST_IP,
+                    CONF_IGMPFIX, CONF_HOST_IP, CONF_MQTT_PORT,
                     CONF_CLOUD_AUTH_KEY, CONF_CLOUD_SERVER,
                     CONF_TMPL_NAME, CONF_ADDITIONAL_INFO,
                     CONF_OBJECT_ID_PREFIX,
@@ -118,7 +118,8 @@ class ShellyOptionsFlowHandler(config_entries.OptionsFlow):
                 self.v(CONF_VERSION): bool,
                 self.v(CONF_UPGRADE_SWITCH): bool,
                 self.v(CONF_IGMPFIX): bool,
-                self.v(CONF_HOST_IP) : str
+                self.v(CONF_HOST_IP) : str,
+                self.v(CONF_MQTT_PORT) : int
             })
             return self.async_show_form(step_id="config_1", data_schema=schema)
 
