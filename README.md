@@ -258,7 +258,7 @@ shelly:
 | unavailable_after_sec  | Overide number of seconds before the device will be unavialable.    | 120 | 0.0.16- | 
 
 #### Attributes (0.1.6-)
-| Sensor       | Description                                               | Default | Version |
+| Parameter    | Description                                               | Default | Version |
 |--------------|-----------------------------------------------------------|---------|---------|
 | all          | Show all available attributes                             ||
 | default      | Attributes with the mark in default column                ||
@@ -289,7 +289,7 @@ shelly:
 | payload | Show the latest CoAP message received (DEBUG) ||
 
 #### Sensors
-| Sensor       | Description                           | Values / Unit     | Version |
+| Parameter    | Description                           | Values / Unit     | Version |
 |--------------|---------------------------------------|-------------------|---------|
 | all          | Show all available sensors            |                   |
 | current_consumption | Show power consumtion sensors     | W              |
