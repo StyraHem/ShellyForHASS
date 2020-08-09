@@ -298,6 +298,8 @@ shelly:
 | uptime       | Show uptime sensors                   | s                 |
 | over_power   | Show over power sensors               | True, False       |
 | device_temp  | Show device inner temperature sensors | °C                |
+| illuminance  | Show illuminance sensors              | lux               |
+| vibration    | Show vibration   sensors              | True, False       |
 | over_temp    | Show over temperature sensors         | True, False       |
 | cloud        | Show cloud status                     | disabled, disconnected, connected |
 | mqtt         | Show mqtt connection state            | True, False       |
