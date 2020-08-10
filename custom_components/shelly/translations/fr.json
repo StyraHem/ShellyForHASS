@@ -9,7 +9,7 @@
                     "id_prefix": "Préfixe pour toutes les entités",
                     "discovery": "Activer la découverte automatique"
                 },
-                "description": "Configurez l'intégration de Shelly avec Home Assistant.",
+                "description": "Configurer l'intégration de Shelly avec Home Assistant.",
                 "title": "Shelly smart home"
             }
         }
@@ -18,10 +18,10 @@
         "step": {
             "config_1": {
                 "data": {
-                    "mdns": "Activez mDns pour la découverte, essayez ceci si vos appareils Shelly ne sont pas découverts",
+                    "mdns": "Activer mDns pour la découverte, essayez ceci si vos appareils Shelly ne sont pas découverts",
                     "version": "Créer une entrée montrant la version actuelle de ShellyForHass",
                     "upgrade_switch": "Créer un commutateur de mise à niveau lorsqu'un Shelly a un nouveau firmware",
-                    "igmp_fix": "Envoyez IGMP ADD_MEMBER à plusieurs reprises, essayez ceci si la mise à jour instantanée s'arrête quelques minutes",
+                    "igmp_fix": "Envoyer IGMP ADD_MEMBER à plusieurs reprises, essayez ceci si la mise à jour instantanée s'arrête quelques minutes",
                     "host_ip": "Adresse IP pour Home Assistant"
                 },
                 "title": "Shelly - Paramètres [1/3]",
@@ -67,7 +67,7 @@
                     "power_factor": "Facteur de puissance"
                 },
                 "title": "Shelly - Paramètres [2/3] - Attributs",
-                "description": "Sélectionnez les attributs à afficher pour chaque entrée Shelly. Soyez prudent, chaque attribut se déclenche et stocke des informations supplémentaires dans la base de données. {steps}"
+                "description": "Sélectionner les attributs à afficher pour chaque entrée Shelly. Soyez prudent, chaque attribut se déclenche et stocke des informations supplémentaires dans la base de données. {steps}"
             },
             "sensors": {
                 "data": {
@@ -88,11 +88,11 @@
                     "power_factor": "Facteur de puissance"
                 },
                 "title": "Shelly - Paramètres [3/3] - Capteurs",
-                "description": "Sélectionnez les capteurs à créer pour les appareils Shelly. {steps}"
+                "description": "Sélectionner les capteurs à créer pour les appareils Shelly. {steps}"
             },
             "yaml": {
                 "data": {
-                    "convert": "Cochez cette case si vous souhaitez déplacer votre configuration vers la base de données pour shelly. Si vous faites cela, vous pouvez modifier les paramètres ici et les paramètres dans config.yaml seront ignorés et vous pourrez les supprimer."
+                    "convert": "Cocher cette case si vous souhaitez déplacer votre configuration vers la base de données pour shelly. Si vous faites cela, vous pouvez modifier les paramètres ici et les paramètres dans config.yaml seront ignorés et vous pourrez les supprimer."
                 },
                 "title": "Shelly - config.yaml",
                 "description": "Vos paramètres pour ShellyForHass sont stockés dans config.yaml."
