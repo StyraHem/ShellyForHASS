@@ -258,7 +258,7 @@ shelly:
 | unavailable_after_sec  | Overide number of seconds before the device will be unavialable.    | 120 | 0.0.16- | 
 
 #### Attributes (0.1.6-)
-| Sensor       | Description                                               | Default | Version |
+| Parameter    | Description                                               | Default | Version |
 |--------------|-----------------------------------------------------------|---------|---------|
 | all          | Show all available attributes                             ||
 | default      | Attributes with the mark in default column                ||
@@ -289,7 +289,7 @@ shelly:
 | payload | Show the latest CoAP message received (DEBUG) ||
 
 #### Sensors
-| Sensor       | Description                           | Values / Unit     | Version |
+| Parameter    | Description                           | Values / Unit     | Version |
 |--------------|---------------------------------------|-------------------|---------|
 | all          | Show all available sensors            |                   |
 | current_consumption | Show power consumtion sensors     | W              |
@@ -298,6 +298,8 @@ shelly:
 | uptime       | Show uptime sensors                   | s                 |
 | over_power   | Show over power sensors               | True, False       |
 | device_temp  | Show device inner temperature sensors | °C                |
+| illuminance  | Show illuminance sensors              | lux               |
+| vibration    | Show vibration   sensors              | True, False       |
 | over_temp    | Show over temperature sensors         | True, False       |
 | cloud        | Show cloud status                     | disabled, disconnected, connected |
 | mqtt         | Show mqtt connection state            | True, False       |
