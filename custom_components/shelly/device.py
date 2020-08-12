@@ -109,7 +109,13 @@ class ShellyDevice(RestoreEntity):
                     if self.instance.conf_attribute(key):
                         settings = self._settings.get(key)
                         value = self.instance.format_value(settings, value, True)
-                        attrs[key] = value
+                        k = key
+                        if key in self._dev.info_values_coap:
+                            k += ", C=" + str(self._dev.info_values_coap[key])
+                        if key in self._dev.info_values_status_value:
+                            k += ", S=" + str(self._dev.info_values_status_value[key
+                                                                               ])
+                        attrs[k] = value
 
             if self._dev.sensor_values is not None:
                 for key, value in self._dev.sensor_values.items():

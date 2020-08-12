@@ -359,7 +359,8 @@ class ShellyInstance():
 
         if hass_data['discover']:
             if hass_data['allow_upgrade_switch']:
-                has_update = block.info_values.get('has_firmware_update', False)
+                has_update = block.has_fw_update()
+                #info_values.get('has_firmware_update', False)
                 update_switch = getattr(block, 'firmware_switch', None)
                 if has_update:
                     if update_switch is None:

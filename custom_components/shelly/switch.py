@@ -107,8 +107,9 @@ class ShellyFirmwareUpdate(ShellyBlock, SwitchEntity):
         attrs = super().device_state_attributes
         attrs[ATTRIBUTE_LATEST_FW] = \
             self._block.info_values[ATTRIBUTE_LATEST_FW]
-        attrs[ATTRIBUTE_FW] = \
-            self._block.info_values[ATTRIBUTE_FW]
+        if ATTRIBUTE_FW in attrs:
+            attrs[ATTRIBUTE_FW] = \
+                self._block.info_values[ATTRIBUTE_FW]
         return attrs
 
     @property
