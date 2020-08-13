@@ -364,10 +364,19 @@ class ShellyInstance():
                 update_switch = getattr(block, 'firmware_switch', None)
                 if has_update:
                     if update_switch is None:
-                        attr = {'firmware': True, 'block':block}
+                        attr = {'firmware': True, 'block':block, 'beta':False}
                         self.add_device("switch", attr)
                 elif update_switch is not None:
                     update_switch.remove()
+
+                has_beta_update = block.has_fw_update(True)
+                update_beta_switch = getattr(block, 'beta_firmware_switch', None)
+                if has_beta_update:
+                    if update_beta_switch is None:
+                        attr = {'firmware': True, 'block':block, 'beta':True}
+                        self.add_device("switch", attr)
+                elif update_beta_switch is not None:
+                    update_beta_switch.remove()
 
             #block_key = _get_block_key(block)
             #entity_reg = \
