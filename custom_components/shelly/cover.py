@@ -48,6 +48,7 @@ class ShellyCover(ShellyDevice, CoverEntity):
         self._motion_state = None
         self._support_position = None
         self._state = None
+        self._master_unit = True
         self.update()
 
     @property
