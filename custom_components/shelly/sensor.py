@@ -11,12 +11,6 @@ from threading import Timer
 from homeassistant.util import slugify
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
-from homeassistant.const import (DEVICE_CLASS_HUMIDITY,
-                                 DEVICE_CLASS_BATTERY,
-                                 DEVICE_CLASS_ILLUMINANCE,
-                                 DEVICE_CLASS_TEMPERATURE,
-                                 TEMP_CELSIUS, POWER_WATT,
-                                 STATE_ON, STATE_OFF)
 from homeassistant.helpers.entity import Entity
 from homeassistant.core import callback
 

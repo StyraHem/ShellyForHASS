@@ -230,6 +230,8 @@ class ShellyInstance():
                         entities_to_fix_attr.append(entity.entity_id)
                 if unique_id.endswith("_firmware_update"):
                     entities_to_remove.append(entity.entity_id)
+                if unique_id.endswith("_gas"):
+                    entities_to_remove.append(entity.entity_id)
                 if "_shdw" in unique_id or \
                    "_shwt" in unique_id or \
                    "_shht" in unique_id:

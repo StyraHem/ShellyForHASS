@@ -17,6 +17,7 @@ from homeassistant.const import (
 from homeassistant.components.binary_sensor import (
     DEVICE_CLASS_CONNECTIVITY,
     DEVICE_CLASS_DOOR,
+    DEVICE_CLASS_GAS,
     DEVICE_CLASS_MOISTURE,
     DEVICE_CLASS_PROBLEM,
     DEVICE_CLASS_SAFETY,
@@ -277,7 +278,7 @@ SENSOR_TYPE_DEFAULT = 'default'
 SENSOR_TYPE_CLICK_TYPE = 'click_type'
 SENSOR_TYPE_VIBRATION = 'vibration'
 SENSOR_TYPE_TILT = 'tilt'
-SENSOR_TYPE_PPM = 'ppm'
+SENSOR_TYPE_GAS = 'gas'
 SENSOR_TYPE_TOTAL_WORK_TIME = 'total_work_time'
 
 SENSOR_TYPES_CFG = {
@@ -330,8 +331,8 @@ SENSOR_TYPES_CFG = {
         ['Tilt', '', 'mdi:angle-acute', DEVICE_CLASS_SAFETY, 'bool'],
     SENSOR_TYPE_VIBRATION:
         ['Vibration', '', None, DEVICE_CLASS_VIBRATION, 'bool'],
-    SENSOR_TYPE_PPM:
-        ['Concentration', 'PPM', 'mdi:gauge', None, None],
+    SENSOR_TYPE_GAS:
+    ['Concentration', '', 'mdi:air-filter', DEVICE_CLASS_GAS, 'bool'],
     SENSOR_TYPE_TOTAL_WORK_TIME:
         ['Total work time', 's', 'mdi:briefcase-clock', None, None],
 }
