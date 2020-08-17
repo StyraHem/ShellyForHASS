@@ -15,7 +15,12 @@ from homeassistant.const import (
 )
 
 from homeassistant.components.binary_sensor import (
-    DEVICE_CLASS_CONNECTIVITY
+    DEVICE_CLASS_CONNECTIVITY,
+    DEVICE_CLASS_DOOR,
+    DEVICE_CLASS_MOISTURE,
+    DEVICE_CLASS_PROBLEM,
+    DEVICE_CLASS_SAFETY,
+    DEVICE_CLASS_VIBRATION,
 )
 
 DOMAIN = 'shelly'
@@ -291,20 +296,20 @@ SENSOR_TYPES_CFG = {
     SENSOR_TYPE_BATTERY:
         ['Battery', '%', None, DEVICE_CLASS_BATTERY, None],
     SENSOR_TYPE_OVER_POWER:
-        ['Over power', '', 'mdi:flash-alert', None, 'bool'],
+        ['Over power', '', 'mdi:flash-alert', DEVICE_CLASS_PROBLEM, 'bool'],
     SENSOR_TYPE_DEVICE_TEMP:
         ['Device temperature', TEMP_CELSIUS, "mdi:oil-temperature", None, None],
     SENSOR_TYPE_OVER_TEMP:
-        ['Over temperature', '', 'mdi:alert', None, 'bool'],
+        ['Over temperature', '', 'mdi:alert', DEVICE_CLASS_PROBLEM, 'bool'],
     SENSOR_TYPE_CLOUD_STATUS:
         ['Cloud status', '', 'mdi:cloud-question', None, None],
     SENSOR_TYPE_MQTT_CONNECTED:
         ['MQTT connected', '', 'mdi:transit-connection-variant',
          DEVICE_CLASS_CONNECTIVITY, 'bool'],
     SENSOR_TYPE_FLOOD:
-        ['Flood', '', 'mdi:water', None, 'bool'],
+        ['Flood', '', None, DEVICE_CLASS_MOISTURE, 'bool'],
     SENSOR_TYPE_DOOR_WINDOW:
-        ['Door/Window', '', 'mdi:door', 'window', 'bool'],
+        ['Door/Window', '', None, DEVICE_CLASS_DOOR, 'bool'],
     SENSOR_TYPE_ILLUMINANCE:
         ['Illuminance', 'lux', None, DEVICE_CLASS_ILLUMINANCE, None],
     SENSOR_TYPE_TOTAL_CONSUMPTION:
@@ -322,9 +327,9 @@ SENSOR_TYPES_CFG = {
     SENSOR_TYPE_CLICK_TYPE:
         ['Click type', '', 'mdi:hockey-puck', None, None],
     SENSOR_TYPE_TILT:
-        ['Tilt', '', 'mdi:angle-acute', None, None],
+        ['Tilt', '', 'mdi:angle-acute', DEVICE_CLASS_SAFETY, 'bool'],
     SENSOR_TYPE_VIBRATION:
-        ['Vibration', '', 'mdi:vibrate', None, 'bool'],
+        ['Vibration', '', None, DEVICE_CLASS_VIBRATION, 'bool'],
     SENSOR_TYPE_PPM:
         ['Concentration', 'PPM', 'mdi:gauge', None, None],
     SENSOR_TYPE_TOTAL_WORK_TIME:
