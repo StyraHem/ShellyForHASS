@@ -28,7 +28,7 @@ _LOGGER = logging.getLogger(__name__)
 CLICK_EVENTS = {
     'S' : 'single',
     'SS' : 'double',
-    'SSS': 'tripple',
+    'SSS': 'triple',
     'L': 'long',
     'SL': 'short-long',
     'LS': 'long-short'
