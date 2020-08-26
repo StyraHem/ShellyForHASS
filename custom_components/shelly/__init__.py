@@ -25,6 +25,9 @@ from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.restore_state import RestoreStateData
 from homeassistant.helpers.storage import Store
 from homeassistant.helpers.json import JSONEncoder
+from homeassistant.components.zeroconf import (
+    async_get_instance as zeroconf_async_get_instance
+)
 try: #Backward compatible with HA
     from homeassistant.helpers.entity_registry import ATTR_RESTORED
 except:
@@ -39,7 +42,7 @@ from .configuration_schema import CONFIG_SCHEMA, CONFIG_SCHEMA_ROOT
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.1.9"
+__version__ = "0.2.0-b1"
 VERSION = __version__
 
 async def async_setup(hass, config):
@@ -98,6 +101,7 @@ async def async_unload_entry(hass, config_entry):
     await instance.stop()
     await instance.clean()
     return True
+
 class ShellyInstance():
     """Config instance of Shelly"""
 
@@ -127,6 +131,8 @@ class ShellyInstance():
         sensors = self.conf.get(CONF_SENSORS, {})
         if SENSOR_ALL in sensors:
             self.conf[CONF_SENSORS] = [*ALL_SENSORS.keys()]
+
+        self._debug_msg = False
 
         hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, self.stop)
 
@@ -167,6 +173,7 @@ class ShellyInstance():
         pys.password = conf.get(CONF_PASSWORD)
         pys.cloud_auth_key = conf.get(CONF_CLOUD_AUTH_KEY)
         pys.cloud_server = conf.get(CONF_CLOUD_SERVER)
+        pys.zeroconf = await zeroconf_async_get_instance(self.hass)
         tmpl_name = conf.get(CONF_TMPL_NAME)
         if tmpl_name:
             pys.tmpl_name = tmpl_name
@@ -359,14 +366,24 @@ class ShellyInstance():
 
         if hass_data['discover']:
             if hass_data['allow_upgrade_switch']:
-                has_update = block.info_values.get('has_firmware_update', False)
+                has_update = block.has_fw_update()
+                #info_values.get('has_firmware_update', False)
                 update_switch = getattr(block, 'firmware_switch', None)
                 if has_update:
                     if update_switch is None:
-                        attr = {'firmware': True, 'block':block}
+                        attr = {'firmware': True, 'block':block, 'beta':False}
                         self.add_device("switch", attr)
                 elif update_switch is not None:
                     update_switch.remove()
+
+                has_beta_update = block.has_fw_update(True)
+                update_beta_switch = getattr(block, 'beta_firmware_switch', None)
+                if has_beta_update:
+                    if update_beta_switch is None:
+                        attr = {'firmware': True, 'block':block, 'beta':True}
+                        self.add_device("switch", attr)
+                elif update_beta_switch is not None:
+                    update_beta_switch.remove()
 
             #block_key = _get_block_key(block)
             #entity_reg = \

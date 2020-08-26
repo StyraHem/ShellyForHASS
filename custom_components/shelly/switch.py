@@ -40,10 +40,12 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         if isinstance(dev, dict):
             if 'firmware' in dev:
                 block = dev['block']
-                update_switch = getattr(block, 'firmware_switch', None)
+                beta = dev['beta']
+                name = 'beta_firmware_switch' if beta else 'firmware_switch'
+                update_switch = getattr(block, name, None)
                 if not update_switch:
                     async_add_entities(
-                        [ShellyFirmwareUpdate(block, instance)])
+                        [ShellyFirmwareUpdate(block, instance, beta)])
             return
         async_add_entities([ShellySwitch(dev, instance)])
 
@@ -86,12 +88,18 @@ class ShellySwitch(ShellyDevice, SwitchEntity):
 class ShellyFirmwareUpdate(ShellyBlock, SwitchEntity):
     """Representation of a script entity."""
 
-    def __init__(self, block, instance):
-        block.firmware_switch = self
+    def __init__(self, block, instance, beta):
+        if beta:
+            block.beta_firmware_switch = self
+        else:
+            block.firmware_switch = self
         self._updating = False
-        ShellyBlock.__init__(self, block, instance, "_firmware_update")
+        prefix = "_beta_firmware_update" if beta else "_firmware_update"
+        ShellyBlock.__init__(self, block, instance, prefix)
         self.entity_id = "switch" + self.entity_id
         self._master_unit = False
+        self._beta = beta
+        self._removing = False
 
     @property
     def should_poll(self):
@@ -100,15 +108,19 @@ class ShellyFirmwareUpdate(ShellyBlock, SwitchEntity):
 
     @property
     def name(self):
+        if self._beta:
+            return "Upgrade BETA firmware " + ShellyBlock.name.fget(self)
         return "Upgrade firmware " + ShellyBlock.name.fget(self)
 
     @property
     def device_state_attributes(self):
         attrs = super().device_state_attributes
-        attrs[ATTRIBUTE_LATEST_FW] = \
-            self._block.info_values[ATTRIBUTE_LATEST_FW]
-        attrs[ATTRIBUTE_FW] = \
-            self._block.info_values[ATTRIBUTE_FW]
+        latest_key = ATTRIBUTE_LATEST_BETA_FW if self._beta else ATTRIBUTE_LATEST_FW
+        attrs[latest_key] = \
+            self._block.info_values[latest_key]
+        if ATTRIBUTE_FW in self._block.info_values:
+            attrs[ATTRIBUTE_FW] = \
+                self._block.info_values[ATTRIBUTE_FW]
         return attrs
 
     @property
@@ -120,12 +132,19 @@ class ShellyFirmwareUpdate(ShellyBlock, SwitchEntity):
         """Trig the firmware update"""
         self._updating = True
         self.schedule_update_ha_state()
-        await self.hass.async_add_executor_job(self._block.update_firmware)
+        await self.hass.async_add_executor_job(self._block.update_firmware, self._beta)
 
     async def async_turn_off(self, **_kwargs):
         """Do nothing"""
         self.schedule_update_ha_state()
 
     def remove(self):
-        self._block.firmware_switch = None
+        print("REMOVE*******************")
+        if self._removing:
+            return
+        self._removing = True
         ShellyBlock.remove(self)
+        if self._beta:
+            self._block.beta_firmware_switch = None
+        else:
+            self._block.firmware_switch = None

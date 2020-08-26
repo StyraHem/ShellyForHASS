@@ -77,13 +77,18 @@ class ShellyBlock(RestoreEntity):
             attrs['room'] = room
 
         if self._master_unit:
-
             attrs['protocols'] = self._block.protocols
-
             if self._block.info_values is not None:
                 for key, value in self._block.info_values.items():
                     if self.instance.conf_attribute(key):
-                        attrs[key] = value
+                        # k = 'x' + key
+                        # if key in self._block.info_values_coap:
+                        #     k += ", C=" + str(self._block.info_values_coap[key])
+                        # if key in self._block.info_values_status_value:
+                        #     k += ", S=" + str(
+                        #         self._block.info_values_status_value[key])
+                        attrs[k] = value
+            src = ''
 
         return attrs
 
