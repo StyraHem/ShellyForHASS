@@ -42,6 +42,8 @@ class ShellyDevice(RestoreEntity):
 
         self._is_removed = False
         self._master_unit = False
+        if hasattr(dev, 'master_unit') and dev.master_unit:
+            self._master_unit = True
 
         self._settings = instance.get_settings(dev.id, dev.block.id)
 
@@ -82,12 +84,22 @@ class ShellyDevice(RestoreEntity):
         return name
 
     def _debug_info(self, key, dev):
+        if not self.instance._debug_msg:
+            return ""
         dbg = ""
         if key in dev.info_values_coap:
             dbg += ", C=" + str(dev.info_values_coap[key])
         if key in dev.info_values_status_value:
             dbg += ", S=" + str(dev.info_values_status_value[key])
         return dbg
+
+    def _debug_add_state_info(self, attrs):
+        if not self.instance._debug_msg:
+            return
+        if self._dev.state_coap is not None:
+            attrs['state_CoAP'] = self._dev.state_coap
+        if self._dev.state_status is not None:
+            attrs['state_RESTAPI'] = self._dev.state_status
 
     @property
     def device_state_attributes(self):
@@ -96,6 +108,8 @@ class ShellyDevice(RestoreEntity):
                  'shelly_id': self._dev.id,
                  'ip_address': self._dev.ip_addr
                 }
+
+        self._debug_add_state_info(attrs)
         room = self._dev.room_name()
         if room:
             attrs['room'] = room
