@@ -132,7 +132,7 @@ class ShellyInstance():
         if SENSOR_ALL in sensors:
             self.conf[CONF_SENSORS] = [*ALL_SENSORS.keys()]
 
-        self._debug_msg = False
+        self._debug_msg = conf.get(CONF_DEBUG_ENABLE_INFO)
 
         hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, self.stop)
 

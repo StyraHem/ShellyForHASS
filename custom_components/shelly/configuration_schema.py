@@ -82,8 +82,8 @@ CONFIG_SCHEMA_ROOT = vol.Schema({
         vol.Optional(CONF_SCAN_INTERVAL,
                      default=DEFAULT_SCAN_INTERVAL): cv.positive_int,
         vol.Optional(CONF_POWER_DECIMALS): cv.positive_int, #deprecated
-        vol.Optional(CONF_LOCAL_PY_SHELLY,
-                     default=False): cv.boolean,
+        vol.Optional(CONF_LOCAL_PY_SHELLY, default=False): cv.boolean,
+        vol.Optional(CONF_DEBUG_ENABLE_INFO, default=False): cv.boolean,
         vol.Optional(CONF_ONLY_DEVICE_ID) : cv.string,
         vol.Optional(CONF_CLOUD_AUTH_KEY) : cv.string,
         vol.Optional(CONF_CLOUD_SERVER) : cv.string,
