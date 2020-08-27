@@ -144,7 +144,7 @@ class ShellyDimmer(ShellyDevice, LightEntity):
     @property
     def brightness(self):
         """Return the brightness of the light."""
-        if if self._brightness is None:
+        if self._brightness is None:
             return None
         return int(self._brightness * 2.55)
 
