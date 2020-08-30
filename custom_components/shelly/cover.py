@@ -100,7 +100,10 @@ class ShellyCover(ShellyDevice, CoverEntity):
 
     def set_cover_position(self, **kwargs):
         """Move the cover to a specific position."""
-        self._dev.set_position(kwargs[ATTR_POSITION])
+        pos = kwargs[ATTR_POSITION]
+        self._dev.set_position(pos)
+        self._position = pos
+        self.schedule_update_ha_state()
 
     def stop_cover(self, **_kwargs):
         """Stop the cover."""
