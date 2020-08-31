@@ -38,8 +38,6 @@ CONF_POWER_DECIMALS = 'power_decimals'
 CONF_SENSORS = 'sensors'
 CONF_UPGRADE_SWITCH = 'upgrade_switch'
 CONF_UNAVALABLE_AFTER_SEC = 'unavailable_after_sec'
-CONF_LOCAL_PY_SHELLY = 'debug_local_py_shelly'
-CONF_ONLY_DEVICE_ID = 'debug_only_device_id'
 CONF_CLOUD_AUTH_KEY = 'cloud_auth_key'
 CONF_CLOUD_SERVER = 'cloud_server'
 CONF_TMPL_NAME = 'tmpl_name'
@@ -51,6 +49,11 @@ CONF_DECIMALS = 'decimals'
 CONF_DIV = 'div'
 CONF_UNIT = 'unit'
 CONF_MQTT_PORT = 'mqtt_port'
+
+#Debug settings used for testing
+CONF_LOCAL_PY_SHELLY = 'debug_local_py_shelly'
+CONF_ONLY_DEVICE_ID = 'debug_only_device_id'
+CONF_DEBUG_ENABLE_INFO = 'debug_enable_info'
 
 CONF_WIFI_SENSOR = 'wifi_sensor' #deprecated
 CONF_UPTIME_SENSOR = 'uptime_sensor' #deprecated
@@ -71,9 +74,9 @@ DEFAULT_SETTINGS = \
     'humidity' : {CONF_UNIT:'%'},
     'total_consumption' : {CONF_DECIMALS:2, CONF_DIV:1000, CONF_UNIT:'kWh'},
     'total_returned' : {CONF_DECIMALS:2, CONF_DIV:1000, CONF_UNIT:'kWh'},
-    'current' : {CONF_DECIMALS:1},
+    'current' : {CONF_UNIT:'A', CONF_DECIMALS:1},
     'current_consumption' : {CONF_UNIT:'W'},
-    'voltage' : {CONF_UNIT:'V'},
+    'voltage' : {CONF_UNIT:'V',CONF_DECIMALS:0},
     'power_factor' : {CONF_DECIMALS:1},
     'uptime': {CONF_DIV:3600, CONF_UNIT:'h'},
     'rssi': {CONF_UNIT:'dB'},
@@ -293,7 +296,7 @@ SENSOR_TYPES_CFG = {
     SENSOR_TYPE_RSSI:
         ['RSSI', 'dB', 'mdi:wifi', None, None],
     SENSOR_TYPE_UPTIME:
-        ['Uptime', 's', 'mdi:timer', None, None],
+        ['Uptime', 's', 'mdi:timer-outline', None, None],
     SENSOR_TYPE_BATTERY:
         ['Battery', '%', None, DEVICE_CLASS_BATTERY, None],
     SENSOR_TYPE_OVER_POWER:
