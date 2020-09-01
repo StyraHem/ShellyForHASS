@@ -123,11 +123,11 @@ class ShellySwitch(ShellyDevice, BinarySensorEntity):
             self._click_timer.start()
         self._state = new_state
         if self._dev.event_cnt != self._event_cnt:
-            self._event_cnt = self._dev.event_cnt
             event = CLICK_EVENTS.get(self._dev.last_event, None)
-            self._last_event = event
-            if self._event_cnt:
+            if not self._event_cnt is None:
                 self._send_event(event)
+            self._event_cnt = self._dev.event_cnt
+            self._last_event = event
 
     @property
     def device_state_attributes(self):
