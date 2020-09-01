@@ -89,8 +89,8 @@ class ShellyDevice(RestoreEntity):
         dbg = ""
         if key in dev.info_values_coap:
             dbg += ", C=" + str(dev.info_values_coap[key])
-        if key in dev.info_values_status_value:
-            dbg += ", S=" + str(dev.info_values_status_value[key])
+        if key in dev.info_values_status:
+            dbg += ", S=" + str(dev.info_values_status[key])
         return dbg
 
     def _debug_add_state_info(self, attrs):
@@ -135,12 +135,12 @@ class ShellyDevice(RestoreEntity):
                     key += self._debug_info(key, self._dev)
                     attrs[key] = value
 
-        if self._dev.sensor_values is not None:
-            for key, value in self._dev.sensor_values.items():
-                if self.instance.conf_attribute(key):
-                    settings = self._settings.get(key)
-                    value = self.instance.format_value(settings, value, True)
-                    attrs[key] = value
+        # if self._dev.sensor_values is not None:
+        #     for key, value in self._dev.sensor_values.items():
+        #         if self.instance.conf_attribute(key):
+        #             settings = self._settings.get(key)
+        #             value = self.instance.format_value(settings, value, True)
+        #             attrs[key] = value
 
         return attrs
 

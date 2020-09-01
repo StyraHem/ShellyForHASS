@@ -68,9 +68,9 @@ DEFAULT_SETTINGS = \
     'humidity' : {CONF_UNIT:'%'},
     'total_consumption' : {CONF_DECIMALS:2, CONF_DIV:1000, CONF_UNIT:'kWh'},
     'total_returned' : {CONF_DECIMALS:2, CONF_DIV:1000, CONF_UNIT:'kWh'},
-    'current' : {CONF_DECIMALS:1},
+    'current' : {CONF_UNIT:'A', CONF_DECIMALS:1},
     'current_consumption' : {CONF_UNIT:'W'},
-    'voltage' : {CONF_UNIT:'V'},
+    'voltage' : {CONF_UNIT:'V',CONF_DECIMALS:0},
     'power_factor' : {CONF_DECIMALS:1},
     'uptime': {CONF_DIV:3600, CONF_UNIT:'h'},
     'rssi': {CONF_UNIT:'dB'},
@@ -290,7 +290,7 @@ SENSOR_TYPES_CFG = {
     SENSOR_TYPE_RSSI:
         ['RSSI', 'dB', 'mdi:wifi', None, None],
     SENSOR_TYPE_UPTIME:
-        ['Uptime', 's', 'mdi:timer', None, None],
+        ['Uptime', 's', 'mdi:timer-outline', None, None],
     SENSOR_TYPE_BATTERY:
         ['Battery', '%', None, DEVICE_CLASS_BATTERY, None],
     SENSOR_TYPE_OVER_POWER:

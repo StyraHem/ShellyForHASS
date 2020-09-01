@@ -42,7 +42,7 @@ from .configuration_schema import CONFIG_SCHEMA, CONFIG_SCHEMA_ROOT
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.2.0-b1"
+__version__ = "0.2.0-b3"
 VERSION = __version__
 
 async def async_setup(hass, config):
@@ -237,9 +237,10 @@ class ShellyInstance():
                         entities_to_fix_attr.append(entity.entity_id)
                 if unique_id.endswith("_firmware_update"):
                     entities_to_remove.append(entity.entity_id)
-                if "_shdw" in unique_id or \
+                elif "_shdw" in unique_id or \
                    "_shwt" in unique_id or \
-                   "_shht" in unique_id:
+                   "_shht" in unique_id or \
+                   "_shbtn_1" in unique_id:               
                     #todo check last_seen
                     data = await RestoreStateData.async_get_instance(self.hass)
                     if entity.entity_id in data.last_states:
