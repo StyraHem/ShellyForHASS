@@ -64,7 +64,7 @@ DEFAULT_SETTINGS = \
     'default' : {},
     'temperature' : {CONF_UNIT:'°C'},
     'device_temp' : {CONF_UNIT:'°C'},
-    'illuminance' : {CONF_UNIT:'lux'},
+    'illuminance' : {CONF_UNIT:'lx'},
     'humidity' : {CONF_UNIT:'%'},
     'total_consumption' : {CONF_DECIMALS:2, CONF_DIV:1000, CONF_UNIT:'kWh'},
     'total_returned' : {CONF_DECIMALS:2, CONF_DIV:1000, CONF_UNIT:'kWh'},

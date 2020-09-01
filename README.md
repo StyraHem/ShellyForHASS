@@ -317,7 +317,7 @@ All of the sensors (not current_consumption) require additional_information to b
 --------|-----|-----------|---------|
 | temperature | °C | 0 |    |
 | device_temp | °C | 0 |    |
-| illuminance | lux | 0 |    |
+| illuminance | lx | 0 |    |
 | humidity | % | 0 |    |
 | total_consumption | kWh | 2 |  1000 |
 | total_returned | kWh | 2 |  1000  |
