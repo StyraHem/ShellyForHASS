@@ -114,7 +114,7 @@ class ShellyDevice(RestoreEntity):
         if room:
             attrs['room'] = room
 
-        if self._master_unit:
+        if self._master_unit or self.instance._debug_msg:
 
             attrs['protocols'] = self._dev.protocols
 

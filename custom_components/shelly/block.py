@@ -81,7 +81,7 @@ class ShellyBlock(RestoreEntity):
             if self._block.info_values is not None:
                 for key, value in self._block.info_values.items():
                     if self.instance.conf_attribute(key):
-                        attrs[k] = value
+                        attrs[key] = value
             src = ''
 
         return attrs
