@@ -67,7 +67,7 @@ class ShellySwitch(ShellyDevice, BinarySensorEntity):
         self._unique_id += "_switch"
         self.entity_id += "_switch"
         self._state = None
-        self._click_delay = 500
+        self._click_delay = 700
         self._last_state_change = 0
         self._click_cnt = 0
         self._click_timer = None
@@ -108,11 +108,12 @@ class ShellySwitch(ShellyDevice, BinarySensorEntity):
     def update(self):
         """Fetch new state data for this switch."""
         millis = self._millis()
-        new_state = self._dev.state != 0
+        new_state = None if self._dev.state is None else self._dev.state != 0
         if self._state is not None and new_state != self._state:
             if self._click_timer is not None:
                 self._click_timer.cancel()
             diff = millis - self._last_state_change
+            print(diff)
             if diff < self._click_delay or self._click_cnt == 0:
                 self._click_cnt += 1
             else:
