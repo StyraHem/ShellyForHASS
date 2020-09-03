@@ -70,7 +70,7 @@ DEFAULT_SETTINGS = \
     'total_returned' : {CONF_DECIMALS:2, CONF_DIV:1000, CONF_UNIT:'kWh'},
     'current' : {CONF_UNIT:'A', CONF_DECIMALS:1},
     'current_consumption' : {CONF_UNIT:'W'},
-    'voltage' : {CONF_UNIT:'V',CONF_DECIMALS:0},
+    'voltage' : {CONF_UNIT:'V', CONF_DECIMALS:0},
     'power_factor' : {CONF_DECIMALS:1},
     'uptime': {CONF_DIV:3600, CONF_UNIT:'h'},
     'rssi': {CONF_UNIT:'dB'},

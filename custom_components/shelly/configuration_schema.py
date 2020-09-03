@@ -13,7 +13,6 @@ SENSOR_SCHEMA = vol.Schema({
     vol.Optional(CONF_NAME): cv.string,
 })
 
-
 SETTING_SCHEMA = vol.Schema({
     vol.Optional(CONF_DECIMALS): cv.positive_int,
     vol.Optional(CONF_DIV): cv.positive_int,
