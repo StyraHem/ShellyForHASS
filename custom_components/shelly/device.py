@@ -50,6 +50,16 @@ class ShellyDevice(RestoreEntity):
     def _updated(self, _block):
         """Receive events when the switch state changed (by mobile,
         switch etc)"""
+
+        if hasattr(self._dev, 'kg_send_event_click_count'):
+            if self._dev.kg_send_event_click_count != 0 or self._dev.kg_send_event_events != "":
+                self.hass.bus.fire('shelly_click', \
+                                {'entity_id' : self.entity_id,
+                                'click_count' : self._dev.kg_send_event_click_count,
+                                'click_events' : self._dev.kg_send_event_events})
+                self._dev.kg_send_event_click_count = 0                   
+                self._dev.kg_send_event_events = ""
+
         disabled = self.registry_entry and self.registry_entry.disabled_by
         if self.entity_id is not None and not self._is_removed and not disabled:
             self.schedule_update_ha_state(True)
