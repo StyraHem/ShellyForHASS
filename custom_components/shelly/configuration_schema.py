@@ -38,6 +38,7 @@ DEVICE_SCHEMA = vol.Schema({
     vol.Required(CONF_ID): cv.string,
     vol.Optional(CONF_NAME): cv.string,
     vol.Optional(CONF_LIGHT_SWITCH, default=False): cv.boolean,
+    vol.Optional(CONF_DIMMER_DIMMABLE, default=True): cv.boolean,
     vol.Optional(CONF_SENSORS):
         vol.All(cv.ensure_list, [vol.In(ALL_SENSORS_W_EXTRA)]),
     vol.Optional(CONF_UPGRADE_SWITCH): cv.boolean,

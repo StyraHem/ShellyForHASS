@@ -491,8 +491,7 @@ class ShellyInstance():
         elif dev.device_type == "BINARY_SENSOR":
             self.add_device("binary_sensor", dev)
         elif dev.device_type in ["LIGHT", "DIMMER", "RGBLIGHT"]:
-            dimmable = True
-            if device_config.get(CONF_DIMMER_DIMMABLE) === False:
+            if device_config.get(CONF_DIMMER_DIMMABLE) == False:
                 dev.device_type = "RELAY"
             self.add_device("light", dev)
         else:
