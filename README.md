@@ -10,6 +10,8 @@
 ![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge)
 ![GitHub Releases](https://img.shields.io/github/downloads/StyraHem/ShellyForHass/latest/total?label=Downloads&style=for-the-badge)
 
+![GitHub release (beta)](https://img.shields.io/github/v/release/StyraHem/ShellyForHass?label=Latest%20beta&style=for-the-badge&include_prereleases)
+
 ## Join Facebook group:
 This Facebook group are used to anounce new releases etc. Please join it to be updated of new releases.
 [https://www.facebook.com/groups/shellyforhass/](https://www.facebook.com/groups/shellyforhass/)
