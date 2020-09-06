@@ -58,7 +58,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_discover_sensor
     )
 
-class ShellySensor(ShellyDevice, Entity):
+class ShellySensor(ShellyDevice):
     """Representation of a Shelly Sensor."""
 
     def __init__(self, dev, instance, sensor_type, sensor_name, master_unit):
@@ -118,7 +118,7 @@ class ShellySensor(ShellyDevice, Entity):
         if self._dev.info_values is not None:
             self._battery = self._dev.info_values.get('battery', None)
 
-class ShellyInfoSensor(ShellyBlock, Entity):
+class ShellyInfoSensor(ShellyBlock):
     """Representation of a Shelly Info Sensor."""
 
     def __init__(self, block, instance, sensor_type, sensor_name):

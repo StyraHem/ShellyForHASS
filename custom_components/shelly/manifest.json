@@ -3,7 +3,7 @@
   "name": "Shelly smart home",
   "config_flow": true,
   "documentation": "https://github.com/StyraHem/ShellyForHASS/blob/master/README.md",
-  "dependencies": [],
+  "dependencies": ["zeroconf"],
   "codeowners": ["@hakana","@StyraHem"],
-  "requirements": ["pyShelly==0.1.33"]
+  "requirements": ["pyShelly==0.2.9"]
 }

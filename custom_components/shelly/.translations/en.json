@@ -53,6 +53,7 @@
                     "uptime": "Uptime",
                     "has_firmware_update": "Has firmware update",
                     "latest_fw_version": "Latest firmware version",
+                    "latest_beta_fw_version": "Latest beta firmware version",
                     "firmware_version": "Current firmware version",
                     "mqtt_connected": "MQTT connected",
                     "cloud_status": "Cloud status",

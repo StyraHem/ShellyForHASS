@@ -28,7 +28,7 @@ _LOGGER = logging.getLogger(__name__)
 CLICK_EVENTS = {
     'S' : 'single',
     'SS' : 'double',
-    'SSS': 'tripple',
+    'SSS': 'triple',
     'L': 'long',
     'SL': 'short-long',
     'LS': 'long-short'
@@ -67,7 +67,7 @@ class ShellySwitch(ShellyDevice, BinarySensorEntity):
         self._unique_id += "_switch"
         self.entity_id += "_switch"
         self._state = None
-        self._click_delay = 500
+        self._click_delay = 700
         self._last_state_change = 0
         self._click_cnt = 0
         self._click_timer = None
@@ -108,11 +108,12 @@ class ShellySwitch(ShellyDevice, BinarySensorEntity):
     def update(self):
         """Fetch new state data for this switch."""
         millis = self._millis()
-        new_state = self._dev.state != 0
+        new_state = None if self._dev.state is None else self._dev.state != 0
         if self._state is not None and new_state != self._state:
             if self._click_timer is not None:
                 self._click_timer.cancel()
             diff = millis - self._last_state_change
+            print(diff)
             if diff < self._click_delay or self._click_cnt == 0:
                 self._click_cnt += 1
             else:
@@ -123,11 +124,11 @@ class ShellySwitch(ShellyDevice, BinarySensorEntity):
             self._click_timer.start()
         self._state = new_state
         if self._dev.event_cnt != self._event_cnt:
-            self._event_cnt = self._dev.event_cnt
             event = CLICK_EVENTS.get(self._dev.last_event, None)
-            self._last_event = event
-            if self._event_cnt:
+            if not self._event_cnt is None:
                 self._send_event(event)
+            self._event_cnt = self._dev.event_cnt
+            self._last_event = event
 
     @property
     def device_state_attributes(self):
