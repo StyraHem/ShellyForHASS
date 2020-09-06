@@ -152,7 +152,7 @@ class ShellyInstance():
         await self.async_set_config('version', VERSION)
 
         conf = self.conf
-        if conf.get(CONF_LOCAL_PY_SHELLY):
+        if conf.get(CONF_LOCAL_PY_SHELLY) and os.path.exists(pyShelly/__init.py):
             _LOGGER.info("Loading local pyShelly")
             #pylint: disable=no-name-in-module
             from .pyShelly import pyShelly
