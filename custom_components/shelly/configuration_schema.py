@@ -36,6 +36,7 @@ SETTINGS_SCHEMA = vol.Schema({
 
 DEVICE_SCHEMA = vol.Schema({
     vol.Required(CONF_ID): cv.string,
+    vol.Optional(CONF_MOMENTARY_BUTTON, default=False): cv.boolean,
     vol.Optional(CONF_NAME): cv.string,
     vol.Optional(CONF_LIGHT_SWITCH, default=False): cv.boolean,
     vol.Optional(CONF_SENSORS):

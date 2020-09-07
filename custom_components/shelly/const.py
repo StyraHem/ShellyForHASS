@@ -24,6 +24,7 @@ CONF_ADDITIONAL_INFO = 'additional_information'
 CONF_IGMPFIX = 'igmp_fix'
 CONF_MDNS = 'mdns'
 CONF_LIGHT_SWITCH = 'light_switch'
+CONF_MOMENTARY_BUTTON = "momentary_button"
 CONF_OBJECT_ID_PREFIX = 'id_prefix'
 CONF_ENTITY_ID = 'entity_id'
 CONF_SHOW_ID_IN_NAME = 'show_id_in_name'
@@ -64,7 +65,7 @@ DEFAULT_SETTINGS = \
     'default' : {},
     'temperature' : {CONF_UNIT:'°C'},
     'device_temp' : {CONF_UNIT:'°C'},
-    'illuminance' : {CONF_UNIT:'lx'},
+    'illuminance' : {CONF_UNIT:'lux'},
     'humidity' : {CONF_UNIT:'%'},
     'total_consumption' : {CONF_DECIMALS:2, CONF_DIV:1000, CONF_UNIT:'kWh'},
     'total_returned' : {CONF_DECIMALS:2, CONF_DIV:1000, CONF_UNIT:'kWh'},
