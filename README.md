@@ -1,14 +1,16 @@
 # Shelly smart home platform for HASS and HASSIO
 
 [![founder-wip](https://img.shields.io/badge/founder-Håkan_Åkerberg@StyraHem.se-green.svg?style=for-the-badge)](https://www.styrahem.se)
-[![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20us%20a%20coffee-orange.svg?style=for-the-badge)](https://www.buymeacoffee.com/styrahem)
+[![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20us%20a%20coffee-green.svg?style=for-the-badge)](https://www.buymeacoffee.com/styrahem)
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-green.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
-![Github All Releases](https://img.shields.io/github/downloads/styrahem/shellyforhass/total.svg?label=Total%20downloads&style=for-the-badge)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-yellow.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
+![Github All Releases](https://img.shields.io/github/downloads/styrahem/shellyforhass/total.svg?label=Total%20downloads&style=for-the-badge&color=yellow)
+![GitHub release (beta)](https://img.shields.io/github/v/release/StyraHem/ShellyForHass?label=Latest%20beta&style=for-the-badge&include_prereleases&color=lightgray)
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/StyraHem/ShellyForHass?label=Latest%20release&style=for-the-badge)
-![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge)
-![GitHub Releases](https://img.shields.io/github/downloads/StyraHem/ShellyForHass/latest/total?label=Downloads&style=for-the-badge)
+![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge&color=blue)
+![GitHub Releases](https://img.shields.io/github/downloads/StyraHem/ShellyForHass/latest/total?label=Downloads&style=for-the-badge&color=blue)
+
 
 ## Join Facebook group:
 This Facebook group are used to anounce new releases etc. Please join it to be updated of new releases.
