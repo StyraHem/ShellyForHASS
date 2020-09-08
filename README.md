@@ -86,7 +86,7 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 
 ### Install with HACS (recomended)
 
-Do you you have [HACS](https://community.home-assistant.io/t/custom-component-hacs) installed? Just search for Shelly and install it direct from HACS. HACS will keep track of updates and you can easly upgrade Shelly to latest version.
+Do you you have [HACS](https://community.home-assistant.io/t/custom-component-hacs) installed? Just search for Shelly and install it direct from HACS. HACS will keep track of updates and you can easly upgrade Shelly to latest version. See Setup for how to add it in HA.
 
 ### Install manually
 
