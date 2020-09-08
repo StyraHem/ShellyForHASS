@@ -41,6 +41,7 @@ DEVICE_SCHEMA = vol.Schema({
     vol.Optional(CONF_SENSORS):
         vol.All(cv.ensure_list, [vol.In(ALL_SENSORS_W_EXTRA)]),
     vol.Optional(CONF_UPGRADE_SWITCH): cv.boolean,
+    vol.Optional(CONF_UPGRADE_BETA_SWITCH): cv.boolean,
     vol.Optional(CONF_UNAVALABLE_AFTER_SEC) : cv.positive_int,
     vol.Optional(CONF_ENTITY_ID): cv.string,
     vol.Optional(CONF_POWER_DECIMALS): cv.positive_int, #deprecated
@@ -70,6 +71,7 @@ CONFIG_SCHEMA_ROOT = vol.Schema({
         vol.Optional(CONF_WIFI_SENSOR): cv.boolean, #deprecated
         vol.Optional(CONF_UPTIME_SENSOR): cv.boolean, #deprecated
         vol.Optional(CONF_UPGRADE_SWITCH, default=True): cv.boolean,
+        vol.Optional(CONF_UPGRADE_BETA_SWITCH, default=False): cv.boolean,
         vol.Optional(CONF_UNAVALABLE_AFTER_SEC, default=90) : cv.positive_int,
         vol.Optional(CONF_SENSORS, default=DEFAULT_SENSORS):
                      vol.All(cv.ensure_list, [vol.In(ALL_SENSORS_W_EXTRA)]),
