@@ -51,7 +51,6 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Add Shelly devices by IP-address if on different LAN or mDns and CoAP not working for discovery
 
 ## Devices supported
-
 - Shelly 1
 - Shelly 1 PM
 - Temperature addon for Shelly 1(PM)
@@ -354,6 +353,23 @@ When the switch sensor is enabled an event will be sent for multiple clicks on t
 |-----------|---------------------------------------------------------------------------------------------|
 | click_cnt | Number of clicks, 2 = turn back and forth quickly, 4 = double click on momentary switch.    |
 | state     | Current state of the switch, can be uset to distinct on-off-on from off-on-off for example. |
+
+#### shellyforhass.click [0.2.0]
+Click event supporting the build in events in Shelly devices with firmware from 1.8.x
+
+```json
+{
+    "event_type": "shellyforhass.click",
+    "data": {
+        "entity_id": "binary_sensor.shelly_shbtn_1_xxxxxx_switch",
+        "click_type": "single"
+    }
+    .....
+}
+```
+| Parameter | Description                                                                                 |
+|-----------|---------------------------------------------------------------------------------------------|
+| click_type | single, double, tripple, long, long-short, short-long (not all devices support all types)  |
 
 ### Restart Home Assistant
 
