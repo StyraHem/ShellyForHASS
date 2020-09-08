@@ -188,6 +188,12 @@ shelly:
 
 ```yaml
 automation:
+  - alias: "shellyforhass.click event supported in fw 1.8.x and later"
+    trigger:
+      platform: event
+      event_type: shellyforhass.click
+      event_data:
+        click_type: single #long, double, triple
   - alias: "Shelly turn off and then on quickly, any switch"
     trigger:
       platform: event
@@ -373,7 +379,7 @@ Click event supporting the build in events in Shelly devices with firmware from 
 ```
 | Parameter | Description                                                                                 |
 |-----------|---------------------------------------------------------------------------------------------|
-| click_type | single, double, tripple, long, long-short, short-long (not all devices support all types)  |
+| click_type | single, double, triple, long, long-short, short-long (not all devices support all types)  |
 
 ### Restart Home Assistant
 
