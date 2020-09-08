@@ -42,7 +42,7 @@ from .configuration_schema import CONFIG_SCHEMA, CONFIG_SCHEMA_ROOT
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.2.0-b7"
+__version__ = "0.2.0"
 VERSION = __version__
 
 async def async_setup(hass, config):
@@ -376,7 +376,8 @@ class ShellyInstance():
                         self.add_device("switch", attr)
                 elif update_switch is not None:
                     update_switch.remove()
-
+                    
+            if hass_data['allow_upgrade_beta_switch']:
                 has_beta_update = block.has_fw_update(True)
                 update_beta_switch = getattr(block, 'beta_firmware_switch', None)
                 if has_beta_update:
@@ -416,6 +417,8 @@ class ShellyInstance():
         block.hass_data = {
             'allow_upgrade_switch' :
                 self._get_specific_config_root(CONF_UPGRADE_SWITCH, block.id),
+            'allow_upgrade_beta_switch' :
+                self._get_specific_config_root(CONF_UPGRADE_BETA_SWITCH, block.id),
             'sensor_cfg' : self._get_sensor_config(block.id),
             'discover': discover_block
         }
