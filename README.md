@@ -240,6 +240,7 @@ shelly:
 | sensors                | A list with sensors to show for each device. See list below.                                        | current_consumption | 0.0.15- |
 | attributes             | A list with attributes to show for each device. See list below.                                        | default | 0.0.16- |
 | upgrade_switch         | Add firmware switches when upgrade needed.                                                           | True  | 0.0.15- |
+| upgrade_beta_switch    | Add firmware switches when beta versions is available.                                               | True  | 0.2.0- |
 | unavailable_after_sec  | Number of seconds before the device will be unavialable      | 60 | 0.0.16- |
 | mdns | Allow the plugin to use mDns to discover devices | True | 0.1.5- |
 | cloud_auth_key | Use this to allow the plugin to connect to your Shelly Cloud. You will find this information at https://my.shelly.cloud/#user_settings and GET KEY | | 0.1.5- |
