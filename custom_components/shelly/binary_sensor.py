@@ -113,7 +113,6 @@ class ShellySwitch(ShellyDevice, BinarySensorEntity):
             if self._click_timer is not None:
                 self._click_timer.cancel()
             diff = millis - self._last_state_change
-            print(diff)
             if diff < self._click_delay or self._click_cnt == 0:
                 self._click_cnt += 1
             else:

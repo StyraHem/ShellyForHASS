@@ -51,7 +51,6 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Add Shelly devices by IP-address if on different LAN or mDns and CoAP not working for discovery
 
 ## Devices supported
-
 - Shelly 1
 - Shelly 1 PM
 - Temperature addon for Shelly 1(PM)
@@ -79,11 +78,15 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Shelly RGBWW
 - Shelly Vintage (0.1.8)
 
+## Firmware
+* 1.7.x and before (0.1.9)
+* 1.8.0 (0.2.0)
+
 ## Installation
 
 ### Install with HACS (recomended)
 
-Do you you have [HACS](https://community.home-assistant.io/t/custom-component-hacs) installed? Just search for Shelly and install it direct from HACS. HACS will keep track of updates and you can easly upgrade Shelly to latest version.
+Do you you have [HACS](https://community.home-assistant.io/t/custom-component-hacs) installed? Just search for Shelly and install it direct from HACS. HACS will keep track of updates and you can easly upgrade Shelly to latest version. See Setup for how to add it in HA.
 
 ### Install manually
 
@@ -185,6 +188,12 @@ shelly:
 
 ```yaml
 automation:
+  - alias: "shellyforhass.click event supported in fw 1.8.x and later"
+    trigger:
+      platform: event
+      event_type: shellyforhass.click
+      event_data:
+        click_type: single #long, double, triple
   - alias: "Shelly turn off and then on quickly, any switch"
     trigger:
       platform: event
@@ -240,6 +249,7 @@ shelly:
 | sensors                | A list with sensors to show for each device. See list below.                                        | current_consumption | 0.0.15- |
 | attributes             | A list with attributes to show for each device. See list below.                                        | default | 0.0.16- |
 | upgrade_switch         | Add firmware switches when upgrade needed.                                                           | True  | 0.0.15- |
+| upgrade_beta_switch    | Add firmware switches when beta versions is available.                                               | True  | 0.2.0- |
 | unavailable_after_sec  | Number of seconds before the device will be unavialable      | 60 | 0.0.16- |
 | mdns | Allow the plugin to use mDns to discover devices | True | 0.1.5- |
 | cloud_auth_key | Use this to allow the plugin to connect to your Shelly Cloud. You will find this information at https://my.shelly.cloud/#user_settings and GET KEY | | 0.1.5- |
@@ -353,6 +363,23 @@ When the switch sensor is enabled an event will be sent for multiple clicks on t
 |-----------|---------------------------------------------------------------------------------------------|
 | click_cnt | Number of clicks, 2 = turn back and forth quickly, 4 = double click on momentary switch.    |
 | state     | Current state of the switch, can be uset to distinct on-off-on from off-on-off for example. |
+
+#### shellyforhass.click [0.2.0]
+Click event supporting the build in events in Shelly devices with firmware from 1.8.x
+
+```json
+{
+    "event_type": "shellyforhass.click",
+    "data": {
+        "entity_id": "binary_sensor.shelly_shbtn_1_xxxxxx_switch",
+        "click_type": "single"
+    }
+    .....
+}
+```
+| Parameter | Description                                                                                 |
+|-----------|---------------------------------------------------------------------------------------------|
+| click_type | single, double, triple, long, long-short, short-long (not all devices support all types)  |
 
 ### Restart Home Assistant
 
