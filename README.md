@@ -256,6 +256,7 @@ shelly:
 | cloud_server | Use this togheter with cloud_auth_key | | 0.1.5- |
 | tmpl_name | Template how to create the friendly name from Shelly Cloud | {room} - {name} | 0.1.5- |
 | discover_by_ip | This is a list of ip-addresses to force the plugin to discover. Use this if not CoAP or mDns discovery working for your device. | | 0.1.5- |
+| mqtt_port | Specify the port number for the internal MQTT server to listen on. 0 means off. Use something else then 1883 if you have other MQTT server installed. | 0 | 0.1.9- |
 
 #### Device configuration
 
