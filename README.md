@@ -246,7 +246,7 @@ shelly:
 | _wifi_sensor_          | Add extra sensor for wifi signal of each device. Requires `additional_information` to be `True`.  | False   | 0.0.6 (deprecated) |
 | _uptime_sensor_        | Add extra sensor for device uptime of each devivce. Requires `additional_information` to be `True` | False   | 0.0.6 (deprecated)  |
 | power_decimals         | Round power sensor values to the given number of decimals                                          |         | 0.0.14- |
-| sensors                | A list with sensors to show for each device. See list below.                                        | current_consumption | 0.0.15- |
+| sensors                | A list with sensors to show for each device. See list below.                                        | current_consumption, total_consumption | 0.0.15- |
 | attributes             | A list with attributes to show for each device. See list below.                                        | default | 0.0.16- |
 | upgrade_switch         | Add firmware switches when upgrade needed.                                                           | True  | 0.0.15- |
 | upgrade_beta_switch    | Add firmware switches when beta versions is available.                                               | True  | 0.2.0- |
