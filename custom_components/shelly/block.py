@@ -38,6 +38,7 @@ class ShellyBlock(RestoreEntity):
         self.async_on_remove(self._remove_handler)
         self._master_unit = False
         self._settings = instance.get_settings(block.id)
+        self.last_ha_update = None
 
     def _remove_handler(self):
         self._is_removed = True
@@ -56,13 +57,19 @@ class ShellyBlock(RestoreEntity):
             name += " [" + self._block.id + "]"
         return name
 
+    def _update_ha_state(self):        
+        #snapshot = { "attr" : self.device_state_attributes, "state" : self.state, "available": self.available }
+        #if self.last_ha_update != snapshot:
+        self.schedule_update_ha_state()
+        #self.last_ha_update = snapshot
+
     def _updated(self, _block):
         """Receive events when the switch state changed (by mobile,
         switch etc)"""
         disabled = self.registry_entry and self.registry_entry.disabled_by
         if self.entity_id is not None and not self._is_removed \
             and not disabled:
-            self.schedule_update_ha_state(True)
+            self._update_ha_state()
 
     @property
     def device_state_attributes(self):

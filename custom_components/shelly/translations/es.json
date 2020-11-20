@@ -48,6 +48,7 @@
                     "shelly_id": "ID Shelly",
                     "ssid": "SSID",
                     "rssi": "RSSI",
+                    "rssi_level": "RSSI Level",
                     "uptime": "Tiempo de actividad",
                     "has_firmware_update": "Hay una actualización de firmware",
                     "latest_fw_version": "Última versión de firmware",

@@ -22,7 +22,8 @@
                     "mdns": "Enable mDns for discovery, try this if your Shelly devices not discovered",
                     "version": "Create a entry showing current version of ShellyForHass",
                     "upgrade_switch": "Create upgrade switch when Shelly has new firmware",
-                    "igmp_fix": "Repeatly send IGMP ADD_MEMBER, try this if instant update stop some minutes",
+                    "upgrade_beta_switch": "Enable upgrade to Beta version switch",
+                    "igmp_fix": "Repeatly send IGMP ADD_MEMBER, try this if instant update stop after some minutes",
                     "host_ip": "Ip address for Home Assistant",
                     "mqtt_port": "Tcpip port of integrated MQTT server"
                 },
@@ -50,6 +51,7 @@
                     "shelly_id": "Shelly ID",
                     "ssid": "SSID",
                     "rssi": "RSSI",
+                    "rssi_level": "RSSI Level",
                     "uptime": "Uptime",
                     "has_firmware_update": "Has firmware update",
                     "latest_fw_version": "Latest firmware version",
@@ -84,6 +86,7 @@
             "sensors": {
                 "data": {
                     "rssi": "RSSI",
+                    "rssi_level": "RSSI Level",
                     "uptime": "Uptime",
                     "current_consumption": "Current consumption",
                     "total_consumption": "Total consumption",

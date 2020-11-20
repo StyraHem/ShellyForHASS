@@ -75,13 +75,15 @@ class ShellyLightRelay(ShellyDevice, LightEntity):
     def turn_on(self, **kwargs):
         self._dev.turn_on()
         self._state = True
-        self.schedule_update_ha_state()
+        
+        self._update_ha_state()
 
 
     def turn_off(self, **kwargs):
         self._dev.turn_off()
         self._state = False
-        self.schedule_update_ha_state()
+        
+        self._update_ha_state()
 
     def update(self):
         """Fetch new state data for this light."""
@@ -134,12 +136,14 @@ class ShellyDimmer(ShellyDevice, LightEntity):
         else:
             self._dev.turn_on(brightness)
         self._state = True
-        self.schedule_update_ha_state()
+        
+        self._update_ha_state()
 
     def turn_off(self, **_kwargs):
         self._dev.turn_off()
         self._state = False
-        self.schedule_update_ha_state()
+        
+        self._update_ha_state()
 
     @property
     def brightness(self):
@@ -272,13 +276,15 @@ class ShellyRGB(ShellyDevice, LightEntity):
                           mode=mode, effect=effect_nr, white_value=white_value)
 
         self._state = True
-        self.schedule_update_ha_state()
+        
+        self._update_ha_state()
 
     def turn_off(self, **_kwargs):
         """Turn off light"""
         self._dev.turn_off()
         self._state = False
-        self.schedule_update_ha_state()
+        
+        self._update_ha_state()
 
     def update(self):
         """Fetch new state data for this light."""
