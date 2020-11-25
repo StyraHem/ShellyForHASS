@@ -143,7 +143,6 @@ class ShellyFirmwareUpdate(ShellyBlock, SwitchEntity):
         self._update_ha_state()
 
     def remove(self):
-        print("REMOVE*******************")
         if self._removing:
             return
         self._removing = True

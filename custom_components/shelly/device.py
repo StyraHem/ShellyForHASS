@@ -47,13 +47,8 @@ class ShellyDevice(RestoreEntity):
 
         self._settings = instance.get_settings(dev.id, dev.block.id)
 
-        self.last_ha_update = None
-
     def _update_ha_state(self):        
-        #snapshot = { "attr" : self.device_state_attributes, "state" : self.state, "available": self.available }
-        #if self.last_ha_update != snapshot:
-        self.schedule_update_ha_state()
-        #self.last_ha_update = snapshot
+        self.schedule_update_ha_state(True)
 
     def _updated(self, _block):
         """Receive events when the switch state changed (by mobile,
