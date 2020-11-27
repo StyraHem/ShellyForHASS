@@ -74,8 +74,10 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Shelly i3 (0.1.9)
 - Shelly Plug
 - Shelly Plug S
+- Shelly Plug US
 - Shelly RGBW2 (rgb or 4 channels)
 - Shelly RGBWW
+- Shelly UNI
 - Shelly Vintage (0.1.8)
 
 ## Firmware
@@ -270,16 +272,17 @@ shelly:
 | upgrade_switch | Add firmware switches when upgrade needed. Override global configuration.               | False    | 0.0.15- |
 | unavailable_after_sec  | Overide number of seconds before the device will be unavialable.    | 120 | 0.0.16- | 
 
-#### Attributes (0.1.6-)
+#### Attributes (0.1.6-)<
 | Parameter    | Description                                               | Default | Version |
 |--------------|-----------------------------------------------------------|---------|---------|
 | all          | Show all available attributes                             ||
-| default      | Attributes with the mark in default column                ||
+| default      | Attributes with the mark in default column                || 0.2.1-
 | ip_address   | IP address of the Shelly device                       | x |
 | shelly_type  | Type of Shelly (Shelly 1, Shelly 2 etc)               | x |
 | shelly_id    | Shelly id of the device, 6 or 12 digits hex number    | x |
 | ssid         | SSID the device is connected to                       ||
 | rssi         | WiFi quality for the device  ||
+| rssi_level   | WiFi quality (excelent, very good, good, bad) ||0.2.1-|
 | uptime       | Total uptime (s) for device ||
 | has_firmware_update | Indicate if the device have a new firmware available | x |
 | latest_fw_version | The newest firmware for the device type ||
@@ -305,9 +308,11 @@ shelly:
 | Parameter    | Description                           | Values / Unit     | Version |
 |--------------|---------------------------------------|-------------------|---------|
 | all          | Show all available sensors            |                   |
+| default      | Add switch/current-/totalconsumption || 0.2.1-
 | current_consumption | Show power consumtion sensors     | W              |
 | total_consumption | Show total power consumtion sensors | Wh             |
 | rssi         | Show WiFi quality sensors             | dB                |
+| rssi_level   | WiFi quality|excelent, very good, good, bad|0.2.1-
 | uptime       | Show uptime sensors                   | s                 |
 | over_power   | Show over power sensors               | True, False       |
 | device_temp  | Show device inner temperature sensors | °C                |
