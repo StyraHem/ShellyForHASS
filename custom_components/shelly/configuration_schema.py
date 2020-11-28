@@ -31,7 +31,8 @@ SETTINGS_SCHEMA = vol.Schema({
     vol.Optional('voltage'): SETTING_SCHEMA,
     vol.Optional('power_factor'): SETTING_SCHEMA,
     vol.Optional('uptime'): SETTING_SCHEMA,
-    vol.Optional('rssi'): SETTING_SCHEMA
+    vol.Optional('rssi'): SETTING_SCHEMA,
+    vol.Optional('rssi_level'): SETTING_SCHEMA
 })
 
 DEVICE_SCHEMA = vol.Schema({

@@ -49,6 +49,9 @@ class ShellyDevice(RestoreEntity):
 
         if hasattr(self._dev, 'kg_momentary_button'):
             self._dev.kg_momentary_button = instance._get_specific_config(CONF_MOMENTARY_BUTTON, None, dev.id, dev.block.id)
+            
+    def _update_ha_state(self):        
+        self.schedule_update_ha_state(True)
 
     def _updated(self, _block):
         """Receive events when the switch state changed (by mobile,
@@ -65,7 +68,8 @@ class ShellyDevice(RestoreEntity):
 
         disabled = self.registry_entry and self.registry_entry.disabled_by
         if self.entity_id is not None and not self._is_removed and not disabled:
-            self.schedule_update_ha_state(True)
+            
+            self._update_ha_state()
 
         if self._dev.info_values is not None:
             device_sensors = self.instance.device_sensors
