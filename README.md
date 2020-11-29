@@ -81,8 +81,7 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Shelly Vintage (0.1.8)
 
 ## Firmware
-* 1.7.x and before (0.1.9)
-* 1.8.0 (0.2.0)
+Support all Shelly firmware versions (0.2.0)
 
 ## Installation
 
