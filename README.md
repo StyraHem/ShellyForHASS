@@ -16,7 +16,7 @@ This Facebook group are used to anounce new releases etc. Please join it to be u
 [https://www.facebook.com/groups/shellyforhass/](https://www.facebook.com/groups/shellyforhass/)
 
 ## Wiki
-See the (Wiki)[https://github.com/StyraHem/ShellyForHASS/wiki] for FAQ and examples of automations in HA related to ShellyForHass.
+See the [Wiki](https://github.com/StyraHem/ShellyForHASS/wiki) for FAQ and examples of automations in HA related to ShellyForHass.
 
 ## Support the development
 We spending lots of effort to make this plugin better and supporting new devices. Please support us by joining on [Patreon](https://www.patreon.com/shelly4hass), donate to [Paypal pool](https://www.paypal.com/pools/c/8n6AbR9sNk) or buying us [some cups of coffee](https://www.buymeacoffee.com/styrahem).
