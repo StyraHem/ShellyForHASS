@@ -11,10 +11,12 @@
 ![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge&color=blue)
 ![GitHub Releases](https://img.shields.io/github/downloads/StyraHem/ShellyForHass/latest/total?label=Downloads&style=for-the-badge&color=blue)
 
-
 ## Join Facebook group:
 This Facebook group are used to anounce new releases etc. Please join it to be updated of new releases.
 [https://www.facebook.com/groups/shellyforhass/](https://www.facebook.com/groups/shellyforhass/)
+
+## Wiki
+See the (Wiki)[https://github.com/StyraHem/ShellyForHASS/wiki] for FAQ and examples of automations in HA related to ShellyForHass.
 
 ## Support the development
 We spending lots of effort to make this plugin better and supporting new devices. Please support us by joining on [Patreon](https://www.patreon.com/shelly4hass), donate to [Paypal pool](https://www.paypal.com/pools/c/8n6AbR9sNk) or buying us [some cups of coffee](https://www.buymeacoffee.com/styrahem).
