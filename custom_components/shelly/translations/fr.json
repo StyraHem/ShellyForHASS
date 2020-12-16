@@ -73,6 +73,7 @@
             "sensors": {
                 "data": {
                     "rssi": "RSSI",
+                    "rssi_level": "RSSI Level",
                     "uptime": "Durée de fonctionnement",
                     "current_consumption": "Consommation actuelle",
                     "total_consumption": "Consommation totale",
