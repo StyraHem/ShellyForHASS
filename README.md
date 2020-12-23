@@ -1,18 +1,22 @@
 # Shelly smart home platform for HASS and HASSIO
 
 [![founder-wip](https://img.shields.io/badge/founder-Håkan_Åkerberg@StyraHem.se-green.svg?style=for-the-badge)](https://www.styrahem.se)
-[![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20us%20a%20coffee-orange.svg?style=for-the-badge)](https://www.buymeacoffee.com/styrahem)
+[![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20us%20a%20coffee-green.svg?style=for-the-badge)](https://www.buymeacoffee.com/styrahem)
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-green.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
-![Github All Releases](https://img.shields.io/github/downloads/styrahem/shellyforhass/total.svg?label=Total%20downloads&style=for-the-badge)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-yellow.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
+![Github All Releases](https://img.shields.io/github/downloads/styrahem/shellyforhass/total.svg?label=Total%20downloads&style=for-the-badge&color=yellow)
+![GitHub release (beta)](https://img.shields.io/github/v/release/StyraHem/ShellyForHass?label=Latest%20beta&style=for-the-badge&include_prereleases&color=lightgray)
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/StyraHem/ShellyForHass?label=Latest%20release&style=for-the-badge)
-![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge)
-![GitHub Releases](https://img.shields.io/github/downloads/StyraHem/ShellyForHass/latest/total?label=Downloads&style=for-the-badge)
+![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge&color=blue)
+![GitHub Releases](https://img.shields.io/github/downloads/StyraHem/ShellyForHass/latest/total?label=Downloads&style=for-the-badge&color=blue)
 
 ## Join Facebook group:
 This Facebook group are used to anounce new releases etc. Please join it to be updated of new releases.
 [https://www.facebook.com/groups/shellyforhass/](https://www.facebook.com/groups/shellyforhass/)
+
+## Wiki
+See the [Wiki](https://github.com/StyraHem/ShellyForHASS/wiki) for FAQ and examples of automations in HA related to ShellyForHass.
 
 ## Support the development
 We spending lots of effort to make this plugin better and supporting new devices. Please support us by joining on [Patreon](https://www.patreon.com/shelly4hass), donate to [Paypal pool](https://www.paypal.com/pools/c/8n6AbR9sNk) or buying us [some cups of coffee](https://www.buymeacoffee.com/styrahem).
@@ -49,7 +53,6 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Add Shelly devices by IP-address if on different LAN or mDns and CoAP not working for discovery
 
 ## Devices supported
-
 - Shelly 1
 - Shelly 1 PM
 - Temperature addon for Shelly 1(PM)
@@ -73,15 +76,20 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Shelly i3 (0.1.9)
 - Shelly Plug
 - Shelly Plug S
+- Shelly Plug US
 - Shelly RGBW2 (rgb or 4 channels)
 - Shelly RGBWW
+- Shelly UNI
 - Shelly Vintage (0.1.8)
+
+## Firmware
+Support all Shelly firmware versions (0.2.0)
 
 ## Installation
 
 ### Install with HACS (recomended)
 
-Do you you have [HACS](https://community.home-assistant.io/t/custom-component-hacs) installed? Just search for Shelly and install it direct from HACS. HACS will keep track of updates and you can easly upgrade Shelly to latest version.
+Do you you have [HACS](https://community.home-assistant.io/t/custom-component-hacs) installed? Just search for Shelly and install it direct from HACS. HACS will keep track of updates and you can easly upgrade Shelly to latest version. See Setup for how to add it in HA.
 
 ### Install manually
 
@@ -183,6 +191,12 @@ shelly:
 
 ```yaml
 automation:
+  - alias: "shellyforhass.click event supported in fw 1.8.x and later"
+    trigger:
+      platform: event
+      event_type: shellyforhass.click
+      event_data:
+        click_type: single #long, double, triple
   - alias: "Shelly turn off and then on quickly, any switch"
     trigger:
       platform: event
@@ -234,16 +248,18 @@ shelly:
 | scan_interval          | Update frequency for polling status and additional information. If the not CoAP supported this will be the delay for status updates. | 60      | 0.0.6-  |
 | _wifi_sensor_          | Add extra sensor for wifi signal of each device. Requires `additional_information` to be `True`.  | False   | 0.0.6 (deprecated) |
 | _uptime_sensor_        | Add extra sensor for device uptime of each devivce. Requires `additional_information` to be `True` | False   | 0.0.6 (deprecated)  |
-| power_decimals         | Round power sensor values to the given number of decimals                                          |         | 0.0.14- |
-| sensors                | A list with sensors to show for each device. See list below.                                        | current_consumption | 0.0.15- |
+| power_decimals         | Round power sensor values to the given number of decimals                                          |         | 0.0.14- (deprecated) |
+| sensors                | A list with sensors to show for each device. See list below.                                        | current_consumption, total_consumption | 0.0.15- |
 | attributes             | A list with attributes to show for each device. See list below.                                        | default | 0.0.16- |
 | upgrade_switch         | Add firmware switches when upgrade needed.                                                           | True  | 0.0.15- |
+| upgrade_beta_switch    | Add firmware switches when beta versions is available.                                               | True  | 0.2.0- |
 | unavailable_after_sec  | Number of seconds before the device will be unavialable      | 60 | 0.0.16- |
 | mdns | Allow the plugin to use mDns to discover devices | True | 0.1.5- |
 | cloud_auth_key | Use this to allow the plugin to connect to your Shelly Cloud. You will find this information at https://my.shelly.cloud/#user_settings and GET KEY | | 0.1.5- |
 | cloud_server | Use this togheter with cloud_auth_key | | 0.1.5- |
 | tmpl_name | Template how to create the friendly name from Shelly Cloud | {room} - {name} | 0.1.5- |
 | discover_by_ip | This is a list of ip-addresses to force the plugin to discover. Use this if not CoAP or mDns discovery working for your device. | | 0.1.5- |
+| mqtt_port | Specify the port number for the internal MQTT server to listen on. 0 means off. Use something else then 1883 if you have other MQTT server installed. | 0 | 0.1.9- |
 
 #### Device configuration
 
@@ -257,16 +273,17 @@ shelly:
 | upgrade_switch | Add firmware switches when upgrade needed. Override global configuration.               | False    | 0.0.15- |
 | unavailable_after_sec  | Overide number of seconds before the device will be unavialable.    | 120 | 0.0.16- | 
 
-#### Attributes (0.1.6-)
+#### Attributes (0.1.6-)<
 | Parameter    | Description                                               | Default | Version |
 |--------------|-----------------------------------------------------------|---------|---------|
 | all          | Show all available attributes                             ||
-| default      | Attributes with the mark in default column                ||
+| default      | Attributes with the mark in default column                || 0.2.1-
 | ip_address   | IP address of the Shelly device                       | x |
 | shelly_type  | Type of Shelly (Shelly 1, Shelly 2 etc)               | x |
 | shelly_id    | Shelly id of the device, 6 or 12 digits hex number    | x |
 | ssid         | SSID the device is connected to                       ||
 | rssi         | WiFi quality for the device  ||
+| rssi_level   | WiFi quality (excelent, very good, good, bad) ||0.2.1-|
 | uptime       | Total uptime (s) for device ||
 | has_firmware_update | Indicate if the device have a new firmware available | x |
 | latest_fw_version | The newest firmware for the device type ||
@@ -292,9 +309,11 @@ shelly:
 | Parameter    | Description                           | Values / Unit     | Version |
 |--------------|---------------------------------------|-------------------|---------|
 | all          | Show all available sensors            |                   |
+| default      | Add switch/current-/totalconsumption || 0.2.1-
 | current_consumption | Show power consumtion sensors     | W              |
 | total_consumption | Show total power consumtion sensors | Wh             |
 | rssi         | Show WiFi quality sensors             | dB                |
+| rssi_level   | WiFi quality|excelent, very good, good, bad|0.2.1-
 | uptime       | Show uptime sensors                   | s                 |
 | over_power   | Show over power sensors               | True, False       |
 | device_temp  | Show device inner temperature sensors | °C                |
@@ -317,7 +336,7 @@ All of the sensors (not current_consumption) require additional_information to b
 --------|-----|-----------|---------|
 | temperature | °C | 0 |    |
 | device_temp | °C | 0 |    |
-| illuminance | lux | 0 |    |
+| illuminance | lx | 0 |    |
 | humidity | % | 0 |    |
 | total_consumption | kWh | 2 |  1000 |
 | total_returned | kWh | 2 |  1000  |
@@ -351,6 +370,23 @@ When the switch sensor is enabled an event will be sent for multiple clicks on t
 |-----------|---------------------------------------------------------------------------------------------|
 | click_cnt | Number of clicks, 2 = turn back and forth quickly, 4 = double click on momentary switch.    |
 | state     | Current state of the switch, can be uset to distinct on-off-on from off-on-off for example. |
+
+#### shellyforhass.click [0.2.0]
+Click event supporting the build in events in Shelly devices with firmware from 1.8.x
+
+```json
+{
+    "event_type": "shellyforhass.click",
+    "data": {
+        "entity_id": "binary_sensor.shelly_shbtn_1_xxxxxx_switch",
+        "click_type": "single"
+    }
+    .....
+}
+```
+| Parameter | Description                                                                                 |
+|-----------|---------------------------------------------------------------------------------------------|
+| click_type | single, double, triple, long, long-short, short-long (not all devices support all types)  |
 
 ### Restart Home Assistant
 
