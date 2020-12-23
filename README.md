@@ -54,7 +54,8 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 
 ## Devices supported
 - Shelly 1
-- Shelly 1 PM
+- Shelly 1L (0.2.2)
+- Shelly 1PM
 - Temperature addon for Shelly 1(PM)
 - Shelly 2 (relay or roller mode)
 - Shelly 2.5 (relay or roller mode)
