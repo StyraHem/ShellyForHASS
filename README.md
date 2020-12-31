@@ -65,7 +65,8 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Shelly Air (0.1.9)
 - Shelly Bulb
 - Shelly Button-1 (0.1.9)
-- Shelly DUO (0.1.7)
+- Shelly Duo (0.1.7)
+- Shelly Duo GU10 (0.1.7)
 - Shelly Dimmer / Dimmer SL
 - Shelly Dimmer 2 (0.1.9)
 - Shelly Door/Window
