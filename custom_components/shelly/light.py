@@ -6,12 +6,19 @@ https://home-assistant.io/components/shelly/
 """
 import logging
 
+from homeassistant.const import (
+    ATTR_STATE
+)
 from homeassistant.components.light import (
     ATTR_BRIGHTNESS, ATTR_COLOR_TEMP, ATTR_EFFECT, ATTR_HS_COLOR, 
     ATTR_WHITE_VALUE,
     SUPPORT_BRIGHTNESS, SUPPORT_COLOR, SUPPORT_COLOR_TEMP, SUPPORT_EFFECT,
     SUPPORT_WHITE_VALUE,
 )
+from functools import partial
+from homeassistant.helpers import config_validation as cv, entity_platform, service
+import voluptuous as vol
+
 try:
     from homeassistant.components.light import (LightEntity)
 except:
@@ -52,6 +59,17 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         else:
             async_add_entities([ShellyDimmer(dev, instance)])
 
+    platform = entity_platform.current_platform.get()
+    platform.async_register_entity_service(
+        'set_value',
+        {
+            vol.Optional(ATTR_STATE): bool,
+            vol.Optional(ATTR_BRIGHTNESS): cv.positive_int,
+            vol.Optional(ATTR_COLOR_TEMP): cv.positive_int,
+        },
+        "async_set_value"
+    )
+
     async_dispatcher_connect(
         hass,
         "shelly_new_light",
@@ -75,14 +93,12 @@ class ShellyLightRelay(ShellyDevice, LightEntity):
     def turn_on(self, **kwargs):
         self._dev.turn_on()
         self._state = True
-        
         self._update_ha_state()
 
 
     def turn_off(self, **kwargs):
         self._dev.turn_off()
         self._state = False
-        
         self._update_ha_state()
 
     def update(self):
@@ -136,13 +152,30 @@ class ShellyDimmer(ShellyDevice, LightEntity):
         else:
             self._dev.turn_on(brightness)
         self._state = True
-        
         self._update_ha_state()
+
+    def set_value(self, **kwargs):
+        brightness = None
+        color_temp = None
+        state = None
+        if ATTR_BRIGHTNESS in kwargs:
+            brightness = int(kwargs[ATTR_BRIGHTNESS] / 2.55)
+        if ATTR_COLOR_TEMP in kwargs:
+            color_temp = int(mired_to_kelvin(kwargs[ATTR_COLOR_TEMP]))
+            if color_temp > self._color_temp_max:
+                color_temp = self._color_temp_max
+            if color_temp < self._color_temp_min:
+                color_temp = self._color_temp_min
+        if ATTR_STATE in kwargs:
+            state = kwargs[ATTR_STATE]
+        self._dev.set_values(state=state, brightness=brightness, color_temp=color_temp)
+
+    async def async_set_value(self, **kwargs):
+        await self.hass.async_add_executor_job(partial(self.set_value, **kwargs))
 
     def turn_off(self, **_kwargs):
         self._dev.turn_off()
         self._state = False
-        
         self._update_ha_state()
 
     @property
@@ -229,6 +262,25 @@ class ShellyRGB(ShellyDevice, LightEntity):
         """Return status of light"""
         return self._state
 
+    def set_value(self, **kwargs):
+        brightness = None
+        color_temp = None
+        state = None
+        if ATTR_BRIGHTNESS in kwargs:
+            brightness = int(kwargs[ATTR_BRIGHTNESS] / 2.55)
+        if ATTR_COLOR_TEMP in kwargs:
+            color_temp = int(mired_to_kelvin(kwargs[ATTR_COLOR_TEMP]))
+            if color_temp > self._color_temp_max:
+                color_temp = self._color_temp_max
+            if color_temp < self._color_temp_min:
+                color_temp = self._color_temp_min
+        if ATTR_STATE in kwargs:
+            state = kwargs[ATTR_STATE]
+        self._dev.set_values(state=state, brightness=brightness, color_temp=color_temp)
+
+    async def async_set_value(self, **kwargs):
+        await self.hass.async_add_executor_job(partial(self.set_value, **kwargs))
+
     def turn_on(self, **kwargs):
         """Turn on light"""
         brightness = None
@@ -276,14 +328,12 @@ class ShellyRGB(ShellyDevice, LightEntity):
                           mode=mode, effect=effect_nr, white_value=white_value)
 
         self._state = True
-        
         self._update_ha_state()
 
     def turn_off(self, **_kwargs):
         """Turn off light"""
         self._dev.turn_off()
         self._state = False
-        
         self._update_ha_state()
 
     def update(self):

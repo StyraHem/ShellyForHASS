@@ -84,7 +84,7 @@ class ShellySwitch(ShellyDevice, BinarySensorEntity):
     @property
     def icon(self):
         """Return the button icon."""
-        return "mdi:hockey-puck"
+        return "mdi:light-switch"
 
     def _millis(self):
         return int(round(time.time() * 1000))

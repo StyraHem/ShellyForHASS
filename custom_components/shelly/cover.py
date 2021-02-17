@@ -103,7 +103,6 @@ class ShellyCover(ShellyDevice, CoverEntity):
         pos = kwargs[ATTR_POSITION]
         self._dev.set_position(pos)
         self._position = pos
-        
         self._update_ha_state()
 
     def stop_cover(self, **_kwargs):
