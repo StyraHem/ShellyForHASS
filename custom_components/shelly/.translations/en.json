@@ -25,7 +25,7 @@
                     "upgrade_beta_switch": "Enable upgrade to Beta version switch",
                     "igmp_fix": "Repeatly send IGMP ADD_MEMBER, try this if instant update stop after some minutes",
                     "host_ip": "Ip address for Home Assistant",
-                    "mqtt_port": "Tcpip port of integrated MQTT server"
+                    "mqtt_port": "Tcpip port to listen on for integrated MQTT server"
                 },
                 "title": "Shelly - Settings [1/3]",
                 "description": "Configuration (1/2)"
@@ -43,6 +43,16 @@
                 },
                 "title": "Shelly - Settings [1/3]",
                 "description": "Configuration (2/2)"
+            },
+            "config_mqtt": {
+                "data": {
+                    "mqtt_server_host": "Host or ip address",
+                    "mqtt_server_port": "Port",
+                    "mqtt_server_username": "User name",
+                    "mqtt_server_password": "Password"
+                },
+                "title": "Shelly - Settings [1/3]",
+                "description": "MQTT server connection"
             },
             "attributes": {
                 "data": {
