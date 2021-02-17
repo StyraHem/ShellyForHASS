@@ -45,7 +45,7 @@ from .configuration_schema import CONFIG_SCHEMA, CONFIG_SCHEMA_ROOT
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.2.2-b1"
+__version__ = "0.2.2-b2"
 VERSION = __version__
 
 async def async_setup(hass, config):
@@ -189,6 +189,7 @@ class ShellyInstance():
             pys.only_device_id = pys.only_device_id.upper()
         pys.igmp_fix_enabled = conf.get(CONF_IGMPFIX)
         pys.mdns_enabled = conf.get(CONF_MDNS)
+        pys.shelly_instance = self #Used for debuging only
         host_ip = conf.get(CONF_HOST_IP)
         if host_ip:
             if host_ip == 'ha':
@@ -196,6 +197,12 @@ class ShellyInstance():
             else:
                 pys.host_ip = host_ip
         pys.mqtt_port = conf.get(CONF_MQTT_PORT, 0)
+
+        pys.mqtt_server_host = conf.get(CONF_MQTT_SERVER_HOST, '')
+        pys.mqtt_server_port = conf.get(CONF_MQTT_SERVER_PORT, 1883)
+        pys.mqtt_server_username = conf.get(CONF_MQTT_SERVER_USERNAME, '')
+        pys.mqtt_server_password = conf.get(CONF_MQTT_SERVER_PASSWORD, '')
+
         pys.start()
         pys.discover()
 
