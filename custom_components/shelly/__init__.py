@@ -45,7 +45,7 @@ from .configuration_schema import CONFIG_SCHEMA, CONFIG_SCHEMA_ROOT
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.2.2-b2"
+__version__ = "0.2.2-b3"
 VERSION = __version__
 
 async def async_setup(hass, config):
