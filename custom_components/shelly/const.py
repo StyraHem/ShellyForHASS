@@ -14,6 +14,8 @@ from homeassistant.const import (
     ENERGY_WATT_HOUR
 )
 
+DEVICE_CLASS_MOTION = 'motion'
+
 from homeassistant.components.binary_sensor import (
     DEVICE_CLASS_CONNECTIVITY
 )
@@ -292,6 +294,7 @@ SENSOR_TYPE_TILT = 'tilt'
 SENSOR_TYPE_PPM = 'ppm'
 SENSOR_TYPE_TOTAL_WORK_TIME = 'total_work_time'
 SENSOR_TYPE_EXT_SWITCH = 'external_switch'
+SENSOR_TYPE_MOTION = 'motion'
 
 SENSOR_TYPES_CFG = {
     SENSOR_TYPE_DEFAULT:
@@ -351,4 +354,6 @@ SENSOR_TYPES_CFG = {
         ['Total work time', 's', 'mdi:briefcase-clock', None, None],
     SENSOR_TYPE_EXT_SWITCH:
         ['External switch', '', 'mdi:electric-switch', None, 'bool'],
+    SENSOR_TYPE_MOTION:
+        ['Motion', '', 'mdi:motion-sensor', DEVICE_CLASS_MOTION, 'bool'],
 }
