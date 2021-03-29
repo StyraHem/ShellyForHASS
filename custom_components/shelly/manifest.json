@@ -1,9 +1,10 @@
 {
   "domain": "shelly",
   "name": "Shelly smart home",
+  "version": "0.2.2-b4",
   "config_flow": true,
   "documentation": "https://github.com/StyraHem/ShellyForHASS/blob/master/README.md",
   "dependencies": ["zeroconf"],
   "codeowners": ["@hakana","@StyraHem"],
-  "requirements": ["pyShelly==0.2.11"]
+  "requirements": ["pyShelly==0.2.23", "paho-mqtt==1.5.1"]
 }

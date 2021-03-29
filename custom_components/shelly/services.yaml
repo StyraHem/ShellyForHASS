@@ -1,0 +1,29 @@
+# Service ID
+set_value:
+  name: Set value
+  description: Set specific values for Shelly device
+  target:
+  fields:
+    state:
+      name: State
+      description: Set the device state
+      required: false
+      example: "true"
+      default: "true"
+      selector:
+        select:
+          options:
+            - "true"
+            - "false"
+    brightness:
+      name: Brighness
+      description: Set brightness of the device (1-255)
+      required: false
+      example: "55"
+      default: "255"
+    color_temo:
+      name: Color temperatur
+      description: Set color temperature
+      required: false
+      example: "3000"
+      default: "3000"

@@ -54,7 +54,8 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 
 ## Devices supported
 - Shelly 1
-- Shelly 1 PM
+- Shelly 1L (0.2.2)
+- Shelly 1PM
 - Temperature addon for Shelly 1(PM)
 - Shelly 2 (relay or roller mode)
 - Shelly 2.5 (relay or roller mode)
@@ -64,7 +65,8 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Shelly Air (0.1.9)
 - Shelly Bulb
 - Shelly Button-1 (0.1.9)
-- Shelly DUO (0.1.7)
+- Shelly Duo (0.1.7)
+- Shelly Duo GU10 (0.1.7)
 - Shelly Dimmer / Dimmer SL
 - Shelly Dimmer 2 (0.1.9)
 - Shelly Door/Window

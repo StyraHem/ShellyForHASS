@@ -42,6 +42,16 @@
                 },
                 "title": "Shelly - Settings [1/3]",
                 "description": "Configuration (2/2)"
+            },            
+            "config_mqtt": {
+                "data": {
+                    "mqtt_server_host": "Host or ip address",
+                    "mqtt_server_port": "Port",
+                    "mqtt_server_username": "User name",
+                    "mqtt_server_password": "Password"
+                },
+                "title": "Shelly - Settings [1/3]",
+                "description": "MQTT server connection"
             },
             "attributes": {
                 "data": {
@@ -85,6 +95,7 @@
             "sensors": {
                 "data": {
                     "rssi": "RSSI",
+                    "rssi_level": "RSSI Level",
                     "uptime": "Uptime",
                     "current_consumption": "Current consumption",
                     "total_consumption": "Total consumption",

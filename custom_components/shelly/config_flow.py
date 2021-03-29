@@ -18,7 +18,9 @@ from .const import (DOMAIN,
                     CONF_CLOUD_AUTH_KEY, CONF_CLOUD_SERVER,
                     CONF_TMPL_NAME, CONF_ADDITIONAL_INFO,
                     CONF_OBJECT_ID_PREFIX,
-                    CONF_UNAVALABLE_AFTER_SEC
+                    CONF_UNAVALABLE_AFTER_SEC,
+                    CONF_MQTT_SERVER_HOST, CONF_MQTT_SERVER_PORT,
+                    CONF_MQTT_SERVER_USERNAME, CONF_MQTT_SERVER_PASSWORD
 )
 from .configuration_schema import STEP_SCHEMA
 
@@ -146,6 +148,20 @@ class ShellyOptionsFlowHandler(config_entries.OptionsFlow):
                 self.v(CONF_PASSWORD): str
             })
             return self.async_show_form(step_id="config_2", data_schema=schema)
+
+        self._options.update(user_input)
+
+        return await self.async_step_config_mqtt()
+
+    async def async_step_config_mqtt(self, user_input=None):
+        if not user_input:
+            schema = vol.Schema({
+                self.v(CONF_MQTT_SERVER_HOST): str,
+                self.v(CONF_MQTT_SERVER_PORT): int,
+                self.v(CONF_MQTT_SERVER_USERNAME): str,
+                self.v(CONF_MQTT_SERVER_PASSWORD): str,
+            })
+            return self.async_show_form(step_id="config_mqtt", data_schema=schema)
 
         self._options.update(user_input)
 

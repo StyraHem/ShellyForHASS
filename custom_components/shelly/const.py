@@ -14,6 +14,8 @@ from homeassistant.const import (
     ENERGY_WATT_HOUR
 )
 
+DEVICE_CLASS_MOTION = 'motion'
+
 from homeassistant.components.binary_sensor import (
     DEVICE_CLASS_CONNECTIVITY
 )
@@ -45,6 +47,10 @@ CONF_DECIMALS = 'decimals'
 CONF_DIV = 'div'
 CONF_UNIT = 'unit'
 CONF_MQTT_PORT = 'mqtt_port'
+CONF_MQTT_SERVER_HOST = 'mqtt_server_host'
+CONF_MQTT_SERVER_PORT = 'mqtt_server_port'
+CONF_MQTT_SERVER_USERNAME = 'mqtt_server_username'
+CONF_MQTT_SERVER_PASSWORD = 'mqtt_server_password'
 
 #Debug settings used for testing
 CONF_LOCAL_PY_SHELLY = 'debug_local_py_shelly'
@@ -288,6 +294,8 @@ SENSOR_TYPE_VIBRATION = 'vibration'
 SENSOR_TYPE_TILT = 'tilt'
 SENSOR_TYPE_PPM = 'ppm'
 SENSOR_TYPE_TOTAL_WORK_TIME = 'total_work_time'
+SENSOR_TYPE_EXT_SWITCH = 'external_switch'
+SENSOR_TYPE_MOTION = 'motion'
 
 SENSOR_TYPES_CFG = {
     SENSOR_TYPE_DEFAULT:
@@ -336,7 +344,7 @@ SENSOR_TYPES_CFG = {
     SENSOR_TYPE_CURRENT:
         ['Current', 'A', 'mdi:alpha-i-circle-outline', None, None],
     SENSOR_TYPE_CLICK_TYPE:
-        ['Click type', '', 'mdi:hockey-puck', None, None],
+        ['Click type', '', 'mdi:light-switch', None, None],
     SENSOR_TYPE_TILT:
         ['Tilt', '', 'mdi:angle-acute', None, None],
     SENSOR_TYPE_VIBRATION:
@@ -345,4 +353,8 @@ SENSOR_TYPES_CFG = {
         ['Concentration', 'PPM', 'mdi:gauge', None, None],
     SENSOR_TYPE_TOTAL_WORK_TIME:
         ['Total work time', 's', 'mdi:briefcase-clock', None, None],
+    SENSOR_TYPE_EXT_SWITCH:
+        ['External switch', '', 'mdi:electric-switch', None, 'bool'],
+    SENSOR_TYPE_MOTION:
+        ['Motion', '', 'mdi:motion-sensor', DEVICE_CLASS_MOTION, 'bool'],
 }
