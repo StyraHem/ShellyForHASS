@@ -12,7 +12,7 @@
 ![GitHub Releases](https://img.shields.io/github/downloads/StyraHem/ShellyForHass/latest/total?label=Downloads&style=for-the-badge&color=blue)
 
 ## Join Facebook group:
-This Facebook group are used to anounce new releases etc. Please join it to be updated of new releases.
+This Facebook group are used to announce new releases etc. Please join it to be updated of new releases.
 [https://www.facebook.com/groups/shellyforhass/](https://www.facebook.com/groups/shellyforhass/)
 
 ## Wiki
@@ -89,9 +89,9 @@ Support all Shelly firmware versions (0.2.0)
 
 ## Installation
 
-### Install with HACS (recomended)
+### Install with HACS (recommended)
 
-Do you you have [HACS](https://community.home-assistant.io/t/custom-component-hacs) installed? Just search for Shelly and install it direct from HACS. HACS will keep track of updates and you can easly upgrade Shelly to latest version. See Setup for how to add it in HA.
+Do you you have [HACS](https://community.home-assistant.io/t/custom-component-hacs) installed? Just search for Shelly and install it direct from HACS. HACS will keep track of updates and you can easily upgrade Shelly to latest version. See Setup for how to add it in HA.
 
 ### Install manually
 
@@ -146,7 +146,7 @@ shelly:
     - id: "13498B-1"   #Shelly 2, Id + Channel number
     - id: "7BD5F3"
       name: My cool plug   #set friendly name
-      sensors: #overide global (all)
+      sensors: #override global (all)
          - power
          - device_temp
 ```
@@ -180,7 +180,7 @@ shelly:
     - id: "7BD5F3"
       name: My cool plug #set friendly name
 ```
-##### Discovery by ip
+##### Discovery by IP
 
 ```yaml
 shelly:
@@ -242,23 +242,23 @@ shelly:
 | password               | Password to use for restrict login                                                                     |         | 0.0.3-  |
 | discovery              | Enable or disable discovery                                                                            | True    | 0.0.4-  |
 | version                | Add a version sensor to with version of component and pyShelly                                         | False   | 0.0.4-  |
-| devices                | Config for each device, se next table for more info                                                    |         | 0.0.4-  |
+| devices                | Config for each device, see next table for more info                                                   |         | 0.0.4-  |
 | show_id_in_name        | Add Shelly Device id to the end of the name                                                            | False   | 0.0.5-  |
 | id_prefix              | Change the prefix of the entity id and unique id of the device                                         | shelly  | 0.0.5-  |
 | igmp_fix               | Enable sending out IP_ADD_MEMBERSHIP every minute                                                      | False   | 0.0.5-  |
 | additional_information | Retrieve additional information (rssi, ssid, uptime, ..)                                               | True    | 0.0.6-  |
 | scan_interval          | Update frequency for polling status and additional information. If the not CoAP supported this will be the delay for status updates. | 60      | 0.0.6-  |
 | _wifi_sensor_          | Add extra sensor for wifi signal of each device. Requires `additional_information` to be `True`.  | False   | 0.0.6 (deprecated) |
-| _uptime_sensor_        | Add extra sensor for device uptime of each devivce. Requires `additional_information` to be `True` | False   | 0.0.6 (deprecated)  |
+| _uptime_sensor_        | Add extra sensor for device uptime of each device. Requires `additional_information` to be `True` | False   | 0.0.6 (deprecated)  |
 | power_decimals         | Round power sensor values to the given number of decimals                                          |         | 0.0.14- (deprecated) |
 | sensors                | A list with sensors to show for each device. See list below.                                        | current_consumption, total_consumption | 0.0.15- |
 | attributes             | A list with attributes to show for each device. See list below.                                        | default | 0.0.16- |
 | upgrade_switch         | Add firmware switches when upgrade needed.                                                           | True  | 0.0.15- |
 | upgrade_beta_switch    | Add firmware switches when beta versions is available.                                               | True  | 0.2.0- |
-| unavailable_after_sec  | Number of seconds before the device will be unavialable      | 60 | 0.0.16- |
+| unavailable_after_sec  | Number of seconds before the device will be unavailable      | 60 | 0.0.16- |
 | mdns | Allow the plugin to use mDns to discover devices | True | 0.1.5- |
 | cloud_auth_key | Use this to allow the plugin to connect to your Shelly Cloud. You will find this information at https://my.shelly.cloud/#user_settings and GET KEY | | 0.1.5- |
-| cloud_server | Use this togheter with cloud_auth_key | | 0.1.5- |
+| cloud_server | Use this together with cloud_auth_key | | 0.1.5- |
 | tmpl_name | Template how to create the friendly name from Shelly Cloud | {room} - {name} | 0.1.5- |
 | discover_by_ip | This is a list of ip-addresses to force the plugin to discover. Use this if not CoAP or mDns discovery working for your device. | | 0.1.5- |
 | mqtt_port | Specify the port number for the internal MQTT server to listen on. 0 means off. Use something else then 1883 if you have other MQTT server installed. | 0 | 0.1.9- |
@@ -273,7 +273,7 @@ shelly:
 | light_switch | Show this switch as a light                                                               | True           |         |
 | sensors      | A list with sensors to show for each device. This will override the global sensors. See list below.  |                | 0.0.15- |
 | upgrade_switch | Add firmware switches when upgrade needed. Override global configuration.               | False    | 0.0.15- |
-| unavailable_after_sec  | Overide number of seconds before the device will be unavialable.    | 120 | 0.0.16- | 
+| unavailable_after_sec  | Override number of seconds before the device will be unavailable.    | 120 | 0.0.16- | 
 
 #### Attributes (0.1.6-)<
 | Parameter    | Description                                               | Default | Version |
@@ -285,7 +285,7 @@ shelly:
 | shelly_id    | Shelly id of the device, 6 or 12 digits hex number    | x |
 | ssid         | SSID the device is connected to                       ||
 | rssi         | WiFi quality for the device  ||
-| rssi_level   | WiFi quality (excelent, very good, good, bad) ||0.2.1-|
+| rssi_level   | WiFi quality (excellent, very good, good, bad) ||0.2.1-|
 | uptime       | Total uptime (s) for device ||
 | has_firmware_update | Indicate if the device have a new firmware available | x |
 | latest_fw_version | The newest firmware for the device type ||
@@ -295,8 +295,8 @@ shelly:
 | cloud_status | Shelly cloud status (disabled/disconnected/connected) | x |
 | mqtt_connected | Device connected to MQTT server ||
 | switch       | Show state of the actual switch button | x |
-| current_consumption | Show power consumtion  ||
-| total_consumption | Show total power consumtion  ||
+| current_consumption | Show power consumption  ||
+| total_consumption | Show total power consumption  ||
 | total_returned | Show total power returned  (EM/3EM) ||0.1.7-|
 | voltage | Show current voltage (V) ||0.1.7-|
 | current | Show current current (A) ||0.1.7-|
@@ -312,10 +312,10 @@ shelly:
 |--------------|---------------------------------------|-------------------|---------|
 | all          | Show all available sensors            |                   |
 | default      | Add switch/current-/totalconsumption || 0.2.1-
-| current_consumption | Show power consumtion sensors     | W              |
-| total_consumption | Show total power consumtion sensors | Wh             |
+| current_consumption | Show power consumption sensors     | W              |
+| total_consumption | Show total power consumption sensors | Wh             |
 | rssi         | Show WiFi quality sensors             | dB                |
-| rssi_level   | WiFi quality|excelent, very good, good, bad|0.2.1-
+| rssi_level   | WiFi quality|excellent, very good, good, bad|0.2.1-
 | uptime       | Show uptime sensors                   | s                 |
 | over_power   | Show over power sensors               | True, False       |
 | device_temp  | Show device inner temperature sensors | °C                |
@@ -371,7 +371,7 @@ When the switch sensor is enabled an event will be sent for multiple clicks on t
 | Parameter | Description                                                                                 |
 |-----------|---------------------------------------------------------------------------------------------|
 | click_cnt | Number of clicks, 2 = turn back and forth quickly, 4 = double click on momentary switch.    |
-| state     | Current state of the switch, can be uset to distinct on-off-on from off-on-off for example. |
+| state     | Current state of the switch, can be used to distinct on-off-on from off-on-off for example. |
 
 #### shellyforhass.click [0.2.0]
 Click event supporting the build in events in Shelly devices with firmware from 1.8.x
@@ -455,7 +455,7 @@ This plugin is created by the StyraHem.se, the Swedish distributor of Shelly. In
 [![buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/styrahem)
 
 ## Thanks to
-- [@tefinger](https://github.com/tefinger) that have test and add functinallity to improve this component.
+- [@tefinger](https://github.com/tefinger) that have test and add functionality to improve this component.
 - Allterco that have developed all nice Shellies and also response quickly on requests and bugfixes.
 
 ## Screenshots
