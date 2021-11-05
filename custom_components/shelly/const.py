@@ -339,7 +339,7 @@ SENSOR_TYPES_CFG = {
     SENSOR_TYPE_VOLTAGE:
         ['Voltage', 'V', 'mdi:alpha-v-circle-outline', None, None],
     SENSOR_TYPE_POWER_FACTOR:
-        ['Power factor', None, 'mdi:flash', None, None],
+        ['Power factor', ' ', 'mdi:flash', None, None],
     SENSOR_TYPE_CURRENT:
         ['Current', 'A', 'mdi:alpha-i-circle-outline', None, None],
     SENSOR_TYPE_CLICK_TYPE:
