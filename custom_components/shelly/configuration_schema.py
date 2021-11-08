@@ -19,21 +19,9 @@ SETTING_SCHEMA = vol.Schema({
     vol.Optional(CONF_UNIT): cv.string
 })
 
-SETTINGS_SCHEMA = vol.Schema({
-    vol.Optional('temperature'): SETTING_SCHEMA,
-    vol.Optional('humidity'): SETTING_SCHEMA,
-    vol.Optional('illuminance'): SETTING_SCHEMA,
-    vol.Optional('current'): SETTING_SCHEMA,
-    vol.Optional('total_consumption'): SETTING_SCHEMA,
-    vol.Optional('total_returned'): SETTING_SCHEMA,
-    vol.Optional('current_consumption'): SETTING_SCHEMA,
-    vol.Optional('device_temp'): SETTING_SCHEMA,
-    vol.Optional('voltage'): SETTING_SCHEMA,
-    vol.Optional('power_factor'): SETTING_SCHEMA,
-    vol.Optional('uptime'): SETTING_SCHEMA,
-    vol.Optional('rssi'): SETTING_SCHEMA,
-    vol.Optional('rssi_level'): SETTING_SCHEMA
-})
+SETTINGS_SCHEMA = vol.Schema(
+    dict([(k, SETTING_SCHEMA) for (k, v) in DEFAULT_SETTINGS.items()])
+)
 
 DEVICE_SCHEMA = vol.Schema({
     vol.Required(CONF_ID): cv.string,

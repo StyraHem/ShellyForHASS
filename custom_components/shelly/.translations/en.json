@@ -1,6 +1,5 @@
 {
     "config": {
-        "title": "Shelly smart home",
         "abort": {
             "single_instance_allowed": "Only a single configuration of Shelly is allowed."
         },
@@ -23,12 +22,14 @@
                     "version": "Create a entry showing current version of ShellyForHass",
                     "upgrade_switch": "Create upgrade switch when Shelly has new firmware",
                     "upgrade_beta_switch": "Enable upgrade to Beta version switch",
-                    "igmp_fix": "Repeatly send IGMP ADD_MEMBER, try this if instant update stop after some minutes",
+                    "igmp_fix": "Repeatly send IGMP ADD_MEMBER, try this if instant update stop some minutes",
                     "host_ip": "Ip address for Home Assistant",
-                    "mqtt_port": "Tcpip port to listen on for integrated MQTT server"
+                    "mqtt_port": "Tcpip port of integrated MQTT server"
                 },
                 "title": "Shelly - Settings [1/3]",
-                "description": "Configuration (1/2)"
+                "description": "Configuration (1/2)",
+                "button": "1",
+                "save": "2"                
             },
             "config_2": {
                 "data": {
@@ -43,7 +44,7 @@
                 },
                 "title": "Shelly - Settings [1/3]",
                 "description": "Configuration (2/2)"
-            },
+            },            
             "config_mqtt": {
                 "data": {
                     "mqtt_server_host": "Host or ip address",
@@ -65,7 +66,6 @@
                     "uptime": "Uptime",
                     "has_firmware_update": "Has firmware update",
                     "latest_fw_version": "Latest firmware version",
-                    "latest_beta_fw_version": "Latest beta firmware version",
                     "firmware_version": "Current firmware version",
                     "mqtt_connected": "MQTT connected",
                     "cloud_status": "Cloud status",
@@ -85,13 +85,15 @@
                     "tilt" :"Tilt",
                     "vibration" : "Vibration",
                     "temperature" :"Temperature",
+                    "humidity" : "Humidity",
                     "illuminance" : "Illuminance",
                     "ppm": "PPM",
                     "sensor": "Sensor",
-                    "total_work_time": "Total work time"
+                    "total_work_time": "Total work time",
+                    "latest_beta_fw_version": "Latest beta version"
                 },
                 "title": "Shelly - Settings [2/3] - Attributes",
-                "description": "Select attributes to show for each Shelly entry. Be careful, every attributes trig and store extra information to database. {steps}"
+                "description": "Select attributes to show for each Shelly entry. Be careful, every attributes trig and store extra information to database."
             },
             "sensors": {
                 "data": {
@@ -114,13 +116,15 @@
                     "tilt" :"Tilt",
                     "vibration" : "Vibration",
                     "temperature" :"Temperature",
+                    "humidity" : "Humidity",
                     "illuminance" : "Illuminance",
                     "ppm": "PPM",
                     "sensor": "Sensor",
-                    "total_work_time": "Total work time"
+                    "total_work_time": "Total work time",
+                    "click_type": "Click type"
                 },
                 "title": "Shelly - Settings [3/3] - Sensors",
-                "description": "Select sensors to create for Shelly devices. {steps}"
+                "description": "Select sensors to create for Shelly devices."
             },
             "yaml": {
                 "data": {

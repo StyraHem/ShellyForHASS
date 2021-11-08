@@ -17,6 +17,7 @@ class ShellyDevice(RestoreEntity):
 
     def __init__(self, dev, instance):
         conf = instance.conf
+        instance.entities.append(self)
         id_prefix = conf.get(CONF_OBJECT_ID_PREFIX)
         self._unique_id = id_prefix + "_" + dev.type + "_" + dev.id
         self.entity_id = "." + slugify(self._unique_id)
@@ -27,9 +28,6 @@ class ShellyDevice(RestoreEntity):
             self._unique_id += "_" + slugify(entity_id)
         self._show_id_in_name = conf.get(CONF_SHOW_ID_IN_NAME)
         self._name_ext = None
-        #self._name = dev.type_name()
-        #if conf.get(CONF_SHOW_ID_IN_NAME):
-        #    self._name += " [" + dev.id + "]"  # 'Test' #light.name
         self._dev = dev
         self.hass = instance.hass
         self.instance = instance
@@ -39,13 +37,15 @@ class ShellyDevice(RestoreEntity):
                                           dev.id, dev.block.id)
 
         self._sensor_conf = instance._get_sensor_config(dev.id, dev.block.id)
-
         self._is_removed = False
         self._master_unit = False
         if hasattr(dev, 'master_unit') and dev.master_unit:
             self._master_unit = True
 
-        self._settings = instance.get_settings(dev.id, dev.block.id)
+        self.config_updated()
+
+    def config_updated(self):        
+        self._settings = self.instance.get_settings(self._dev.id, self._dev.block.id)
 
     def _update_ha_state(self):
         self.schedule_update_ha_state(True)

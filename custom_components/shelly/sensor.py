@@ -11,11 +11,7 @@ from threading import Timer
 from homeassistant.util import slugify
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
-from homeassistant.const import (DEVICE_CLASS_HUMIDITY,
-                                 DEVICE_CLASS_BATTERY,
-                                 DEVICE_CLASS_ILLUMINANCE,
-                                 DEVICE_CLASS_TEMPERATURE,
-                                 TEMP_CELSIUS, POWER_WATT,
+from homeassistant.const import (DEVICE_CLASS_ENERGY,
                                  STATE_ON, STATE_OFF)
 from homeassistant.helpers.entity import Entity
 from homeassistant.core import callback
@@ -75,10 +71,17 @@ class ShellySensor(ShellyDevice):
         if self._sensor_type in SENSOR_TYPES_CFG:
             self._sensor_cfg = SENSOR_TYPES_CFG[self._sensor_type]
         #settings = instance._get_setting(sensor_type, dev.id, dev.block.id)
-        self._sensor_settings = self._settings.get(sensor_type, {})
+        #self.config_updated()
+        self._sensor_settings = self._settings.get(self._sensor_type, {})
         self._unit = self._sensor_settings.get(CONF_UNIT)
         self._master_unit = master_unit
         self.update()
+
+    #def config_updated(self):
+    #    ShellyDevice.config_updated(self)
+    #    self._settings = self.instance.get_settings(self._dev.id, self._dev.block.id)
+    #    self._sensor_settings = self._settings.get(self._sensor_type, {})
+    #    self._unit = self._sensor_settings.get(CONF_UNIT)
 
     @property
     def state(self):
@@ -166,6 +169,20 @@ class ShellyInfoSensor(ShellyBlock):
     def device_class(self):
         """Return the device class."""
         return self._sensor_cfg[3]
+
+    @property
+    def state_class(self):
+        device_class = self.device_class
+        if device_class == DEVICE_CLASS_ENERGY:
+            return "total_increasing"
+        if device_class == DEVICE_CLASS_TEMPERATURE or \
+           device_class == DEVICE_CLASS_HUMIDITY:
+            return "measurement"
+        return None
+
+    @property
+    def capability_attributes(self):
+        return {"state_class": self.state_class}
 
 class ShellyVersion(Entity):
     """Representation of a Shelly version sensor."""
