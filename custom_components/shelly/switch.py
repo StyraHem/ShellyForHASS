@@ -107,10 +107,14 @@ class ShellyFirmwareUpdate(ShellyBlock, SwitchEntity):
         return False
 
     @property
+    def icon(self):
+        return "mdi:download"
+
+    @property
     def name(self):
         if self._beta:
-            return "Upgrade BETA firmware " + ShellyBlock.name.fget(self)
-        return "Upgrade firmware " + ShellyBlock.name.fget(self)
+            return ShellyBlock.name.fget(self) + " - Download beta firmware"
+        return ShellyBlock.name.fget(self) + " - Download new firmware"
 
     @property
     def device_state_attributes(self):

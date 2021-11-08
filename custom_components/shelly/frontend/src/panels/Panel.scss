@@ -1,0 +1,73 @@
+// Required
+@import "~bootstrap/scss/functions";
+
+// Default variable overrides
+//$body-bg: #000;
+//$body-color: #111;
+
+// Required
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/root";
+
+// Optional Bootstrap components here
+@import "~bootstrap/scss/reboot";
+//@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/navbar";
+@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/card";
+@import "~bootstrap/scss/dropdown";
+// etc
+
+.Panel {
+    font-size: var(--paper-font-body1_-_font-size);    
+    .navbar {
+        height: var(--header-height);        
+        padding-left: 30px !important;
+        background-color: var(--app-header-background-color);//$main-black-color;
+    }
+    .Container {
+        padding: 1rem;
+
+        .card {
+            width: 15rem;
+            display: inline-block;
+            padding: 0.8rem;
+            margin: 0.1rem;
+            position: relative;
+            .name {                
+            }
+        }
+
+        .configpanel {
+            .value {
+                .bool {
+                    position: absolute;
+                    top: 1rem;
+                    right: 1rem;
+                }
+            }
+        }
+        .settingpanel {
+            .name {
+                padding-bottom: 0.7rem;
+                font-weight: 500;
+            }
+            .label {
+                width: 5rem;
+                display: inline-block;
+            }
+            input[type="text"], input[type="number"] {
+                width: 8rem;
+                margin-top: 0.3rem;
+            }
+            .attrib {
+                display: inline-block;
+            }
+            .sensor {                
+                float: right;
+            }
+
+        }
+    }
+}

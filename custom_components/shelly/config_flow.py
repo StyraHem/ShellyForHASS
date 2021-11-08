@@ -9,7 +9,7 @@ from homeassistant.core import callback
 from homeassistant.const import (
     CONF_PASSWORD, CONF_SCAN_INTERVAL, CONF_USERNAME
 )
-from .const import (DOMAIN,
+from .const import (CONF_LOCAL_PY_SHELLY, DOMAIN,
                     ALL_ATTRIBUTES, CONF_ATTRIBUTES,
                     ALL_SENSORS, CONF_SENSORS,
                     CONF_MDNS, CONF_VERSION, CONF_UPGRADE_SWITCH,
@@ -75,7 +75,9 @@ class ShellyOptionsFlowHandler(config_entries.OptionsFlow):
         """Initialize Shelly options flow."""
         self.config_entry = config_entry
         self._options = {}
-        self._step_cnt = 0
+
+        if config_entry.options.get(CONF_LOCAL_PY_SHELLY):
+            self._options[CONF_LOCAL_PY_SHELLY] = True
 
     async def async_step_init(self, user_input=None):
         """Manage the options."""
@@ -89,7 +91,6 @@ class ShellyOptionsFlowHandler(config_entries.OptionsFlow):
             and not self.instance.config_entry.options:
             return await self.async_step_yaml()
 
-        self._step_cnt = 0
         return await self.async_step_config_1()
 
     def v(self, id):
@@ -172,16 +173,13 @@ class ShellyOptionsFlowHandler(config_entries.OptionsFlow):
 
         if not user_input:
             attribs = {}
-            pos = self._step_cnt * 10
-            for attrib in list(ALL_ATTRIBUTES)[pos:pos+10]:
+            for attrib in list(ALL_ATTRIBUTES):
                 default = attrib in self.instance.conf[CONF_ATTRIBUTES]
                 attribs[vol.Optional(attrib, default=default)] = bool
 
-            steps = "(" + str(self._step_cnt+1) +"/2)"
             return self.async_show_form(
                 step_id="attributes",
-                data_schema=vol.Schema(attribs),
-                description_placeholders={"steps": steps}
+                data_schema=vol.Schema(attribs)
             )
 
         attribs = self._options.get("attributes", [])
@@ -191,27 +189,19 @@ class ShellyOptionsFlowHandler(config_entries.OptionsFlow):
 
         self._options["attributes"] = attribs
 
-        if self._step_cnt < 1:
-            self._step_cnt += 1
-            return await self.async_step_attributes()
-        else:
-            self._step_cnt = 0
-            return await self.async_step_sensors()
+        return await self.async_step_sensors()
 
     async def async_step_sensors(self, user_input=None):
 
         if not user_input:
             sensors = {}
-            pos = self._step_cnt * 10
-            for sensor in list(ALL_SENSORS)[pos:pos+10]:
+            for sensor in list(ALL_SENSORS):
                 default = sensor in self.instance.conf[CONF_SENSORS]
                 sensors[vol.Optional(sensor, default=default)] = bool
 
-            steps = "(" + str(self._step_cnt+1) +"/2)"
             return self.async_show_form(
                 step_id="sensors",
-                data_schema=vol.Schema(sensors),
-                description_placeholders={"steps": steps})
+                data_schema=vol.Schema(sensors))
 
         sensors = self._options.get("sensors", [])
         for sensor, value in user_input.items():
@@ -220,17 +210,11 @@ class ShellyOptionsFlowHandler(config_entries.OptionsFlow):
 
         self._options["sensors"] = sensors
 
-        if self._step_cnt < 1:
-            self._step_cnt += 1
-            return await self.async_step_sensors()
-        else:
-            return await self.async_step_final()
+        return await self.async_step_final()
 
     async def async_step_final(self):
-
-        self.instance.update_options(self._options)
-
         return self.async_create_entry(
             title="Shelly smart home",
             data=self._options
         )
+

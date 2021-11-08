@@ -1,0 +1,19 @@
+{
+  "files": ["src/index.ts"],
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "esnext",
+    "lib": ["es2017", "dom", "dom.iterable"],
+    "sourceMap": true, 
+    "outDir": "./dist",
+    "strict": true,
+    "noImplicitAny": false,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "sourceRoot": "src",
+    "experimentalDecorators": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+    "jsx": "react"
+  }
+}

@@ -68,7 +68,7 @@
                     "power_factor": "Factor de potencia"
                 },
                 "title": "Shelly - Configuraciones [2/3] - Atributos",
-                "description": "Seleccione los atributos para mostrar para cada entrada de Shelly. Tenga cuidado, cada atributo activa y almacena información adicional en la base de datos. {steps}"
+                "description": "Seleccione los atributos para mostrar para cada entrada de Shelly. Tenga cuidado, cada atributo activa y almacena información adicional en la base de datos."
             },
             "sensors": {
                 "data": {
@@ -90,7 +90,7 @@
                     "power_factor": "Factor de potencia"
                 },
                 "title": "Shelly - Configuraciones [3/3] - Sensores",
-                "description": "Seleccione los sensores para crear para los dispositivos Shelly. {steps}"
+                "description": "Seleccione los sensores para crear para los dispositivos Shelly."
             },
             "yaml": {
                 "data": {

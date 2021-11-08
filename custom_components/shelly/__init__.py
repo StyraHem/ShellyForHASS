@@ -11,10 +11,13 @@ import re
 import shutil
 import os
 import logging
-import time
 import asyncio
-import pytz
 import voluptuous as vol
+
+#import debugpy
+#debugpy.listen(5678)
+#print("WAITING FOR DEBUGGER!")
+#debugpy.wait_for_client()
 
 from homeassistant.const import (
     CONF_DEVICES, CONF_DISCOVERY, CONF_ID, CONF_PASSWORD,
@@ -41,11 +44,11 @@ from homeassistant.util import get_local_ip
 
 from .const import *
 from .configuration_schema import CONFIG_SCHEMA, CONFIG_SCHEMA_ROOT
-#from .frontend import setup_frontend
+from .frontend import setup_frontend
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.2.3-b1"
+__version__ = "0.3.0-b1"
 VERSION = __version__
 
 async def async_setup(hass, config):
@@ -107,35 +110,31 @@ async def async_unload_entry(hass, config_entry):
 
 class ShellyInstance():
     """Config instance of Shelly"""
-
     def __init__(self, hass, config_entry, conf):
         self.hass = hass
+        self.cancel_update_listener = config_entry.add_update_listener(self.update_listener)
         self.config_entry = config_entry
         self.entry_id = self.config_entry.entry_id
         self.platforms = {}
+        self.entities = []
         self.pys = None
         self.conf = conf
+        self.version_added = False
         self.discover = self.conf.get(CONF_DISCOVERY)
         self.device_sensors = []  #Keep track dynamic device sensors is added
         self.block_sensors = []  #Keep track dynamic block sensors is added
-        self.conf_attributes = set(self.conf.get(CONF_ATTRIBUTES))
-        if ATTRIBUTE_ALL in self.conf_attributes:
-            self.conf_attributes |= ALL_ATTRIBUTES
-        if ATTRIBUTE_DEFAULT in self.conf_attributes:
-            self.conf_attributes |= DEFAULT_ATTRIBUTES
-        if ATTRIBUTE_CONSUMPTION in self.conf_attributes:
-            self.conf_attributes.add(ATTRIBUTE_CURRENT_CONSUMPTION)
-            self.conf_attributes.add(ATTRIBUTE_TOTAL_CONSUMPTION)
-            self.conf_attributes.add(ATTRIBUTE_TOTAL_RETURNED)
-        self.conf[CONF_ATTRIBUTES] = list(self.conf_attributes)
-        if ATTRIBUTE_SWITCH in self.conf_attributes:
-            self.conf_attributes.add(ATTRIBUTE_SWITCH + "_1")
-            self.conf_attributes.add(ATTRIBUTE_SWITCH + "_2")
+        self.update_config_attributes()
         sensors = self.conf.get(CONF_SENSORS, {})
+        if SENSOR_MQTT in sensors:
+            self.conf[CONF_SENSORS].append(SENSOR_MQTT_CONNECTED)
+            self.conf[CONF_SENSORS].remove(SENSOR_MQTT)
+        if SENSOR_CLOUD in sensors:
+            self.conf[CONF_SENSORS].append(SENSOR_CLOUD_STATUS)
+            self.conf[CONF_SENSORS].remove(SENSOR_CLOUD)
         if SENSOR_DEFAULT in sensors:
             self.conf[CONF_SENSORS] = DEFAULT_SENSORS
         if SENSOR_ALL in sensors:
-            self.conf[CONF_SENSORS] = [*ALL_SENSORS.keys()]
+            self.conf[CONF_SENSORS] = [*ALL_SENSORS.keys()]        
         self._debug_msg = conf.get(CONF_DEBUG_ENABLE_INFO)
 
         hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, self.stop)
@@ -143,20 +142,128 @@ class ShellyInstance():
         hass.loop.create_task(
             self.start_up()
         )
-
         self.shelly_config = {}
-        #hass.loop.create_task(
-        #    setup_frontend(self)
-        #)
+        hass.loop.create_task(
+            setup_frontend(self)
+        )
+
+    async def update_listener(self, hass, config_entry):
+        """Handle options update."""
+        #print("###### CONFIG Updated ####################")
+        #print(self.config_entry.options)
+        self.hass.bus.fire('s4h/config_updated', {})
+        
+        config_list = GLOBAL_CONFIG + DEBUG_CONFIG
+        for key in config_list:
+            if key in self.config_entry.options:
+                self.conf[key] = self.config_entry.options[key]
+            elif key in self.conf:
+                del self.conf[key]
+        ##self.conf.update(self.config_entry.options)
+        self.update_config_attributes()
+        
+        await self.update_config()
+
+        entity_reg = \
+            await self.hass.helpers.entity_registry.async_get_registry()
+        for entity in self.entities:
+                if hasattr(entity, 'config_updated'):
+                    entity.config_updated()
+
+    def set_config_attribute(self, id, value):
+        self.update_config_list(CONF_ATTRIBUTES, id, value)
+
+    def set_config_sensor(self, id, value):
+        self.update_config_list(CONF_SENSORS, id, value)
+
+    def set_setting(self, id, param, value):
+        options = self.config_entry.options.copy()  
+        settings = options[CONF_SETTINGS] = \
+            options[CONF_SETTINGS].copy() \
+                if CONF_SETTINGS in options else {}
+        settings[id] = settings[id].copy() if id in settings else {}
+        if value!=None:
+            settings[id][param] = value
+        else:
+            del settings[id][param]
+            if not settings[id]:
+                del settings[id]
+                if not settings:
+                    del options[CONF_SETTINGS]
+        self.hass.config_entries.async_update_entry(
+            self.config_entry, options=options)
+
+    def set_config(self, id, value):
+        options = self.config_entry.options.copy()
+        if value!="":
+            options[id]=value
+        elif id in options:
+            del options[id]
+        self.hass.config_entries.async_update_entry(
+            self.config_entry, options=options)
+
+    def update_config_list(self, type, id, value):
+        options = self.config_entry.options.copy()
+        list = options[type] = options[type].copy()
+        if value:
+            if not id in list:
+                list.append(id)
+        else:
+            if id in list:
+                list.remove(id)
+        self.hass.config_entries.async_update_entry(
+            self.config_entry, options=options)
+
+    async def update_config(self):
+        conf = self.conf
+        pys = self.pys
+
+        #if self.local_py_shelly != conf.get(CONF_LOCAL_PY_SHELLY):
+        #    self.config_entry.async_unload(self.hass)??
+
+        pys.igmp_fix_enabled = conf.get(CONF_IGMPFIX)
+        pys.only_device_id = conf.get(CONF_ONLY_DEVICE_ID,"").upper()
+        pys.update_status_interval = timedelta(seconds=conf.get(CONF_SCAN_INTERVAL, 0))
+        self._debug_msg = conf.get(CONF_DEBUG_ENABLE_INFO)
+        if conf.get(CONF_VERSION) and not self.version_added:
+            self.version_added = True
+            attr = {'version': VERSION, 'pyShellyVersion': pys.version(),
+                    'extra' : {'ip-addr': pys.host_ip}}
+            self.add_device("sensor", attr)
+        if not conf.get(CONF_VERSION) and self.version_added:
+            self.version_added = False
+            entity_reg = \
+                await self.hass.helpers.entity_registry.async_get_registry()
+            entity_id = "sensor." + slugify(conf.get(CONF_OBJECT_ID_PREFIX)) + "_version"
+            entity_reg.async_remove(entity_id)
+
+
+    def update_config_attributes(self):
+        self.conf_attributes = set(self.conf.get(CONF_ATTRIBUTES))
+        if ATTRIBUTE_ALL in self.conf_attributes:
+            self.conf_attributes |= ALL_ATTRIBUTES
+            self.conf_attributes.remove(ATTRIBUTE_ALL)
+        if ATTRIBUTE_DEFAULT in self.conf_attributes:
+            self.conf_attributes |= DEFAULT_ATTRIBUTES
+            self.conf_attributes.remove(ATTRIBUTE_DEFAULT)
+        if ATTRIBUTE_CONSUMPTION in self.conf_attributes:
+            self.conf_attributes.add(ATTRIBUTE_CURRENT_CONSUMPTION)
+            self.conf_attributes.add(ATTRIBUTE_TOTAL_CONSUMPTION)
+            self.conf_attributes.add(ATTRIBUTE_TOTAL_RETURNED)
+            self.conf_attributes.remove(ATTRIBUTE_CONSUMPTION)
+        self.conf[CONF_ATTRIBUTES] = list(self.conf_attributes)
+        if ATTRIBUTE_SWITCH in self.conf_attributes:
+            self.conf_attributes.add(ATTRIBUTE_SWITCH + "_1")
+            self.conf_attributes.add(ATTRIBUTE_SWITCH + "_2")
 
     async def start_up(self):
-
         self.shelly_config = await self.async_load_file("config") or {}
         last_ver = await self.async_get_config('version', '0.0.0')
         await self.async_set_config('version', VERSION)
 
         conf = self.conf
-        if conf.get(CONF_LOCAL_PY_SHELLY):
+        self.local_py_shelly = conf.get(CONF_LOCAL_PY_SHELLY)
+        if self.local_py_shelly:
             _LOGGER.info("Loading local pyShelly")
             #pylint: disable=no-name-in-module
             from .pyShelly import pyShelly
@@ -182,8 +289,8 @@ class ShellyInstance():
         tmpl_name = conf.get(CONF_TMPL_NAME)
         if tmpl_name:
             pys.tmpl_name = tmpl_name
-        if additional_info:
-            pys.update_status_interval = timedelta(seconds=update_interval)
+        #if additional_info:
+        pys.update_status_interval = timedelta(seconds=update_interval)
         pys.only_device_id = conf.get(CONF_ONLY_DEVICE_ID)
         if pys.only_device_id:
             pys.only_device_id = pys.only_device_id.upper()
@@ -211,6 +318,7 @@ class ShellyInstance():
             pys.add_device_by_ip(ip_addr, 'IP-addr')
 
         if conf.get(CONF_VERSION):
+            self.version_added = True
             attr = {'version': VERSION, 'pyShellyVersion': pys.version(),
                     'extra' : {'ip-addr': pys.host_ip}}
             self.add_device("sensor", attr)
@@ -282,11 +390,18 @@ class ShellyInstance():
     async def stop(self, _=None):
         """Stop Shelly."""
         _LOGGER.info("Shutting down Shelly")
+        entity_reg = \
+            await self.hass.helpers.entity_registry.async_get_registry()
+        #entities_to_remove = []
+        #for entity in entity_reg.entities.values():
+        #    if entity.platform == "shelly":
+        #        entities_to_remove.append(entity.entity_id)
+        #for entity_id in entities_to_remove:
+        #    entity_reg.async_remove(entity_id)
+        if self.cancel_update_listener:
+            self.cancel_update_listener()
         if self.pys:
             self.pys.close()
-
-    def update_options(self, options):
-        pass
 
     def format_value(self, settings, value, add_unit=False):
         if settings is not None \
@@ -304,15 +419,24 @@ class ShellyInstance():
                 value = str(value) + ' ' + settings[CONF_UNIT]
         return value
 
+    def _update_settings(self, settings, update):
+        #Combine settings on lower level
+        for key, value in update.items():
+            if key in settings:
+                settings[key]=settings[key].copy()
+                settings[key].update(value)
+            else:
+                settings[key]=value
+
     def get_settings(self, *ids):
         settings = DEFAULT_SETTINGS.copy()
         conf_settings = self.conf.get(CONF_SETTINGS)
-        settings.update(conf_settings)
+        self._update_settings(settings, conf_settings)
         for device_id in ids:
             device_cfg = self._find_device_config(device_id)
             if device_cfg:
                 conf_settings = device_cfg.get(CONF_SETTINGS)
-                settings.update(conf_settings)
+                self._update_settings(settings, conf_settings)
         return settings
 
     def _get_specific_config_root(self, key, *ids):

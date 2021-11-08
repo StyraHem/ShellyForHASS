@@ -16,6 +16,7 @@ class ShellyBlock(RestoreEntity):
     """Base class for Shelly entities"""
 
     def __init__(self, block, instance, prefix=""):
+        instance.entities.append(self)
         conf = instance.conf
         id_prefix = conf.get(CONF_OBJECT_ID_PREFIX)
         self._unique_id = slugify(id_prefix + "_" + block.type + "_" +
@@ -37,7 +38,11 @@ class ShellyBlock(RestoreEntity):
         self._is_removed = False
         self.async_on_remove(self._remove_handler)
         self._master_unit = False
-        self._settings = instance.get_settings(block.id)
+        #self._settings = instance.get_settings(block.id)
+        self.config_updated()
+
+    def config_updated(self):
+        self._settings = self.instance.get_settings(self._block.id)
 
     def _remove_handler(self):
         self._is_removed = True
