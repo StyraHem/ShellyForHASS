@@ -8,10 +8,13 @@ from homeassistant.const import (
     DEVICE_CLASS_BATTERY,
     DEVICE_CLASS_ILLUMINANCE,
     DEVICE_CLASS_TEMPERATURE,
-    DEVICE_CLASS_POWER,
+    DEVICE_CLASS_ENERGY,
     TEMP_CELSIUS,
     POWER_WATT,
-    ENERGY_WATT_HOUR
+    ENERGY_WATT_HOUR,
+    CONF_NAME,
+    CONF_SCAN_INTERVAL,
+    CONF_DISCOVERY
 )
 
 DEVICE_CLASS_MOTION = 'motion'
@@ -59,6 +62,74 @@ CONF_DEBUG_ENABLE_INFO = 'debug_enable_info'
 CONF_WIFI_SENSOR = 'wifi_sensor' #deprecated
 CONF_UPTIME_SENSOR = 'uptime_sensor' #deprecated
 
+GLOBAL_CONFIG = [
+    CONF_ADDITIONAL_INFO,
+    CONF_IGMPFIX,
+    CONF_MDNS,
+    #CONF_OBJECT_ID_PREFIX
+    CONF_SHOW_ID_IN_NAME,
+    CONF_VERSION,
+    CONF_UPGRADE_SWITCH,
+    CONF_UPGRADE_BETA_SWITCH,
+    CONF_SCAN_INTERVAL,
+    CONF_UNAVALABLE_AFTER_SEC,
+    CONF_CLOUD_AUTH_KEY,
+    CONF_CLOUD_SERVER,
+    CONF_TMPL_NAME,
+    #CONF_DISCOVER_BY_IP,
+    CONF_DISCOVERY,
+    CONF_HOST_IP,
+    CONF_MQTT_PORT,
+    CONF_MQTT_SERVER_HOST,
+    CONF_MQTT_SERVER_PORT,
+    CONF_MQTT_SERVER_USERNAME,
+    CONF_MQTT_SERVER_PASSWORD,
+]
+
+DEBUG_CONFIG = [
+    CONF_LOCAL_PY_SHELLY,
+    CONF_ONLY_DEVICE_ID,
+    CONF_DEBUG_ENABLE_INFO,
+]
+
+DEVICE_CONFIG = [
+    CONF_ENTITY_ID,
+    CONF_NAME,
+    CONF_LIGHT_SWITCH,
+    CONF_UPGRADE_SWITCH,
+    CONF_UPGRADE_BETA_SWITCH,
+    CONF_UNAVALABLE_AFTER_SEC,
+]
+
+ALL_CONFIG = {
+    CONF_ENTITY_ID : { "type" : "str" },
+    CONF_LIGHT_SWITCH : { "type" : "bool" },
+    CONF_ADDITIONAL_INFO : { "type" : "bool" },
+    CONF_IGMPFIX : { "type" : "bool" },
+    CONF_MDNS : { "type" : "bool" },    
+    CONF_OBJECT_ID_PREFIX : { "type" : "str" },    
+    CONF_SHOW_ID_IN_NAME : { "type" : "bool" },
+    CONF_VERSION : { "type" : "bool" },
+    CONF_UPGRADE_SWITCH : { "type" : "bool" },
+    CONF_UPGRADE_BETA_SWITCH : { "type" : "bool" },
+    CONF_UNAVALABLE_AFTER_SEC : { "type" : "int" },
+    CONF_CLOUD_AUTH_KEY : { "type" : "txt" },
+    CONF_CLOUD_SERVER : { "type" : "str" },
+    CONF_TMPL_NAME : { "type" : "str" },
+    #CONF_DISCOVER_BY_IP : { "type" : "list" },
+    CONF_DISCOVERY : { "type" : "bool" },
+    CONF_HOST_IP : { "type" : "str" },
+    CONF_MQTT_PORT : { "type" : "int", "group" : "mqtt" },
+    CONF_MQTT_SERVER_HOST : { "type" : "str", "group" : "mqtt-server" },
+    CONF_MQTT_SERVER_PORT : { "type" : "int", "group" : "mqtt-server" },
+    CONF_MQTT_SERVER_USERNAME : { "type" : "str", "group" : "mqtt-server" },
+    CONF_MQTT_SERVER_PASSWORD : {"type" : "str", "group" : "mqtt-server" },
+    CONF_LOCAL_PY_SHELLY : { "type" : "bool", "group" : "debug" },
+    CONF_ONLY_DEVICE_ID : {"type" : "str", "group" : "debug" },
+    CONF_DEBUG_ENABLE_INFO : {"type" : "bool", "group" : "debug"},
+    CONF_SCAN_INTERVAL : { "type" : "int", "group" : "general" }
+}
+
 DEFAULT_IGMPFIX = False
 DEFAULT_DISCOVERY = True
 DEFAULT_OBJECT_ID_PREFIX = 'shelly'
@@ -66,25 +137,29 @@ DEFAULT_SCAN_INTERVAL = 60 #timedelta(seconds=60)
 DEFAULT_SHOW_ID_IN_NAME = False
 DEFAULT_MDNS = True
 
+DEFAULT_WH = {CONF_DECIMALS:2, CONF_DIV:1000, CONF_UNIT:'kWh'}
+DEFAULT_W = {CONF_UNIT:'W', CONF_DECIMALS:0, CONF_DIV:1}
+DEFAULT_TIME = {CONF_DIV:3600, CONF_UNIT:'h', CONF_DECIMALS:0}
+
 DEFAULT_SETTINGS = \
 {
     'default' : {},
-    'temperature' : {CONF_UNIT:'°C'},
-    'device_temp' : {CONF_UNIT:'°C'},
-    'illuminance' : {CONF_UNIT:'lx'},
+    'temperature' : {CONF_UNIT:'°C', CONF_DECIMALS:0},
     'humidity' : {CONF_UNIT:'%'},
-    'total_consumption' : {CONF_DECIMALS:2, CONF_DIV:1000, CONF_UNIT:'kWh'},
-    'total_returned' : {CONF_DECIMALS:2, CONF_DIV:1000, CONF_UNIT:'kWh'},
+    'device_temp' : {CONF_UNIT:'°C', CONF_DECIMALS:0},
+    'illuminance' : {CONF_UNIT:'lx'},
+    'total_consumption' : DEFAULT_WH,
+    'total_returned' : DEFAULT_WH,
     'current' : {CONF_UNIT:'A', CONF_DECIMALS:1},
-    'current_consumption' : {CONF_UNIT:'W'},
+    'current_consumption' : DEFAULT_W,
     'voltage' : {CONF_UNIT:'V', CONF_DECIMALS:0},
     'power_factor' : {CONF_DECIMALS:1},
-    'uptime': {CONF_DIV:3600, CONF_UNIT:'h'},
+    'uptime': DEFAULT_TIME,
     'rssi': {CONF_UNIT:'dB'},
     'tilt': {CONF_UNIT:'°'},
     'battery': {CONF_UNIT:'%'},
     'ppm': {CONF_UNIT:'PPM'},
-    'total_work_time': {CONF_DIV:3600, CONF_UNIT:'h'},
+    'total_work_time': DEFAULT_TIME,
 }
 
 SHELLY_DEVICE_ID = 'device_id'
@@ -125,6 +200,7 @@ ATTRIBUTE_CLICK_CNT = 'click_count'
 ATTRIBUTE_TILT = 'tilt'
 ATTRIBUTE_VIBRATION = 'vibration'
 ATTRIBUTE_TEMPERATURE = 'temperature'
+ATTRIBUTE_HUMIDITY = 'humidity'
 ATTRIBUTE_ILLUMINANCE = 'illuminance'
 ATTRIBUTE_PPM = 'ppm'
 ATTRIBUTE_SENSOR = 'sensor'
@@ -160,6 +236,7 @@ ALL_ATTRIBUTES = {
     ATTRIBUTE_TILT,
     ATTRIBUTE_VIBRATION,
     ATTRIBUTE_TEMPERATURE,
+    ATTRIBUTE_HUMIDITY,
     ATTRIBUTE_ILLUMINANCE,
     ATTRIBUTE_PPM,
     ATTRIBUTE_SENSOR,
@@ -216,13 +293,16 @@ SENSOR_OVER_POWER = 'over_power'
 SENSOR_DEV_TEMP = 'device_temp'
 SENSOR_OVER_TEMP = 'over_temp'
 SENSOR_CLOUD = 'cloud'
+SENSOR_CLOUD_STATUS = 'cloud_status'
 SENSOR_MQTT = 'mqtt'
+SENSOR_MQTT_CONNECTED = 'mqtt_connected'
 SENSOR_BATTERY = 'battery'
 SENSOR_SWITCH = 'switch'
 SENSOR_CLICK_TYPE = 'click_type'
 SENSOR_TILT = 'tilt'
 SENSOR_VIBRATION = 'vibration'
 SENSOR_TEMPERATURE = 'temperature'
+SENSOR_HUMIDITY = 'humidity'
 SENSOR_ILLUMINANCE = 'illuminance'
 SENSOR_PPM = 'ppm'
 SENSOR_TOTAL_WORK_TIME = 'total_work_time'
@@ -237,8 +317,8 @@ ALL_SENSORS = {
     SENSOR_TOTAL_RETURNED: {'attr':'total_returned'},
     SENSOR_DEV_TEMP: {'attr':'device_temp'},
     SENSOR_OVER_TEMP: {'attr':'over_temp'},
-    SENSOR_CLOUD:  {'attr':'cloud_status'},
-    SENSOR_MQTT:  {'attr':'mqtt_connected'},
+    SENSOR_CLOUD_STATUS:  {'attr':'cloud_status'},
+    SENSOR_MQTT_CONNECTED:  {'attr':'mqtt_connected'},
     SENSOR_BATTERY : {'attr':'battery'},
     SENSOR_VOLTAGE : {'attr':'voltage'},
     SENSOR_POWER_FACTOR : {'attr':'power_factor'},
@@ -248,6 +328,7 @@ ALL_SENSORS = {
     SENSOR_TILT : {'attr':'tilt'},
     SENSOR_VIBRATION  : {'attr':'vibration'},
     SENSOR_TEMPERATURE : {'attr':'temperature'},
+    SENSOR_HUMIDITY : {'attr':'humidity'},
     SENSOR_ILLUMINANCE : {'attr':'illuminance'},
     SENSOR_PPM : {'attr':'ppm'},
     SENSOR_TOTAL_WORK_TIME : {'attr':'total_work_time'}
@@ -257,7 +338,9 @@ EXTRA_SENSORS = {
     SENSOR_ALL: {},
     SENSOR_DEFAULT: {},
     SENSOR_POWER: {},
-    SENSOR_CONSUMPTION: {}
+    SENSOR_CONSUMPTION: {},
+    SENSOR_MQTT: {},
+    SENSOR_CLOUD: {}
 }
 
 DEFAULT_SENSORS = [
@@ -332,10 +415,10 @@ SENSOR_TYPES_CFG = {
         ['Illuminance', 'lux', None, DEVICE_CLASS_ILLUMINANCE, None],
     SENSOR_TYPE_TOTAL_CONSUMPTION:
         ['Total consumption', ENERGY_WATT_HOUR,
-         'mdi:flash-circle', DEVICE_CLASS_POWER, None],
+         'mdi:flash-circle', DEVICE_CLASS_ENERGY, None],
     SENSOR_TYPE_TOTAL_RETURNED:
         ['Total returned', ENERGY_WATT_HOUR,
-         'mdi:flash-circle', DEVICE_CLASS_POWER, None],
+         'mdi:flash-circle', DEVICE_CLASS_ENERGY, None],
     SENSOR_TYPE_VOLTAGE:
         ['Voltage', 'V', 'mdi:alpha-v-circle-outline', None, None],
     SENSOR_TYPE_POWER_FACTOR:
@@ -357,3 +440,4 @@ SENSOR_TYPES_CFG = {
     SENSOR_TYPE_MOTION:
         ['Motion', '', 'mdi:motion-sensor', DEVICE_CLASS_MOTION, 'bool'],
 }
+
