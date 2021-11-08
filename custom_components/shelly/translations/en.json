@@ -27,9 +27,7 @@
                     "mqtt_port": "Tcpip port of integrated MQTT server"
                 },
                 "title": "Shelly - Settings [1/3]",
-                "description": "Configuration (1/2)",
-                "button": "1",
-                "save": "2"                
+                "description": "Configuration (1/2)"    
             },
             "config_2": {
                 "data": {
