@@ -10,12 +10,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
+    - run: cd custom_components/shelly/frontend
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: rollup -c
+    - run: cd ..
     - name: Archive Release
       uses: thedoctor0/zip-release@master
       with:
         type: 'zip'
-        filename: '../../shelly4hass.zip'
-        directory: custom_components/shelly
+        filename: 'shelly4hass.zip'
         exclusions: '*.git*'
     - name: Upload Release
       uses: ncipollo/release-action@v1
