@@ -18,6 +18,7 @@ jobs:
         cache-dependency-path: custom_components/shelly/frontend/package-lock.json
     - run: npm ci
       working-directory: custom_components/shelly/frontend
+    - run: npm install --global rollup
     - run: rollup -c
       working-directory: custom_components/shelly/frontend
     - name: Archive Release
