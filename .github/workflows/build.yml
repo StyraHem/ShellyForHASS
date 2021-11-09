@@ -10,4 +10,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
-    
+    - name: Archive Release
+      uses: thedoctor0/zip-release@master
+      with:
+        type: 'zip'
+        filename: 'shelly4hass.zip'
+        directory: custom_components/shelly
+        exclusions: '*.git*'
