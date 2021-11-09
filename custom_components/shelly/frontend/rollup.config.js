@@ -11,7 +11,7 @@ import styles from "rollup-plugin-styles";
 export default {
   input: "src/index.ts",
   output: {
-    file: "dist/bundle.js",
+    file: "../www/bundle.js",
     format: "iife",
     sourcemap: true,
   },
