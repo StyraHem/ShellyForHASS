@@ -1,0 +1,14 @@
+name: Python Package using Conda
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+    
