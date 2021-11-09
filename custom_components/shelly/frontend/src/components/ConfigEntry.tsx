@@ -2,7 +2,6 @@ import { Instance, Config } from "../data";
 import { SendWebSocketAction } from "../util";
 import React, { Component } from 'react';
 
-
 interface Props {
   instance: Instance,
   config: Config
