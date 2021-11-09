@@ -15,9 +15,9 @@ class ShellyFrontend(HomeAssistantView):
         #return web.Response(status=404)
         #if os.path.exists(servefile):
         path = os.path.dirname(__file__)
-        #return web.FileResponse(f"{path}/frontend/dist/main.js")
+        #return web.FileResponse(f"{path}/www/main.js")
         #print(requested_file)
-        return web.FileResponse(f"{path}/frontend/dist/" + requested_file)
+        return web.FileResponse(f"{path}/www/" + requested_file)
 
 async def setup_frontend(instance):
     """Configure the frontend elements."""
