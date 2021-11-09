@@ -51,6 +51,6 @@ export default {
       host: "localhost",
       port: 3000,
     }),*/
-    livereload({ watch: "dist" }),
+    //livereload({ watch: "dist" }),
   ]
 };
