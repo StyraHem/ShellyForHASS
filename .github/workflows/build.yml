@@ -15,7 +15,7 @@ jobs:
       with:
         type: 'zip'
         filename: 'shelly4hass.zip'
-        directory: custom_components/shelly
+        path: custom_components/shelly
         exclusions: '*.git*'
     - name: Upload Release
       uses: ncipollo/release-action@v1
