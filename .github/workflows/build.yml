@@ -14,13 +14,14 @@ jobs:
       uses: thedoctor0/zip-release@master
       with:
         type: 'zip'
-        filename: 'shelly4hass.zip'
-        path: custom_components/shelly
+        filename: '../../shelly4hass.zip'
+        directory: custom_components/shelly
         exclusions: '*.git*'
     - name: Upload Release
       uses: ncipollo/release-action@v1
       with:
         name: "Test123"
+        allowUpdates: true
         draft: true
         tag: "0.3.0.test.2"
         artifacts: "shelly4hass.zip"
