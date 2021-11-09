@@ -1,8 +1,6 @@
 import { Instance, Config } from "../data";
 import { SendWebSocketAction } from "../util";
 import React, { Component } from 'react';
-import { TextField, Checkbox } from "@mui/material";
-
 
 interface Props {
   instance: Instance,
