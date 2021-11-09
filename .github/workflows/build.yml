@@ -3,7 +3,7 @@ name: Build ShellyForHass
 on:
   push:
   pull_request:
-  
+
 jobs:
   build-linux:
     runs-on: ubuntu-latest
