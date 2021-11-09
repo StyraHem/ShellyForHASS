@@ -21,6 +21,7 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         name: "Test123"
+        draft: true
         tag: "0.3.0.test.2"
         artifacts: "shelly4hass.zip"
         token: ${{ secrets.GITHUB_TOKEN }}
