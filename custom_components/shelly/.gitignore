@@ -1,5 +1,4 @@
 **/node_modules
 frontend/dist
 frontend/public
-frontend/package-lock.json
 frontend/stats.html
