@@ -2,9 +2,8 @@ name: Build ShellyForHass
 
 on:
   push:
-    tags:
-      - "*"
-
+  pull_request:
+  
 jobs:
   build-linux:
     runs-on: ubuntu-latest
