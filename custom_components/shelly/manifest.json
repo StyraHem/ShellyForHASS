@@ -6,10 +6,7 @@
   "documentation": "https://github.com/StyraHem/ShellyForHASS/blob/master/README.md",
   "dependencies": ["zeroconf"],
   "codeowners": ["@hakana","@StyraHem"],
-<<<<<<< HEAD
   "requirements": ["pyShelly==0.2.24", "paho-mqtt==1.5.1", "websocket-client"]
-=======
-  "requirements": ["pyShelly==0.3.2", "paho-mqtt==1.5.1", "websocket-client", "http"],
->>>>>>> Add support for Config GUI, Shelly Plus 1/1P and Shelly Pro 4PM using MQTT or Http/Socket
+  "requirements": ["pyShelly==0.3.2", "paho-mqtt==1.5.1", "websocket-client"],
   "iot_class": "local_push"
 }

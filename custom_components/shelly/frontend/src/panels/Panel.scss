@@ -13,6 +13,7 @@
 // Optional Bootstrap components here
 @import "~bootstrap/scss/reboot";
 //@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/nav";
 @import "~bootstrap/scss/navbar";
 @import "~bootstrap/scss/grid";
 @import "~bootstrap/scss/card";
@@ -25,18 +26,20 @@
         height: var(--header-height);        
         padding-left: 30px !important;
         background-color: var(--app-header-background-color);//$main-black-color;
+
+        .ha-sidebar {
+            padding-right: 1rem;
+        }
     }
     .Container {
         padding: 1rem;
 
         .card {
-            width: 15rem;
+            width: 17rem;
             display: inline-block;
             padding: 0.8rem;
             margin: 0.1rem;
             position: relative;
-            .name {                
-            }
         }
 
         .configpanel {
