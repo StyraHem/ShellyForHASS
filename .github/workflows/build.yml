@@ -2,6 +2,9 @@ name: Build ShellyForHass
 
 on:
   push:
+    branches:
+      - master
+      - dev
     tags:
       - +.+.+.+.+
       - +.+.+
@@ -34,6 +37,5 @@ jobs:
       with:
         name: "Release ${{GITHUB_REF##*/}}"
         draft: true
-        tag: ${{GITHUB_REF##*/}}
         artifacts: "shelly4hass.zip"
         token: ${{ secrets.GITHUB_TOKEN }}
