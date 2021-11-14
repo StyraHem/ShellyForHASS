@@ -14,6 +14,7 @@ export default class ShellySettingPanel extends Component<Props> {
   render() {
     const { instance } = this.props
     return (<div className="settingpanel">
+      <h2>Settings</h2>
       <Masonry
         elementType={'div'}
       >
@@ -31,36 +32,5 @@ export default class ShellySettingPanel extends Component<Props> {
       </Masonry>
     </div>
     );
-    //     ${this.instance.settings.map(
-    //       setting => { return html`
-    //         <tr>
-    //           <td>${setting.name}</td>              
-    //           <td>
-    //             <shelly-setting-checkbox .param=${"sensor"} .instance=${this.instance} .setting=${setting}>
-    //             </shelly-setting-checkbox>               
-    //           </td>
-    //           <td>
-    //             <shelly-setting-checkbox .param=${"attrib"} .instance=${this.instance} .setting=${setting}>
-    //             </shelly-setting-checkbox>
-    //           </td>
-    //           <td>
-    //             <shelly-setting-textfield .param=${"decimals"} .instance=${this.instance} .setting=${setting} .type=${"number"}></shelly-setting-textfield>
-    //           </td>
-    //           <td>
-    //           <shelly-setting-textfield .param=${"div"} .instance=${this.instance} .setting=${setting}></shelly-setting-textfield>
-    //           </td>
-    //           <td>
-    //           <shelly-setting-textfield .param=${"unit"} .instance=${this.instance} .setting=${setting}></shelly-setting-textfield>
-    //           </td>
-    //           <td>
-    //             ${setting.changed ?
-    //               html `Changed` :
-    //               ""
-    //             }
-    //           </td>
-    //         </tr>
-    //       `})}
-    //   </table>
-    // `;
   }
 }
