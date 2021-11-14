@@ -35,7 +35,6 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         name: "Release ${GITHUB_REF##*/}"
-        allowUpdates: true
         draft: true
         artifacts: "shelly4hass.zip"
         token: ${{ secrets.GITHUB_TOKEN }}
