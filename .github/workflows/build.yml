@@ -37,6 +37,6 @@ jobs:
       with:
         name: "Release"
         draft: true
-        tag: ${{github.ref##*/}}
+        tag: ${{ github.REF }}
         artifacts: "shelly4hass.zip"
         token: ${{ secrets.GITHUB_TOKEN }}
