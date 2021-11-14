@@ -1,9 +1,8 @@
 name: Build ShellyForHass
-
 on:
   push:
-    tags:
-
+    branches:
+      - '**'
 jobs:
   build-linux:
     runs-on: ubuntu-latest
