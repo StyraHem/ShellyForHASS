@@ -6,7 +6,6 @@
   "documentation": "https://github.com/StyraHem/ShellyForHASS/blob/master/README.md",
   "dependencies": ["zeroconf"],
   "codeowners": ["@hakana","@StyraHem"],
-  "requirements": ["pyShelly==0.2.24", "paho-mqtt==1.5.1", "websocket-client"]
   "requirements": ["pyShelly==0.3.2", "paho-mqtt==1.5.1", "websocket-client"],
   "iot_class": "local_push"
 }
