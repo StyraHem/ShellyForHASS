@@ -2,12 +2,9 @@ name: Build ShellyForHass
 
 on:
   push:
-    branches:
-      - master
-      - dev
     tags:
-      - +.+.+.+.+
-      - +.+.+
+      - '+.+.+.+.+'
+      - '+.+.+'
 jobs:
   build-linux:
     runs-on: ubuntu-latest
@@ -35,7 +32,7 @@ jobs:
     - name: Upload Release
       uses: ncipollo/release-action@v1
       with:
-        name: "Release"
+        name: "Release ${{ github.REF }}"
         draft: true
         tag: ${{ github.REF }}
         artifacts: "shelly4hass.zip"
