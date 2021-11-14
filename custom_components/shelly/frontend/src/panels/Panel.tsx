@@ -47,18 +47,18 @@ class Panel extends Component<Props, State> {
   }
   render() {
     /* eslint-disable no-unused-vars */
-    const { hass, panel } = this.props;
-    /* eslint-enable no-unused-vars */
+    const { hass, panel, showMenu, narrow } = this.props;
+    /* eslint-enable no-unused-vars */    
     if (!this.state?.app)
       return <div>Loading...</div>;
     var instance = this.state.app?.instances[0];
     return (<Router basename="/shelly">
       <div className="Panel">
-        <ShellyNavbar></ShellyNavbar>
+        <ShellyNavbar narrow={narrow}></ShellyNavbar>
         <div className="Container">
           <Routes>
-            <Route index element={<div>Comming soon!</div>} />
-            <Route path="*" element={<Navigate to="/" />} />
+            {/* <Route index element={<div>Comming soon!</div>} /> */}
+            <Route path="*" element={<Navigate to="/config" />} />
             <Route path="/config" element={<ShellyConfigPanel app={this.state.app} instance={instance}></ShellyConfigPanel> } />
             <Route path="/settings" element={<ShellySettingPanel app={this.state.app} instance={instance}></ShellySettingPanel> } />
           </Routes>

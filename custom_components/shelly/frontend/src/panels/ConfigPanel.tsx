@@ -17,6 +17,7 @@ export default class ShellyConfigPanel extends Component<Props> {
     const { configs } = instance;
     return (<>
       <div className="configpanel">
+        <h2>Config</h2>
         <Masonry
           elementType={'div'}
         >
