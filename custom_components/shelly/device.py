@@ -164,7 +164,8 @@ class ShellyDevice(RestoreEntity):
             'name': self._dev.block.friendly_name(),
             'manufacturer': 'Allterco',
             'model': self._dev.type_name(),
-            'sw_version': self._dev.fw_version()
+            'sw_version': self._dev.fw_version(),
+            'configuration_url': f'http://{self._dev.ip_addr}'
         }
 
     @property
