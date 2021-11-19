@@ -103,7 +103,8 @@ class ShellyBlock(RestoreEntity):
             'name': self._block.friendly_name(),
             'manufacturer': 'Allterco',
             'model': self._block.type_name(),
-            'sw_version': self._block.fw_version()
+            'sw_version': self._block.fw_version(),
+            'configuration_url': f'http://{self._block.ip_addr}'
         }
 
     @property
