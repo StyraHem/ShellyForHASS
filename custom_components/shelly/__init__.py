@@ -14,10 +14,12 @@ import logging
 import asyncio
 import voluptuous as vol
 
-#import debugpy
-#debugpy.listen(5678)
-#print("WAITING FOR DEBUGGER!")
-#debugpy.wait_for_client()
+if os.getenv("SHELLY_DEBUGPY"):
+    import debugpy
+    debugpy.listen(5678)
+    if os.getenv("SHELLY_DEBUGPY")=="wait":
+        print("WAITING FOR DEBUGGER!")
+        debugpy.wait_for_client()
 
 from homeassistant.const import (
     CONF_DEVICES, CONF_DISCOVERY, CONF_ID, CONF_PASSWORD,
@@ -48,7 +50,7 @@ from .frontend import setup_frontend
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.3.0-b1"
+__version__ = "0.3.0-b2"
 VERSION = __version__
 
 async def async_setup(hass, config):
@@ -153,11 +155,15 @@ class ShellyInstance():
         #print(self.config_entry.options)
         self.hass.bus.fire('s4h/config_updated', {})
         
+        options = CONFIG_SCHEMA_ROOT(self.config_entry.options.copy())
+        self.conf.update(options)
+
         config_list = GLOBAL_CONFIG + DEBUG_CONFIG
         for key in config_list:
-            if key in self.config_entry.options:
-                self.conf[key] = self.config_entry.options[key]
-            elif key in self.conf:
+            if key in self.conf and \
+                not key in options:
+            #    self.conf[key] = self.config_entry.options[key]
+            #elif key in self.conf:
                 del self.conf[key]
         ##self.conf.update(self.config_entry.options)
         self.update_config_attributes()

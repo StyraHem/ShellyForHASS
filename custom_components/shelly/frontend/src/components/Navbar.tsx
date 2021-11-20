@@ -31,6 +31,7 @@ export default function ShellyNavbar({narrow}) {
             {/* <Nav.Link as={Link} to="/" eventKey="/">Devices</Nav.Link> */}
             <Nav.Link as={Link} to="/config" eventKey="/config">Config</Nav.Link>
             <Nav.Link as={Link} to="/settings" eventKey="/settings">Settings</Nav.Link>
+            {/* <Nav.Link as={Link} to="/readme" eventKey="/readme">Readme</Nav.Link> */}
           </Nav>
         </Navbar.Collapse>
       </Container>

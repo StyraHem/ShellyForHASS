@@ -1,6 +1,7 @@
 """WebSocket for Shelly."""
 # pylint: disable=unused-argument
 # from typing_extensions import Required
+import os
 import voluptuous as vol
 from homeassistant.components import websocket_api
 import homeassistant.helpers.config_validation as cv
@@ -19,6 +20,7 @@ async def setup_ws(instance):
 @websocket_api.async_response
 @websocket_api.websocket_command({vol.Required("type"): "s4h/get_config"})
 async def shelly_get_config(hass, connection, msg):
+    #print("GET CONFIG*****************")
     """Handle get config command."""
     content = {}
     content["type"] = 's4h/get_config' #Debug
@@ -70,7 +72,8 @@ async def shelly_get_config(hass, connection, msg):
         options["settings"] = settings
         configs = []
         config_list = GLOBAL_CONFIG
-        # + DEBUG_CONFIG
+        if (os.getenv("SHELLY_DEBUG")):
+            config_list = GLOBAL_CONFIG + DEBUG_CONFIG
         for key in config_list:
             value = ALL_CONFIG[key]
             if "type" in value:
