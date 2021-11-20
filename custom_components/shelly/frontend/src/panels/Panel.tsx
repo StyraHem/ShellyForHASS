@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { HomeAssistant } from "../hass/types"
 import ShellyConfigPanel from './ConfigPanel'
 import ShellySettingPanel from './SettingPanel'
+import ShellyDocPanel from './DocPanel'
 import ShellyNavbar from '../components/Navbar'
 import {App, getConfiguration} from '../data'
 import { Navigate } from 'react-router-dom';
@@ -61,6 +62,7 @@ class Panel extends Component<Props, State> {
             <Route path="*" element={<Navigate to="/config" />} />
             <Route path="/config" element={<ShellyConfigPanel app={this.state.app} instance={instance}></ShellyConfigPanel> } />
             <Route path="/settings" element={<ShellySettingPanel app={this.state.app} instance={instance}></ShellySettingPanel> } />
+            {/* <Route path="/readme" element={<ShellyDocPanel></ShellyDocPanel> } /> */}
           </Routes>
         </div>
       </div>

@@ -1,11 +1,11 @@
 {
   "domain": "shelly",
   "name": "Shelly smart home",
-  "version": "0.3.0-b1",
+  "version": "0.3.0-b2",
   "config_flow": true,
   "documentation": "https://github.com/StyraHem/ShellyForHASS/blob/master/README.md",
   "dependencies": ["zeroconf"],
   "codeowners": ["@hakana","@StyraHem"],
-  "requirements": ["pyShelly==0.3.2", "paho-mqtt==1.5.1", "websocket-client"],
+  "requirements": ["pyShelly==0.3.3", "paho-mqtt==1.5.1", "websocket-client"],
   "iot_class": "local_push"
 }
