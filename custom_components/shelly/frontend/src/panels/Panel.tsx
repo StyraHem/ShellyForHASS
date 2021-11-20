@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { HomeAssistant } from "../hass/types"
 import ShellyConfigPanel from './ConfigPanel'
 import ShellySettingPanel from './SettingPanel'
-import ShellyDocPanel from './DocPanel'
+//import ShellyDocPanel from './DocPanel'
 import ShellyNavbar from '../components/Navbar'
 import {App, getConfiguration} from '../data'
 import { Navigate } from 'react-router-dom';
