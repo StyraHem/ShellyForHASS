@@ -42,7 +42,7 @@ except:
     ATTR_RESTORED = None
 from homeassistant.helpers.entity import Entity
 from homeassistant.util import slugify, dt as dt_util
-from homeassistant.util import get_local_ip
+from homeassistant.components.network import async_get_source_ip
 
 from .const import *
 from .configuration_schema import CONFIG_SCHEMA, CONFIG_SCHEMA_ROOT
@@ -306,7 +306,7 @@ class ShellyInstance():
         host_ip = conf.get(CONF_HOST_IP)
         if host_ip:
             if host_ip == 'ha':
-                pys.host_ip = get_local_ip()
+                pys.host_ip = async_get_source_ip()
             else:
                 pys.host_ip = host_ip
         pys.mqtt_port = conf.get(CONF_MQTT_PORT, 0)
