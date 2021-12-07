@@ -1,7 +1,7 @@
 {
   "domain": "shelly",
   "name": "Shelly smart home",
-  "version": "0.3.0-b3",
+  "version": "0.3.1-b3",
   "config_flow": true,
   "documentation": "https://github.com/StyraHem/ShellyForHASS/blob/master/README.md",
   "dependencies": ["zeroconf"],
