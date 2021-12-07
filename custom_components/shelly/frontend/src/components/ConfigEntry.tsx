@@ -37,7 +37,9 @@ export default class ShellyConfigEntry extends Component<Props> {
       ></input>
 
     if (config.type=="txt")
-      return <textarea title={config.name}></textarea>
+      return <textarea title={config.name} rows={6}
+              value={config.value}
+              onChange={this.update_config}></textarea>
 
     if (config.type=="int")
       return <input type="number" title={config.name} 

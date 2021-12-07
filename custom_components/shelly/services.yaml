@@ -16,7 +16,7 @@ set_value:
             - "true"
             - "false"
     brightness:
-      name: Brighness
+      name: Brightness
       description: Set brightness of the device (1-255)
       required: false
       example: "55"
