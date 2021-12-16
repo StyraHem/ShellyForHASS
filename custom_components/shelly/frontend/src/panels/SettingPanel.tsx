@@ -15,13 +15,10 @@ export default class ShellySettingPanel extends Component<Props> {
     const { instance } = this.props
     return (<div className="settingpanel">
       <h2>Settings</h2>
-      <Masonry
-        elementType={'div'}
-      >
         {instance.settings.map( setting => (
           <Card key={setting.id}>
-            <div className="name">{setting.name}</div>
-            Show:&nbsp;
+            <Card.Title>{setting.title}</Card.Title>
+            <div className="label">show:</div>
             <Checkbox instance={instance} setting={setting} param="sensor"></Checkbox>
             <Checkbox instance={instance} setting={setting} param="attrib"></Checkbox>
             <TextField instance={instance} setting={setting} param="decimals" type="number"></TextField>
@@ -29,7 +26,6 @@ export default class ShellySettingPanel extends Component<Props> {
             <TextField instance={instance} setting={setting} param="unit" type="text"></TextField>
           </Card>
         ))}
-      </Masonry>
     </div>
     );
   }

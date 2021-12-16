@@ -209,7 +209,7 @@ class ShellyVersion(Entity):
         return self._version #+ "/" + self._py_shelly_version
 
     @property
-    def device_state_attributes(self):
+    def extra_state_attributes(self):
         """Return attributes for the sensor."""
         attribs = {'shelly': self._version,
                 'pyShelly': self._py_shelly_version,

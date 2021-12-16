@@ -28,21 +28,21 @@ export default class ShellyConfigEntry extends Component<Props> {
 
     if (config.type=="bool") {
       const val = config.value.toString().toLowerCase()=="true";
-      return <input title={config.name} type="checkbox" checked={val} onChange={this.update_config}></input>
+      return <input title={config.title} type="checkbox" checked={val} onChange={this.update_config}></input>
     }
     if (config.type=="str")
-      return <input type="text" title={config.name}
+      return <input type="text" title={config.title}
         value={config.value}
         onChange={this.update_config}
       ></input>
 
     if (config.type=="txt")
-      return <textarea title={config.name} rows={6}
+      return <textarea title={config.title} rows={6}
               value={config.value}
               onChange={this.update_config}></textarea>
 
     if (config.type=="int")
-      return <input type="number" title={config.name} 
+      return <input type="number" title={config.title} 
         value={config.value}
         onChange={this.update_config}
       ></input>

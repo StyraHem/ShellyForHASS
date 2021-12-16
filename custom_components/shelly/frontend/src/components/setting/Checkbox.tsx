@@ -30,11 +30,11 @@ export default class ShellySettingCheckbox extends Component<Props> {
     const { setting, param } = this.props;
     return <div className={param}>
         {setting.has[param] ? 
-        <>
-          {param}:&nbsp;
-          <input type="checkbox" title={setting.name}
+        <>          
+          <input type="checkbox" title={setting.title}
             checked={setting.value[param]} 
             onChange={this.update_setting} />
+          &nbsp;{param}
         </>
         : ""}
         

@@ -1,4 +1,138 @@
 {
+    "frontend": {
+        "settings" : {
+            "ip_address": "IP address",
+            "shelly_type": "Shelly type",
+            "shelly_id": "Shelly ID",
+            "ssid": "SSID",
+            "rssi": "RSSI",
+            "rssi_level": "RSSI Level",
+            "uptime": "Uptime",
+            "has_firmware_update": "Has firmware update",
+            "latest_fw_version": "Latest firmware version",
+            "firmware_version": "Current firmware version",
+            "mqtt_connected": "MQTT connected",
+            "cloud_status": "Cloud status",
+            "switch": "Switch state",
+            "total_consumption": "Total consumption",
+            "current_consumption": "Current consumption",
+            "over_power": "Over power",
+            "device_temp": "Device temperature",
+            "over_temp": "Over temperature",
+            "battery": "Battery level",
+            "voltage": "Voltage",
+            "total_returned": "Total returned",
+            "current": "Current",
+            "power_factor": "Power factor",
+            "click_type": "Click type",
+            "click_count" :"Click count",
+            "tilt" :"Tilt",
+            "vibration" : "Vibration",
+            "temperature" :"Temperature",
+            "humidity" : "Humidity",
+            "illuminance" : "Illuminance",
+            "ppm": "PPM",
+            "sensor": "Sensor state",
+            "total_work_time": "Total work time",
+            "latest_beta_fw_version": "Latest beta version",            
+            "mqtt": "MQTT connected",
+            "cloud": "Cloud status"
+        },
+        "config" : {
+            "groups" : {
+                "name": "Friendly Name",
+                "general" : "Gereral",
+                "mqtt-integrated": "Integrerad MQTT server",
+                "mqtt-broker": "MQTT broker connection",
+                "discovery": "Discovery",
+                "cloud": "Shelly Cloud"
+            },
+            "additional_information": {
+                "title": "Additional Information", 
+                "desc": "Poll Shelly devices for additional information, like device temperature, warnings, RSSI, uptime, firmware etc."
+            },
+            "mdns": {
+                "title": "mDns",
+                "desc": "Enable mDns for discovery, try this if your Shelly devices not discovered"
+            },
+            "version": {
+                "title": "Show version",
+                "desc": "Create a entry showing current version of ShellyForHass"
+            },
+            "upgrade_switch": {
+                "title": "Show upgrade switch",
+                "desc": "Create upgrade switch when Shelly has new firmware"
+            },
+            "upgrade_beta_switch": {
+                "title": "Show upgrad to beta switch",
+                "desc": "Enable upgrade to Beta version switch"
+            },
+            "igmp_fix": {
+                "title": "IGMP fix",
+                "desc": "Repeatly send IGMP ADD_MEMBER, try this if instant update stop some minutes"
+            },
+            "host_ip": {
+                "title": "Host IP to bind to",
+                "desc": "Ip address for Home Assistant, set to HA to get same IP as Home Assistant"
+            },
+            "mqtt_port": {
+                "title": "MQTT Port (Integrated MQTT server)",
+                "desc": "Tcpip port of integrated MQTT server"
+            },
+            "scan_interval": {
+                "title": "Poll interval (sec)",
+                "desc": "Interval to poll Shelly for additional information"
+            },
+            "cloud_auth_key": {
+                "title": "Shelly Cloud Athentication Key",
+                "desc": "Shelly Cloud Key, used to connect to Shelly Cloud"
+            },
+            "cloud_server": {
+                "title": "Shelly Cloud Server Name",
+                "desc": "Shelly Cloud Server Host, used to connect to Shelly Cloud"
+            },
+            "tmpl_name": {
+                "title": "Friendly Name Template",
+                "desc": "Template for friendly name received from Shelly Cloud"
+            },
+            "username": {
+                "title": "Global User Name",
+                "desc": "User name, used to login to all Shelly devices with restricted login"
+            },
+            "password": {
+                "title": "Global Password",
+                "desc": "Password, used to login to Shelly devices with restricted login"
+            },
+            "unavailable_after_sec": {
+                "title": "Unavailable time",
+                "desc": "Number of seconds without connection before set device to unavailable"
+            },            
+            "mqtt_server_host": {
+                "title": "MQTT broker Host or IP-address",
+                "desc": "Address to the MQTT broker to connect to"
+            },
+            "mqtt_server_port": {
+                "title": "MQTT broker port",
+                "desc": "Port to the MQTT broker "
+            },
+            "mqtt_server_username": {
+                "title": "MQTT broker user name",
+                "desc": "User name to use to login to the MQTT broker"
+            },
+            "mqtt_server_password": {
+                "title": "MQTT Password",
+                "desc": "Password to use to login to the MQTT broker"
+            },
+            "discovery": {
+                "title": "Discovery",
+                "desc": "Enable automatically discovery of devices"
+            },
+            "show_id_in_name": {
+                "title": "Show Id in name",
+                "desc": "Add device ID to the end of friendly name"
+            }
+        }
+    },
     "config": {
         "abort": {
             "single_instance_allowed": "Only a single configuration of Shelly is allowed."
