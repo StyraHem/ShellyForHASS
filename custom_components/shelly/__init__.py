@@ -59,7 +59,7 @@ from .frontend import setup_frontend
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.3.2"
+__version__ = "0.3.3"
 VERSION = __version__
 
 async def async_setup(hass, config):
@@ -132,7 +132,7 @@ class ShellyInstance():
         self.conf = conf
         self.version_added = False
         self.discover = self.conf.get(CONF_DISCOVERY)
-        self.device_sensors = []  #Keep track dynamic device sensors is added
+        #self.device_sensors = []  #Removed, cause collisions
         self.block_sensors = []  #Keep track dynamic block sensors is added
         self.update_config_attributes()
         sensors = self.conf.get(CONF_SENSORS, {})
@@ -219,7 +219,7 @@ class ShellyInstance():
 
     def update_config_list(self, type, id, value):
         options = self.config_entry.options.copy()
-        list = options[type] = options[type].copy()
+        list = options[type] = options.get(type, []).copy()
         if value:
             if not id in list:
                 list.append(id)

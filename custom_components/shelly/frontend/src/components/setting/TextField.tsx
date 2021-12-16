@@ -32,7 +32,7 @@ export default class SettingTextField extends Component<Props> {
     return <div className={param}>
         {setting.has[param] ? 
           <><div className="label">{param}: </div>
-          <input type={type} title={setting.name} className={type}
+          <input type={type} title={setting.title} className={type}
             value={setting.value[param]} 
             placeholder={"Default: " + setting.default[param]}
             onChange={this.update_setting} /></>

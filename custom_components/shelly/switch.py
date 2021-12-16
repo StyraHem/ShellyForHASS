@@ -117,8 +117,8 @@ class ShellyFirmwareUpdate(ShellyBlock, SwitchEntity):
         return ShellyBlock.name.fget(self) + " - Download new firmware"
 
     @property
-    def device_state_attributes(self):
-        attrs = super().device_state_attributes
+    def extra_state_attributes(self):
+        attrs = super().extra_state_attributes
         latest_key = ATTRIBUTE_LATEST_BETA_FW if self._beta else ATTRIBUTE_LATEST_FW
         attrs[latest_key] = \
             self._block.info_values[latest_key]

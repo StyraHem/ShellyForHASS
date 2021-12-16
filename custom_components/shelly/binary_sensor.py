@@ -130,8 +130,8 @@ class ShellySwitch(ShellyDevice, BinarySensorEntity):
             self._last_event = event
 
     @property
-    def device_state_attributes(self):
-        attrs = super().device_state_attributes
+    def extra_state_attributes(self):
+        attrs = super().extra_state_attributes
         if self._last_event:
             attrs[ATTRIBUTE_CLICK_TYPE] = self._last_event
             attrs[ATTRIBUTE_CLICK_CNT] = self._event_cnt

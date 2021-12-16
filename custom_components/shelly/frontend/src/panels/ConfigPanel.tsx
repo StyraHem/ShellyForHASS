@@ -15,19 +15,27 @@ export default class ShellyConfigPanel extends Component<Props> {
       return <div>Loading!!!!!!</div>;
     const { app, instance } = this.props;
     const { configs } = instance;
+    const groups = [...new Set(configs.map( config => config.group ))];
+
     return (<>
       <div className="configpanel">
         <h2>Config</h2>
         <Masonry
           elementType={'div'}
         >
-          {configs.map( config => (
-            <Card key={config.id}>
-              <div className="name">{config.name}</div>
-              <div className="value">
-                <ShellyConfigEntry instance={instance} config={config} />
-              </div>
-            </Card>
+        {groups.map( group => (
+          <div className="group">
+              <div className="title">{group}</div>
+              {configs.filter( config => config.group==group).map( config => (                
+                <Card key={config.id}>
+                  <Card.Title>{config.title}</Card.Title>
+                  <div className="desc">{config.desc}</div>
+                  <div className="value">
+                    <ShellyConfigEntry instance={instance} config={config} />
+                  </div>
+                </Card>
+              ))}
+            </div>
           ))}
         </Masonry>
       </div>
