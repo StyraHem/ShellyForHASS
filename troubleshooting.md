@@ -23,6 +23,15 @@ For your Shelly-devices that are in range of the AiMesh-router, you can disable 
 3. Add the MAC-addresses to your Shelly-devices to the block list (you'll find them in the dropdown-list) and click **Apply**.
 4. Turn your AiMesh-nodes back on. Your Shellies will now stay connected to the AiMesh-router and, if you're not suffering from other network-related problems, CoAP-discovery and CoAP-msg will now function as expected.
 
+##### An alternative possibility for CoAp and ASUS AiMesh)
+The ASUS AiMesh blocks multicast CoIot packages. For this reason it is also possible to simply disable multicasting for CoIot in the shellies settings. This brings the advantage that the packets are correctly forwarded to Home-Assistant / ShellyForHASS even over different nodes. So your Shellies can be connected to the different mesh nodes (This ensures a better WLAN connection of your Shellies because they connect to the best node by the still possible roaming) and you still have instant updates: 
+
+To disable multicasting:
+1. Open the web page for each individual Shelly device. 
+2. Then go to the "Internet & Security" section. 
+3. Then, in the "Advanced Developer Settings" section, you will find the option to enter an IP under "CoIot peer". There you enter the IP of your Home-Assistant server followed by the port: 5683. (e.g.: 192.168.1.29:5683). 
+4. Furthermore the checkbox "Enable CoIot" should be activated.
+
 ### mDns
 mDns is a multicast every Shelly sending to anounce there ip-address. The plugin using them to discover the devices.
 Protocol: multicast UDP 224.0.0.251 port 5353
