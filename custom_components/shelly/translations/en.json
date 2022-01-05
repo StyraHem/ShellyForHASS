@@ -42,7 +42,7 @@
             "groups" : {
                 "name": "Friendly Name",
                 "general" : "Gereral",
-                "mqtt-integrated": "Integrerad MQTT server",
+                "mqtt-integrated": "Integrated MQTT server",
                 "mqtt-broker": "MQTT broker connection",
                 "discovery": "Discovery",
                 "cloud": "Shelly Cloud"
