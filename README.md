@@ -129,7 +129,7 @@ shelly:
 ```
 
 In the Shelly config, you only have to enter the server address to point to the IP of HA and the port specified above in the config. This is just a simple MQTT server without authentication. So do not publish it on public networks etc.
-![](https://raw.githubusercontent.com/StyraHem/ShellyForHASS/master/images/mqtt.png)
+![](/images/mqtt.png)
 
 ### HA Integration
 
