@@ -102,32 +102,46 @@ DEVICE_CONFIG = [
 ]
 
 ALL_CONFIG = {
-    CONF_ENTITY_ID : { "type" : "str" },
-    CONF_LIGHT_SWITCH : { "type" : "bool" },
-    CONF_ADDITIONAL_INFO : { "type" : "bool" },
-    CONF_IGMPFIX : { "type" : "bool" },
-    CONF_MDNS : { "type" : "bool" },    
-    CONF_OBJECT_ID_PREFIX : { "type" : "str" },    
-    CONF_SHOW_ID_IN_NAME : { "type" : "bool" },
-    CONF_VERSION : { "type" : "bool" },
-    CONF_UPGRADE_SWITCH : { "type" : "bool" },
-    CONF_UPGRADE_BETA_SWITCH : { "type" : "bool" },
-    CONF_UNAVALABLE_AFTER_SEC : { "type" : "int" },
-    CONF_CLOUD_AUTH_KEY : { "type" : "txt" },
-    CONF_CLOUD_SERVER : { "type" : "str" },
-    CONF_TMPL_NAME : { "type" : "str" },
+    #CONF_ENTITY_ID : { "type" : "str" },
+    #CONF_LIGHT_SWITCH : { "type" : "bool" },
+    #CONF_OBJECT_ID_PREFIX : { "type" : "str" },    
     #CONF_DISCOVER_BY_IP : { "type" : "list" },
-    CONF_DISCOVERY : { "type" : "bool" },
-    CONF_HOST_IP : { "type" : "str" },
-    CONF_MQTT_PORT : { "type" : "int", "group" : "mqtt" },
-    CONF_MQTT_SERVER_HOST : { "type" : "str", "group" : "mqtt-server" },
-    CONF_MQTT_SERVER_PORT : { "type" : "int", "group" : "mqtt-server" },
-    CONF_MQTT_SERVER_USERNAME : { "type" : "str", "group" : "mqtt-server" },
-    CONF_MQTT_SERVER_PASSWORD : {"type" : "str", "group" : "mqtt-server" },
+
+    #General
+    CONF_VERSION : { "type" : "bool", "group": "general" },
+    CONF_UPGRADE_SWITCH : { "type" : "bool", "group": "general" },
+    CONF_UPGRADE_BETA_SWITCH : { "type" : "bool", "group": "general" },
+    CONF_ADDITIONAL_INFO : { "type" : "bool", "group": "general" },
+    CONF_UNAVALABLE_AFTER_SEC : { "type" : "int", "group": "general" },
+    CONF_SCAN_INTERVAL : { "type" : "int", "group" : "general" },
+
+    #Discovery
+    CONF_IGMPFIX : { "type" : "bool", "group": "discovery" },
+    CONF_MDNS : { "type" : "bool", "group": "discovery"  },    
+    CONF_DISCOVERY : { "type" : "bool", "group": "discovery"  },
+    CONF_HOST_IP : { "type" : "str", "group": "discovery"  },
+    
+    #Name
+    CONF_SHOW_ID_IN_NAME : { "type" : "bool", "group": "name" },
+    CONF_TMPL_NAME : { "type" : "str", "group": "name"  },
+
+    #Cloud
+    CONF_CLOUD_AUTH_KEY : { "type" : "txt", "group": "cloud"  },
+    CONF_CLOUD_SERVER : { "type" : "str", "group": "cloud"  },
+    
+    #MQTT integrated
+    CONF_MQTT_PORT : { "type" : "int", "group" : "mqtt-integrated" },
+    
+    #MQTT broker
+    CONF_MQTT_SERVER_HOST : { "type" : "str", "group" : "mqtt-broker" },
+    CONF_MQTT_SERVER_PORT : { "type" : "int", "group" : "mqtt-broker" },
+    CONF_MQTT_SERVER_USERNAME : { "type" : "str", "group" : "mqtt-broker" },
+    CONF_MQTT_SERVER_PASSWORD : {"type" : "str", "group" : "mqtt-broker" },
+    
+    #Debug
     CONF_LOCAL_PY_SHELLY : { "type" : "bool", "group" : "debug" },
     CONF_ONLY_DEVICE_ID : {"type" : "str", "group" : "debug" },
-    CONF_DEBUG_ENABLE_INFO : {"type" : "bool", "group" : "debug"},
-    CONF_SCAN_INTERVAL : { "type" : "int", "group" : "general" }
+    CONF_DEBUG_ENABLE_INFO : {"type" : "bool", "group" : "debug"}
 }
 
 DEFAULT_IGMPFIX = False

@@ -9,6 +9,7 @@ from .const import (
     CONF_UNIT, ALL_ATTRIBUTES, ALL_SENSORS, DEFAULT_SETTINGS, DOMAIN,
     CONF_DECIMALS, CONF_DIV, CONF_SETTINGS, ALL_CONFIG, GLOBAL_CONFIG, DEBUG_CONFIG, DEVICE_CONFIG)
 import json
+from homeassistant.helpers.translation import async_get_translations
 
 async def setup_ws(instance):
     """Set up WS API handlers."""
@@ -18,8 +19,14 @@ async def setup_ws(instance):
     websocket_api.async_register_command(hass, shelly_setting)
 
 @websocket_api.async_response
-@websocket_api.websocket_command({vol.Required("type"): "s4h/get_config"})
+@websocket_api.websocket_command({vol.Required("type"): "s4h/get_config", vol.Required("language"): cv.string})
 async def shelly_get_config(hass, connection, msg):
+    resources = await async_get_translations(
+        hass,
+        msg["language"],
+        'frontend',
+        'shelly'
+    )
     #print("GET CONFIG*****************")
     """Handle get config command."""
     content = {}
@@ -43,11 +50,12 @@ async def shelly_get_config(hass, connection, msg):
             unit = conf_setting.get(CONF_UNIT, "")
             div = conf_setting.get(CONF_DIV, "")
             decimals = conf_setting.get(CONF_DECIMALS, "")
-            image = cfgSensor[sensor][2] if sensor else ""
             default = DEFAULT_SETTINGS.get(id, {})
+            base = "component.shelly.frontend.settings." + id
+            title = resources.get(base, id)
+
             settings.append({'id': id,
-                             'name': id,
-                             'image': image,
+                             'title': title,                            
                              'has' : {
                                 'sensor' : id in ALL_SENSORS,
                                 'attrib' : id in ALL_ATTRIBUTES,
@@ -68,7 +76,7 @@ async def shelly_get_config(hass, connection, msg):
                                 'unit': default.get(CONF_UNIT)
                              }
                             })
-        settings.sort(key=lambda x: x.get('name'))
+        settings.sort(key=lambda x: x.get('title'))
         options["settings"] = settings
         configs = []
         config_list = GLOBAL_CONFIG
@@ -76,10 +84,17 @@ async def shelly_get_config(hass, connection, msg):
             config_list = GLOBAL_CONFIG + DEBUG_CONFIG
         for key in config_list:
             value = ALL_CONFIG[key]
+            base = "component.shelly.frontend.config." + key + "."
+            name = resources.get(base + "title", key)
+            desc = resources.get(base + "desc")
+            group = value.get("group")
+            group = resources.get("component.shelly.frontend.config.groups." + group, group)
             if "type" in value:
                 configs.append( {
                     "id" : key,
-                    "name" : key,
+                    "title" : name,
+                    "desc" : desc,
+                    "group": group,
                     "type" : value["type"],
                     "value" : instance.conf.get(key, ''),
                     "default" : value.get('def', '')

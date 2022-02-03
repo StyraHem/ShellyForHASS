@@ -10,7 +10,9 @@ export interface Instance {
 
 export interface Config {
   id : string,
-  name : string,
+  title : string,
+  desc: string,
+  group: string,
   type : string,
   value : string,
   def : string
@@ -18,8 +20,7 @@ export interface Config {
 
 export interface Setting {
   id : string,
-  name : string,
-  image : string,
+  title : string,
   value : {
     sensor : boolean,
     attrib: boolean,
@@ -47,7 +48,8 @@ export interface App {
 
 export const getConfiguration = async (hass: HomeAssistant) => {
   const response = await hass.connection.sendMessagePromise<App>({
-    type: "s4h/get_config"
+    type: "s4h/get_config",
+    language: hass.language
   });
   response.instances.map( i => { i.hass=hass })
   return response;

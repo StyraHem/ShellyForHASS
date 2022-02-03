@@ -42,7 +42,16 @@ except:
     ATTR_RESTORED = None
 from homeassistant.helpers.entity import Entity
 from homeassistant.util import slugify, dt as dt_util
-from homeassistant.components.network import async_get_source_ip
+
+try:
+    from homeassistant.util import get_local_ip
+except:
+    get_local_ip = None
+
+try: 
+    from homeassistant.components.network import async_get_source_ip
+except:
+    async_get_source_ip = None
 
 from .const import *
 from .configuration_schema import CONFIG_SCHEMA, CONFIG_SCHEMA_ROOT
@@ -50,7 +59,7 @@ from .frontend import setup_frontend
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "0.3.0-b2"
+__version__ = "0.3.3"
 VERSION = __version__
 
 async def async_setup(hass, config):
@@ -123,7 +132,7 @@ class ShellyInstance():
         self.conf = conf
         self.version_added = False
         self.discover = self.conf.get(CONF_DISCOVERY)
-        self.device_sensors = []  #Keep track dynamic device sensors is added
+        #self.device_sensors = []  #Removed, cause collisions
         self.block_sensors = []  #Keep track dynamic block sensors is added
         self.update_config_attributes()
         sensors = self.conf.get(CONF_SENSORS, {})
@@ -210,7 +219,7 @@ class ShellyInstance():
 
     def update_config_list(self, type, id, value):
         options = self.config_entry.options.copy()
-        list = options[type] = options[type].copy()
+        list = options[type] = options.get(type, []).copy()
         if value:
             if not id in list:
                 list.append(id)
@@ -305,10 +314,12 @@ class ShellyInstance():
         pys.shelly_instance = self #Used for debuging only
         host_ip = conf.get(CONF_HOST_IP)
         if host_ip:
+            pys.host_ip = host_ip
             if host_ip == 'ha':
-                pys.host_ip = async_get_source_ip()
-            else:
-                pys.host_ip = host_ip
+                if get_local_ip:
+                    pys.host_ip = get_local_ip() 
+                elif async_get_source_ip:
+                    pys.host_ip = async_get_source_ip() #from 2021-12 release
         pys.mqtt_port = conf.get(CONF_MQTT_PORT, 0)
 
         pys.mqtt_server_host = conf.get(CONF_MQTT_SERVER_HOST, '')

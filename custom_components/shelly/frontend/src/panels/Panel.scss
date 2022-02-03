@@ -4,6 +4,9 @@
 // Default variable overrides
 //$body-bg: #000;
 //$body-color: #111;
+$card-bg : var(--secondary-background-color);
+//paper-card-background-color
+//secondary-background-color
 
 // Required
 @import "~bootstrap/scss/variables";
@@ -18,6 +21,8 @@
 @import "~bootstrap/scss/grid";
 @import "~bootstrap/scss/card";
 @import "~bootstrap/scss/dropdown";
+
+
 // etc
 
 .Panel {
@@ -40,35 +45,72 @@
             padding: 0.8rem;
             margin: 0.1rem;
             position: relative;
+            vertical-align: top;
+            border-radius: 0.4rem;
         }
 
         .configpanel {
+            .group {
+                width: 19rem;
+                padding: 10px;
+                margin: 5px;
+                border: 1px solid var(--secondary-text-color);
+                border-radius: 10px;
+                .title {                    
+                    font-size: 18px;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                }
+            }
+            .card-title {
+                font-size: var(--ha-card-header-font-size);
+                font-weight: var(--ha-card-header-font-weight);
+            }
+            .desc {
+                color: var(--secondary-text-color);
+                margin-bottom: 10px;
+            }
             .value {
                 .bool {
                     position: absolute;
                     top: 1rem;
                     right: 1rem;
                 }
+                textarea {
+                    width: 95%;
+                }
             }
         }
         .settingpanel {
-            .name {
-                padding-bottom: 0.7rem;
-                font-weight: 500;
+            .card {
+                height: 11rem;
+                margin: 0.2rem;
+            }
+            .card-title {
+                font-size: var(--ha-card-header-font-size);
+                font-weight: var(--ha-card-header-font-weight);
             }
             .label {
-                width: 5rem;
+                padding-left: 0.5rem;
+                width: 5.5rem;
                 display: inline-block;
+                color: var(--secondary-text-color);
             }
             input[type="text"], input[type="number"] {
                 width: 8rem;
-                margin-top: 0.3rem;
+                margin-top: 0.5rem;
+            }
+            .decimals {
+                margin-top: 0.2rem;
             }
             .attrib {
                 display: inline-block;
+                vertical-align: top;
             }
-            .sensor {                
-                float: right;
+            .sensor {
+                margin-right: 1rem;
+                display: inline-block;
+                vertical-align: top;
             }
 
         }

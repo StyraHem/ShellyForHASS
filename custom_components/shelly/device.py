@@ -58,11 +58,11 @@ class ShellyDevice(RestoreEntity):
             self._update_ha_state()
 
         if self._dev.info_values is not None:
-            device_sensors = self.instance.device_sensors
+            block_sensors = self.instance.block_sensors
             for key, _value in self._dev.info_values.items():
                 ukey = self._dev.id + '-' + key
-                if not ukey in device_sensors:
-                    device_sensors.append(ukey)
+                if not ukey in block_sensors:
+                    block_sensors.append(ukey)
                     for sensor in self._sensor_conf:
                         if ALL_SENSORS[sensor].get('attr') == key:
                             attr = {'sensor_type':key,
@@ -113,7 +113,7 @@ class ShellyDevice(RestoreEntity):
             attrs['state_MQTT_status'] = self._dev.state_mqtt_status
 
     @property
-    def device_state_attributes(self):
+    def extra_state_attributes(self):
         """Show state attributes in HASS"""
         attrs = {'shelly_type': self._dev.type_name(),
                  'shelly_id': self._dev.id,

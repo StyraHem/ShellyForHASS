@@ -8,6 +8,8 @@ import typescript from "rollup-plugin-typescript2";
 import { visualizer } from 'rollup-plugin-visualizer';
 import styles from "rollup-plugin-styles";
 
+const production = !process.env.ROLLUP_WATCH;
+
 export default {
   input: "src/index.ts",
   output: {
@@ -51,6 +53,6 @@ export default {
       host: "localhost",
       port: 3000,
     }),*/
-    //livereload({ watch: "dist" }),
+    !production && livereload({ watch: "dist" }),
   ]
 };

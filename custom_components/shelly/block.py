@@ -73,7 +73,7 @@ class ShellyBlock(RestoreEntity):
             self._update_ha_state()
 
     @property
-    def device_state_attributes(self):
+    def extra_state_attributes(self):
         """Show state attributes in HASS"""
         attrs = {'shelly_type': self._block.type_name(),
                  'shelly_id': self._block.id,
