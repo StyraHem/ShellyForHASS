@@ -107,7 +107,7 @@ If you have the configuration in config.yaml you can convert it to internal sett
 ### MQTT Support
 MQTT support is added to two different modes that can run in parallel.
 You can run CoAP and MQTT at the same time and add Shelly devices using CoAP, REST and/or MQTT.
-The benefit of MQTT is that it working with VLANs and network equipment that not support CoAP/IGMP. The backside is that MQTT can't be enabled at the same time as the device is connected to Shelly Cloud, except for Shelly H&T.
+The benefit of MQTT is that it working with VLANs and network equipment that not support CoAP/IGMP. The backside is that MQTT can't be enabled at the same time as the device is connected to Shelly Cloud, except for Shelly H&T and the new Plus/Pro series devices.
 
 #### Connect to an MQTT broker like mosquito etc
 Specifying the address and login to your MQTT broker to make ShellyForHass automatically detect your devices and create entities for them in HA. You must also configure your Shelly devices also to connect to this MQTT broker.
@@ -128,7 +128,7 @@ shelly:
    mqtt_port: 1888
 ```
 
-In the Shelly config, you only have to enter the server address to point to the IP of HA and the port specified above in the config. This is just a simple MQTT server without authentication. So do not publish it on public networks etc.
+In the Shelly config, you only have to enter the server address to point to the IP of HA and the port specified above in the config. This is just a simple MQTT server without authentication. So do not publish it on public networks etc. Do not use a custom MQTT prefix.
 ![](/images/mqtt.png)
 
 ### HA Integration
