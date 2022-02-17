@@ -104,6 +104,33 @@ You can setup this component by using HA integration or config.yaml. Most of set
 
 If you have the configuration in config.yaml you can convert it to internal setting by clicking the settings gear for the integration and follow the instructions. If you use advanced settings they will be lost. After conversion the settings in config.yaml will be ignored. To go back to config.yaml just delete the integration and restart HA.
 
+### MQTT Support
+MQTT support is added to two different modes that can run in parallel.
+You can run CoAP and MQTT at the same time and add Shelly devices using CoAP, REST and/or MQTT.
+The benefit of MQTT is that it working with VLANs and network equipment that not support CoAP/IGMP. The backside is that MQTT can't be enabled at the same time as the device is connected to Shelly Cloud, except for Shelly H&T and the new Plus/Pro series devices.
+
+#### Connect to an MQTT broker like mosquito etc
+Specifying the address and login to your MQTT broker to make ShellyForHass automatically detect your devices and create entities for them in HA. You must also configure your Shelly devices also to connect to this MQTT broker.
+
+```
+shelly:
+  mqtt_server_host: "192.168.1.100"
+  mqtt_server_port: "1883" #Default 1883
+  mqtt_server_username: "user"
+  mqtt_server_password: "password"
+```
+
+#### Built-in MQTT server
+By configuring the mqtt_port the plugin starts listening for clients (Shelly devices) to connect to that port. It can be configured in the integration GUI or in config.yaml depending on how it is installed in your system. Please do not use port 1883 for this to avoid collision with other MQTT brokers.
+
+```
+shelly:
+   mqtt_port: 1888
+```
+
+In the Shelly config, you only have to enter the server address to point to the IP of HA and the port specified above in the config. This is just a simple MQTT server without authentication. So do not publish it on public networks etc. Do not use a custom MQTT prefix.
+![](/images/mqtt.png)
+
 ### HA Integration
 
 When you have installed Shelly you can add it in GUI under HA integration. Use the plus button and search for Shelly. You need to specify the prefix that is used as first part of the entity_id to avoid conflicts. Default is shelly.
