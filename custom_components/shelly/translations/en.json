@@ -42,7 +42,7 @@
             "groups" : {
                 "name": "Friendly Name",
                 "general" : "Gereral",
-                "mqtt-integrated": "Integrerad MQTT server",
+                "mqtt-integrated": "Integrated MQTT server",
                 "mqtt-broker": "MQTT broker connection",
                 "discovery": "Discovery",
                 "cloud": "Shelly Cloud"
@@ -64,7 +64,7 @@
                 "desc": "Create upgrade switch when Shelly has new firmware"
             },
             "upgrade_beta_switch": {
-                "title": "Show upgrad to beta switch",
+                "title": "Show upgrade to beta switch",
                 "desc": "Enable upgrade to Beta version switch"
             },
             "igmp_fix": {

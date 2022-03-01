@@ -1,0 +1,270 @@
+{
+    "frontend": {
+        "settings" : {
+            "ip_address": "Endereço IP",
+            "shelly_type": "Tipo Shelly",
+            "shelly_id": "Shelly ID",
+            "ssid": "SSID",
+            "rssi": "RSSI",
+            "rssi_level": "Nível RSSI",
+            "uptime": "Tempo de atividade",
+            "has_firmware_update": "Tem atualização de firmware",
+            "latest_fw_version": "Versão de firmware mais recente",
+            "firmware_version": "Versão atual do firmware",
+            "mqtt_connected": "MQTT conectado",
+            "cloud_status": "Status da nuvem",
+            "switch": "Mudar estado",
+            "total_consumption": "Consumo total",
+            "current_consumption": "Consumo atual",
+            "over_power": "Acima da potência",
+            "device_temp": "Temperatura do dispositivo",
+            "over_temp": "Acima da temperatura",
+            "battery": "Nível de Bateria",
+            "voltage": "Voltagem",
+            "total_returned": "Total devolvido",
+            "current": "Atual",
+            "power_factor": "Fator de potência",
+            "click_type": "Tipo de clique",
+            "click_count" :"Contagem de cliques",
+            "tilt" :"Inclinar",
+            "vibration" : "Vibração",
+            "temperature" :"Temperatura",
+            "humidity" : "Umidade",
+            "illuminance" : "Iluminância",
+            "ppm": "PPM",
+            "sensor": "Estado do sensor",
+            "total_work_time": "Tempo total de trabalho",
+            "latest_beta_fw_version": "Última versão beta",            
+            "mqtt": "MQTT conectado",
+            "cloud": "Status da nuvem"
+        },
+        "config" : {
+            "groups" : {
+                "name": "Nome fantasia",
+                "general" : "Em geral",
+                "mqtt-integrated": "Servidor MQTT integrado",
+                "mqtt-broker": "Conexão do broker MQTT",
+                "discovery": "Descoberta",
+                "cloud": "Shelly Cloud"
+            },
+            "additional_information": {
+                "title": "Informação adicional", 
+                "desc": "Pesquise os dispositivos Shelly para obter informações adicionais, como temperatura do dispositivo, avisos, RSSI, tempo de atividade, firmware etc."
+            },
+            "mdns": {
+                "title": "mDns",
+                "desc": "Habilite mDns para descoberta, tente isso se seus dispositivos Shelly não forem descobertos"
+            },
+            "version": {
+                "title": "Mostrar versão",
+                "desc": "Crie uma entrada mostrando a versão atual do ShellyForHass"
+            },
+            "upgrade_switch": {
+                "title": "Mostrar interruptor de atualização",
+                "desc": "Crie um interruptor de atualização quando Shelly tiver um novo firmware"
+            },
+            "upgrade_beta_switch": {
+                "title": "Mostrar atualização para o interruptor beta",
+                "desc": "Ativar atualização para versão Beta do interruptor"
+            },
+            "igmp_fix": {
+                "title": "Correção de IGMP",
+                "desc": "Envie repetidamente IGMP ADD_MEMBER, tente isso se a atualização instantânea parar alguns minutos"
+            },
+            "host_ip": {
+                "title": "IP do host para vincular",
+                "desc": "Endereço IP do Home Assistant, definido como HA para obter o mesmo IP do Home Assistant"
+            },
+            "mqtt_port": {
+                "title": "Porta MQTT (servidor MQTT integrado)",
+                "desc": "Porta Tcpip do servidor MQTT integrado"
+            },
+            "scan_interval": {
+                "title": "Intervalo de busca (s)",
+                "desc": "Intervalo de busca Shelly para obter informações adicionais"
+            },
+            "cloud_auth_key": {
+                "title": "Chave de autenticação Shelly Cloud",
+                "desc": "Chave Shelly Cloud, usada para se conectar a núvem Shelly"
+            },
+            "cloud_server": {
+                "title": "Nome do servidor Shelly Cloud",
+                "desc": "Host do Shelly Cloud Server, usado para se conectar ao Shelly Cloud"
+            },
+            "tmpl_name": {
+                "title": "Modelo de nome famtasia",
+                "desc": "Modelo de nome famtasia recebido do Shelly Cloud"
+            },
+            "username": {
+                "title": "Nome de usuário global",
+                "desc": "Nome de usuário, usado para fazer login em todos os dispositivos Shelly com login restrito"
+            },
+            "password": {
+                "title": "Senha Global",
+                "desc": "Senha, usada para fazer login em dispositivos Shelly com login restrito"
+            },
+            "unavailable_after_sec": {
+                "title": "Tempo indisponível",
+                "desc": "Número de segundos sem conexão antes de definir o dispositivo como indisponível"
+            },            
+            "mqtt_server_host": {
+                "title": "Endereço IP ou Host do broker MQTT",
+                "desc": "Endereço para o broker MQTT para se conectar para"
+            },
+            "mqtt_server_port": {
+                "title": "Porta do broker MQTT",
+                "desc": "Porta para o broker MQTT "
+            },
+            "mqtt_server_username": {
+                "title": "MQTT broker user name",
+                "desc": "User name to use to login to the MQTT broker"
+            },
+            "mqtt_server_password": {
+                "title": "Senha do MQTT",
+                "desc": "Senha a ser usada para fazer login no broker MQTT"
+            },
+            "discovery": {
+                "title": "Descoberta automática",
+                "desc": "Habilite a descoberta automática de dispositivos"
+            },
+            "show_id_in_name": {
+                "title": "Mostrar ID no nome",
+                "desc": "Adicione o ID do dispositivo ao final do nome fantasia"
+            }
+        }
+    },
+    "config": {
+        "abort": {
+            "single_instance_allowed": "Apenas uma única configuração de Shelly é permitida."
+        },
+        "step": {
+            "input": {
+                "data": {
+                    "id_prefix": "Prefixo para todas as entidades",
+                    "discovery": "Ativar descoberta automática"
+                },
+                "description": "Configure a integração do Shelly com o Home Assistant.",
+                "title": "Shelly smart home"
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "config_1": {
+                "data": {
+                    "mdns": "Habilite mDns para descoberta, tente isso se seus dispositivos Shelly não forem descobertos",
+                    "version": "Crie uma entrada mostrando a versão atual do ShellyForHass",
+                    "upgrade_switch": "Crie um interruptor de atualização quando Shelly tiver um novo firmware",
+                    "upgrade_beta_switch": "Ativar atualização para a opção de versão Beta",
+                    "igmp_fix": "Envie repetidamente IGMP ADD_MEMBER, tente isso se a atualização instantânea parar alguns minutos",
+                    "host_ip": "Endereço IP do Home Assistant",
+                    "mqtt_port": "Porta Tcpip do servidor MQTT integrado"
+                },
+                "title": "Shelly - Configurações [1/3]",
+                "description": "Configuração (1/2)"    
+            },
+            "config_2": {
+                "data": {
+                    "additional_information": "Pesquise Shelly para obter informações adicionais, como temperatura do dispositivo, avisos, RSSI, tempo de atividade, firmware etc..",
+                    "scan_interval": "Intervalo para escanear para obter informações adicionais de Shelly",
+                    "cloud_auth_key": "Shelly Cloud Key, usada para se conectar ao Shelly Cloud",
+                    "cloud_server": "Shelly Cloud Server Host, usado para se conectar ao Shelly Cloud",
+                    "tmpl_name": "Modelo para nome fantasia recebido de Shelly Cloud",
+                    "username": "Nome de usuário de login restrito",
+                    "password": "Senha de login restrito",
+                    "unavailable_after_sec": "Número de segundos antes de definir o dispositivo como indisponível"
+                },
+                "title": "Shelly - Configurações [1/3]",
+                "description": "Configuração (2/2)"
+            },            
+            "config_mqtt": {
+                "data": {
+                    "mqtt_server_host": "Host ou endereço ip",
+                    "mqtt_server_port": "Porta",
+                    "mqtt_server_username": "Nome de usuário",
+                    "mqtt_server_password": "Senha"
+                },
+                "title": "Shelly - Configurações [1/3]",
+                "description": "Conexão do servidor MQTT"
+            },
+            "attributes": {
+                "data": {
+                    "ip_address": "Endereço IP",
+                    "shelly_type": "Tipo de Shelly",
+                    "shelly_id": "Shelly ID",
+                    "ssid": "SSID",
+                    "rssi": "RSSI",
+                    "rssi_level": "Nível RSSI",
+                    "uptime": "Tempo de atividade",
+                    "has_firmware_update": "Tem atualização de firmware",
+                    "latest_fw_version": "Versão mais recente do firmware",
+                    "firmware_version": "Versão atual do firmware",
+                    "mqtt_connected": "MQTT conectado",
+                    "cloud_status": "status da Cloud",
+                    "switch": "Mudar estado",
+                    "total_consumption": "Consumo total",
+                    "current_consumption": "Consumo atual",
+                    "over_power": "Excesso de potência",
+                    "device_temp": "Temperatura do dispositivo",
+                    "over_temp": "Acima da temperatura",
+                    "battery": "Nível de bateria",
+                    "voltage": "Voltagem",
+                    "total_returned": "Total devolvido",
+                    "current": "Atual",
+                    "power_factor": "Fator de potência",
+                    "click_type": "Tipo de clique",
+                    "click_count" :"Contagem de cliques",
+                    "tilt" :"Inclinar",
+                    "vibration" : "Vibração",
+                    "temperature" :"Temperatura",
+                    "humidity" : "Umidade",
+                    "illuminance" : "Iluminância",
+                    "ppm": "PPM",
+                    "sensor": "Sensor",
+                    "total_work_time": "Tempo total de trabalho",
+                    "latest_beta_fw_version": "Última versão beta"
+                },
+                "title": "Shelly - Configurações [2/3] - Atributos",
+                "description": "Selecione os atributos a serem exibidos para cada entrada do Shelly. Tenha cuidado, todos os atributos acionam e armazenam informações extras no banco de dados."
+            },
+            "sensors": {
+                "data": {
+                    "rssi": "RSSI",
+                    "rssi_level": "Nível RSSI",
+                    "uptime": "Tempo de atividade",
+                    "current_consumption": "Consumo atual",
+                    "total_consumption": "Consumo total",
+                    "over_power": "Excesso de potência",
+                    "device_temp": "Temperatura do dispositivo",
+                    "over_temp": "Acima da temperatura",
+                    "mqtt": "MQTT conectado",
+                    "cloud": "Status da Cloud ",
+                    "battery": "Nível de bateria",
+                    "voltage": "Voltagem",
+                    "switch": "Mudar estado",
+                    "total_returned": "Total devolvido",
+                    "current": "Atual",
+                    "power_factor": "Fator de potência",
+                    "tilt" :"Inclinar",
+                    "vibration" : "Vibração",
+                    "temperature" :"Temperatura",
+                    "humidity" : "Umidade",
+                    "illuminance" : "Iluminância",
+                    "ppm": "PPM",
+                    "sensor": "Sensor",
+                    "total_work_time": "Tempo total de trabalho",
+                    "click_type": "Tipo de click"
+                },
+                "title": "Shelly - Configurações [3/3] - Sensores",
+                "description": "Selecione sensores para criar para dispositivos Shelly."
+            },
+            "yaml": {
+                "data": {
+                    "convert": "Marque isso se quiser mover sua configuração para o banco de dados do shelly. Se você fizer isso, poderá alterar as configurações aqui e as configurações em config.yaml serão ignoradas e você poderá removê-las."
+                },
+                "title": "Shelly - config.yaml",
+                "description": "Suas configurações para ShellyForHass são armazenadas em config.yaml."
+            }
+        }
+    }
+}
