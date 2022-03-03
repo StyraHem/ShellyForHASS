@@ -62,7 +62,7 @@ class ShellySensor(ShellyDevice):
         self._sensor_cfg = SENSOR_TYPES_CFG[SENSOR_TYPE_DEFAULT]
         ShellyDevice.__init__(self, dev, instance)
         self._unique_id += "_" + sensor_name
-        self.entity_id += "_" + sensor_name
+        self.entity_id = "sensor" + self.entity_id + "_" + sensor_name
         self._sensor_type = sensor_type
         self._sensor_name = sensor_name
         self._battery = None
