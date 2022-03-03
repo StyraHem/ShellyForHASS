@@ -43,6 +43,7 @@ class ShellyCover(ShellyDevice, CoverEntity):
     def __init__(self, dev, instance):
         """Initialize the cover."""
         ShellyDevice.__init__(self, dev, instance)
+        self.entity_id = "cover" + self.entity_id
         self._position = None
         self._last_direction = None
         self._motion_state = None

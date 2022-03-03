@@ -60,6 +60,7 @@ class ShellySwitch(ShellyDevice, SwitchEntity):
     def __init__(self, dev, instance):
         """Initialize an ShellySwitch."""
         ShellyDevice.__init__(self, dev, instance)
+        self.entity_id = "switch" + self.entity_id
         self._state = None
         self._master_unit = True
         self.update()

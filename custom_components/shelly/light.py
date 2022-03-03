@@ -82,6 +82,7 @@ class ShellyLightRelay(ShellyDevice, LightEntity):
     def __init__(self, dev, instance):
         """Initialize an ShellyLightRelay."""
         ShellyDevice.__init__(self, dev, instance)
+        self.entity_id = "light" + self.entity_id
         self._state = None
         self._master_unit = True
         self.update()
@@ -111,6 +112,7 @@ class ShellyDimmer(ShellyDevice, LightEntity):
     def __init__(self, dev, instance):
         """Initialize an ShellyDimmer."""
         ShellyDevice.__init__(self, dev, instance)
+        self.entity_id = "light" + self.entity_id
         self._state = None
         self._brightness = None
         self._color_temp = None
@@ -219,6 +221,7 @@ class ShellyRGB(ShellyDevice, LightEntity):
     def __init__(self, dev, instance):
         """Initialize an ShellyLightRelay."""
         ShellyDevice.__init__(self, dev, instance)
+        self.entity_id = "light" + self.entity_id
         self._state = None
         self._brightness = None
         self._white_value = None
