@@ -4,7 +4,7 @@ import Checkbox from '../components/setting/Checkbox'
 import TextField from '../components/setting/TextField'
 import { Card } from "react-bootstrap";
 import Masonry from "react-masonry-component";
-
+import YamlInfo from "../components/YamlInfo"
 interface Props {
   app?: App,
   instance: Instance
@@ -15,6 +15,7 @@ export default class ShellySettingPanel extends Component<Props> {
     const { instance } = this.props
     return (<div className="settingpanel">
       <h2>Settings</h2>
+        <YamlInfo instance={instance}/>
         {instance.settings.map( setting => (
           <Card key={setting.id}>
             <Card.Title>{setting.title}</Card.Title>

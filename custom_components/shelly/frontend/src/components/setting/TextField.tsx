@@ -28,11 +28,13 @@ export default class SettingTextField extends Component<Props> {
   }
 
   render() {
-    const { setting, param, type } = this.props;
+    const { setting, param, type, instance } = this.props;
+    const readonly = instance.yaml;    
     return <div className={param}>
         {setting.has[param] ? 
           <><div className="label">{param}: </div>
           <input type={type} title={setting.title} className={type}
+            disabled={readonly}
             value={setting.value[param]} 
             placeholder={"Default: " + setting.default[param]}
             onChange={this.update_setting} /></>
