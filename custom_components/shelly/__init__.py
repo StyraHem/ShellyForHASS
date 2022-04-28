@@ -59,7 +59,7 @@ from .frontend import setup_frontend
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "1.0.0"
+__version__ = "1.0.0-b1"
 VERSION = __version__
 
 async def async_setup(hass, config):
