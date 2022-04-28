@@ -41,12 +41,24 @@ class ShellyBlock(RestoreEntity):
         #self._settings = instance.get_settings(block.id)
         self.config_updated()
 
+    def __del__(self):
+        print("I'm being automatically destroyed. Goodbye!")
+
+    def add_to_platform_abort(self):
+        self._remove_handler()
+        super().add_to_platform_abort()
+
+    async def async_added_to_hass(self) -> None:
+        await super().async_added_to_hass()
+
     def config_updated(self):
         self._settings = self.instance.get_settings(self._block.id)
 
     def _remove_handler(self):
         self._is_removed = True
         self._block.cb_updated.remove(self._updated)
+        if hasattr(self, 'ukey'):
+            self.instance.block_sensors.remove(self.ukey)
 
     @property
     def name(self):

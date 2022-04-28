@@ -36,7 +36,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             if 'sensor_type' in dev:
                 sensor_type = dev['sensor_type']
                 async_add_entities([ShellyInfoSensor(dev['itm'], instance,
-                                           sensor_type, sensor_type)])
+                                           sensor_type, sensor_type, dev['ukey'])])
             return
         if dev.device_type == "POWERMETER":
             async_add_entities([ShellySensor(dev, instance, SENSOR_TYPE_POWER,
@@ -124,12 +124,13 @@ class ShellySensor(ShellyDevice):
 class ShellyInfoSensor(ShellyBlock):
     """Representation of a Shelly Info Sensor."""
 
-    def __init__(self, block, instance, sensor_type, sensor_name):
+    def __init__(self, block, instance, sensor_type, sensor_name, ukey):
         self._sensor_cfg = SENSOR_TYPES_CFG[SENSOR_TYPE_DEFAULT]
         ShellyBlock.__init__(self, block, instance, "_" + sensor_name)
         self.entity_id = "sensor" + self.entity_id
         self._sensor_name = sensor_name
         self._sensor_type = sensor_type
+        self.ukey = ukey
         if self._sensor_type in SENSOR_TYPES_CFG:
             self._sensor_cfg = SENSOR_TYPES_CFG[self._sensor_type]
         #settings = instance._get_setting(sensor_type, block.id, None)
