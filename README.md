@@ -30,7 +30,7 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 
 ## Features
 
-- Automatically discover all Shelly devices
+- Automatically discover all Shelly devices (Gen 1 and Gen 2)
 - Monitor status (state, temperature, humidity, power, rssi, ip, fw, battery, uptime etc.)
 - Control (turn on/off, dim, color, effects, up/down etc.)
 - Sensors for most of the attributes
@@ -39,7 +39,7 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Works with Shelly default settings, no extra configuration
 - Runs locally, you don't have to add the device to Shelly Cloud
 - Coexists with Shelly Cloud so you can continue to use Shelly Cloud and Shelly apps
-- Using CoAP and REST for communication (not MQTT)
+- Using CoAP, http, mqtt, winsocket for communication
 - Working with both static or dynamic ip addresses on your devices
 - Using events so very fast response (no polling)
 - Support restrict login with username and password (0.0.3-)
@@ -53,6 +53,7 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Add Shelly devices by IP-address if on different LAN or mDns and CoAP not working for discovery
 
 ## Devices supported
+### Gen 1 devices
 - Shelly 1
 - Shelly 1L (0.2.2)
 - Shelly 1PM
@@ -83,6 +84,24 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Shelly RGBWW
 - Shelly UNI
 - Shelly Vintage (0.1.8)
+
+### Plus devices
+- Shelly Plus 1
+- Shelly Plus 1PM
+- Shelly Plus 2
+- Shelly Plus 2PM
+- Shelly Plus i3
+
+### Pro devices
+- Shelly Pro 1
+- Shelly Pro 1PM
+- Shelly Pro 2
+- Shelly Pro 2PM
+- Shelly Pro 4PM
+
+### Comming soon
+- Shelly TRV
+- Shelly Plus H&T
 
 ## Firmware
 Support all Shelly firmware versions (0.2.0)
