@@ -42,7 +42,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             if 'sensor_type' in dev:
                 sensor_type = dev['sensor_type']
                 async_add_entities([ShellyBinaryInfoSensor(dev['itm'], instance,
-                                           sensor_type, sensor_type)])
+                                           sensor_type, sensor_type, dev['ukey'])])
             return
         if dev.device_type == "SWITCH":
             async_add_entities([ShellySwitch(dev, instance)])
@@ -188,12 +188,13 @@ class ShellyBinarySensor(ShellyDevice, BinarySensorEntity):
 class ShellyBinaryInfoSensor(ShellyBlock, BinarySensorEntity):
     """Representation of a Shelly Info Sensor."""
 
-    def __init__(self, block, instance, sensor_type, sensor_name):
+    def __init__(self, block, instance, sensor_type, sensor_name, ukey):
         self._sensor_cfg = SENSOR_TYPES_CFG[SENSOR_TYPE_DEFAULT]
         ShellyBlock.__init__(self, block, instance, "_" + sensor_name)
         self.entity_id = "sensor" + self.entity_id
         self._sensor_name = sensor_name
         self._sensor_type = sensor_type
+        self.ukey = ukey
         if self._sensor_type in SENSOR_TYPES_CFG:
             self._sensor_cfg = SENSOR_TYPES_CFG[self._sensor_type]
         self._state = None

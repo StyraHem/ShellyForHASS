@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import ShellyConfigEntry from '../components/ConfigEntry'
 import { Card, Col, Row } from "react-bootstrap";
 import Masonry from "react-masonry-component";
+import YamlInfo from "../components/YamlInfo"
 
 interface Props {
   app?: App,
@@ -16,10 +17,11 @@ export default class ShellyConfigPanel extends Component<Props> {
     const { app, instance } = this.props;
     const { configs } = instance;
     const groups = [...new Set(configs.map( config => config.group ))];
-
+ 
     return (<>
       <div className="configpanel">
         <h2>Config</h2>
+        <YamlInfo instance={instance} />
         <Masonry
           elementType={'div'}
         >

@@ -73,6 +73,7 @@
                     "total_consumption": "Total consumption",
                     "current_consumption": "Current consumption",
                     "over_power": "Over power",
+                    "over_voltage": "Over voltage",
                     "device_temp": "Device temperature",
                     "over_temp": "Over temperature",
                     "battery": "Battery level",

@@ -27,6 +27,11 @@ $card-bg : var(--secondary-background-color);
 
 .Panel {
     font-size: var(--paper-font-body1_-_font-size);    
+    .info {
+        margin: 1rem;
+        padding: 1rem;
+        border: 0.1rem solid var(--secondary-text-color);
+    }   
     .navbar {
         height: var(--header-height);        
         padding-left: 30px !important;

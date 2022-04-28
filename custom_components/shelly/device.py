@@ -11,7 +11,6 @@ from homeassistant.const import CONF_NAME
 
 from .const import (CONF_OBJECT_ID_PREFIX, CONF_ENTITY_ID, CONF_SHOW_ID_IN_NAME,
                     ALL_SENSORS, SENSOR_TYPES_CFG, DOMAIN)
-
 class ShellyDevice(RestoreEntity):
     """Base class for Shelly entities"""
 
@@ -38,14 +37,30 @@ class ShellyDevice(RestoreEntity):
 
         self._sensor_conf = instance._get_sensor_config(dev.id, dev.block.id)
         self._is_removed = False
+        self.async_on_remove(self._remove_handler)
         self._master_unit = False
         if hasattr(dev, 'master_unit') and dev.master_unit:
             self._master_unit = True
 
         self.config_updated()
 
+    def __del__(self):
+        print("I'm being automatically destroyed. Goodbye!")
+
+    def add_to_platform_abort(self):
+        self._remove_handler()
+        super().add_to_platform_abort()
+
+    async def async_added_to_hass(self) -> None:
+        await super().async_added_to_hass()
+
     def config_updated(self):        
         self._settings = self.instance.get_settings(self._dev.id, self._dev.block.id)
+
+    def _remove_handler(self):
+        self._is_removed = True
+        self._dev.cb_updated.remove(self._updated)
+        self._dev.lazy_load = True
 
     def _update_ha_state(self):
         self.schedule_update_ha_state(True)
@@ -66,7 +81,8 @@ class ShellyDevice(RestoreEntity):
                     for sensor in self._sensor_conf:
                         if ALL_SENSORS[sensor].get('attr') == key:
                             attr = {'sensor_type':key,
-                                    'itm':self._dev}
+                                    'itm':self._dev,
+                                    'ukey': ukey}
                             if key in SENSOR_TYPES_CFG and \
                                 SENSOR_TYPES_CFG[key][4] == 'bool':
                                 self.instance.add_device("binary_sensor", attr)
@@ -98,6 +114,10 @@ class ShellyDevice(RestoreEntity):
             dbg += ", M=" + str(dev.info_values_mqtt[key])
         if key in dev.info_values_mqtt_status:
             dbg += ", MS=" + str(dev.info_values_mqtt_status[key])
+        if key in dev.info_values_ws:
+            dbg += ", WS=" + str(dev.info_values_ws[key])
+        if key in dev.info_values_ws_status:
+            dbg += ", WSS=" + str(dev.info_values_ws_status[key])
         return dbg
 
     def _debug_add_state_info(self, attrs):
@@ -106,12 +126,15 @@ class ShellyDevice(RestoreEntity):
         if self._dev.state_coap is not None:
             attrs['state_CoAP'] = self._dev.state_coap
         if self._dev.state_status is not None:
-            attrs['state_RESTAPI'] = self._dev.state_status
+            attrs['state_HTTP'] = self._dev.state_status
         if self._dev.state_mqtt is not None:
             attrs['state_MQTT'] = self._dev.state_mqtt
         if self._dev.state_mqtt_status is not None:
             attrs['state_MQTT_status'] = self._dev.state_mqtt_status
-
+        if self._dev.state_ws is not None:
+            attrs['state_WS'] = self._dev.state_ws
+        if self._dev.state_ws_status is not None:
+            attrs['state_WSS'] = self._dev.state_ws_status
     @property
     def extra_state_attributes(self):
         """Show state attributes in HASS"""

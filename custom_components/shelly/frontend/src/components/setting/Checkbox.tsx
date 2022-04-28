@@ -27,11 +27,13 @@ export default class ShellySettingCheckbox extends Component<Props> {
   }
 
   render() {
-    const { setting, param } = this.props;
+    const { setting, param, instance } = this.props;
+    const readonly = instance.yaml;    
     return <div className={param}>
         {setting.has[param] ? 
         <>          
           <input type="checkbox" title={setting.title}
+            disabled={readonly}
             checked={setting.value[param]} 
             onChange={this.update_setting} />
           &nbsp;{param}

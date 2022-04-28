@@ -20,7 +20,7 @@ export default function ShellyNavbar({narrow}) {
       <Container>                
         { narrow ? 
           <NavItem onClick={ToggleSidebar} className="ha-sidebar">
-            <span className="navbar-toggler-icon"></span>
+            <p className="navbar-toggler-icon"></p>
           </NavItem>
           : null
         }

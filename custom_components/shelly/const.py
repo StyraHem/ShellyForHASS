@@ -202,6 +202,7 @@ ATTRIBUTE_TOTAL_CONSUMPTION = 'total_consumption'
 ATTRIBUTE_TOTAL_RETURNED = 'total_returned'
 ATTRIBUTE_CURRENT_CONSUMPTION = 'current_consumption'
 ATTRIBUTE_OVER_POWER = 'over_power'
+ATTRIBUTE_OVER_VOLTAGE = 'over_voltage'
 ATTRIBUTE_DEV_TEMP = 'device_temp'
 ATTRIBUTE_OVER_TEMP = 'over_temp'
 ATTRIBUTE_BATTERY = 'battery'
@@ -240,6 +241,7 @@ ALL_ATTRIBUTES = {
     ATTRIBUTE_CURRENT_CONSUMPTION,
     ATTRIBUTE_VOLTAGE,
     ATTRIBUTE_OVER_POWER,
+    ATTRIBUTE_OVER_VOLTAGE,
     ATTRIBUTE_DEV_TEMP,
     ATTRIBUTE_OVER_TEMP,
     ATTRIBUTE_BATTERY,
@@ -275,6 +277,7 @@ DEFAULT_ATTRIBUTES = {
     ATTRIBUTE_CLOUD_STATUS,
     ATTRIBUTE_SWITCH,
     ATTRIBUTE_OVER_POWER,
+    ATTRIBUTE_OVER_VOLTAGE,
     ATTRIBUTE_OVER_TEMP,
     ATTRIBUTE_TOTAL_CONSUMPTION,
     #ATTRIBUTE_VOLTAGE,
@@ -304,6 +307,7 @@ SENSOR_POWER_FACTOR = 'power_factor'
 SENSOR_CURRENT = 'current'
 SENSOR_UPTIME = 'uptime'
 SENSOR_OVER_POWER = 'over_power'
+SENSOR_OVER_VOLTAGE = 'over_voltage'
 SENSOR_DEV_TEMP = 'device_temp'
 SENSOR_OVER_TEMP = 'over_temp'
 SENSOR_CLOUD = 'cloud'
@@ -326,6 +330,7 @@ ALL_SENSORS = {
     SENSOR_RSSI_LEVEL: {'attr':'rssi_level'},
     SENSOR_UPTIME: {'attr':'uptime'},
     SENSOR_OVER_POWER: {'attr':'over_power'},
+    SENSOR_OVER_VOLTAGE: {'attr':'over_voltage'},
     SENSOR_CURRENT_CONSUMPTION: {},
     SENSOR_TOTAL_CONSUMPTION: {'attr':'total_consumption'},
     SENSOR_TOTAL_RETURNED: {'attr':'total_returned'},
@@ -371,6 +376,7 @@ SENSOR_TYPE_RSSI_LEVEL = 'rssi_level'
 SENSOR_TYPE_UPTIME = 'uptime'
 SENSOR_TYPE_BATTERY = 'battery'
 SENSOR_TYPE_OVER_POWER = 'over_power'
+SENSOR_TYPE_OVER_VOLTAGE = 'over_voltage'
 SENSOR_TYPE_DEVICE_TEMP = 'device_temp'
 SENSOR_TYPE_OVER_TEMP = 'over_temp'
 SENSOR_TYPE_CLOUD_STATUS = 'cloud_status'
@@ -412,6 +418,8 @@ SENSOR_TYPES_CFG = {
         ['Battery', '%', None, DEVICE_CLASS_BATTERY, None],
     SENSOR_TYPE_OVER_POWER:
         ['Over power', '', 'mdi:flash-alert', None, 'bool'],
+    SENSOR_TYPE_OVER_VOLTAGE:
+        ['Over voltage', '', 'mdi:flash-alert', None, 'bool'],
     SENSOR_TYPE_DEVICE_TEMP:
         ['Device temperature', TEMP_CELSIUS, "mdi:oil-temperature", None, None],
     SENSOR_TYPE_OVER_TEMP:
@@ -429,10 +437,10 @@ SENSOR_TYPES_CFG = {
         ['Illuminance', 'lux', None, DEVICE_CLASS_ILLUMINANCE, None],
     SENSOR_TYPE_TOTAL_CONSUMPTION:
         ['Total consumption', ENERGY_WATT_HOUR,
-         'mdi:flash-circle', DEVICE_CLASS_ENERGY, None],
+         'mdi:lightning-bolt-circle', DEVICE_CLASS_ENERGY, None],
     SENSOR_TYPE_TOTAL_RETURNED:
         ['Total returned', ENERGY_WATT_HOUR,
-         'mdi:flash-circle', DEVICE_CLASS_ENERGY, None],
+         'mdi:lightning-bolt-circle', DEVICE_CLASS_ENERGY, None],
     SENSOR_TYPE_VOLTAGE:
         ['Voltage', 'V', 'mdi:alpha-v-circle-outline', None, None],
     SENSOR_TYPE_POWER_FACTOR:

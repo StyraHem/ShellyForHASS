@@ -2,6 +2,7 @@ import { HomeAssistant } from "./hass/types"
 
 export interface Instance {
   name : string,
+  yaml: boolean,
   hass: HomeAssistant,
   instance_id : string,
   settings : Setting[],
