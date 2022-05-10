@@ -59,7 +59,7 @@ from .frontend import setup_frontend
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "1.0.0-b1"
+__version__ = "1.0.0-b2"
 VERSION = __version__
 
 async def async_setup(hass, config):
@@ -632,16 +632,6 @@ class ShellyInstance():
                 SENSOR_CONSUMPTION in sensor_cfg or \
                 SENSOR_POWER in sensor_cfg: #POWER deprecated
                 self.add_device("sensor", dev)
-            # if SENSOR_TOTAL_CONSUMPTION in sensor_cfg or \
-            #     SENSOR_CONSUMPTION in sensor_cfg or \
-            #     SENSOR_POWER in sensor_cfg: #POWER deprecated
-            #     self.add_device("sensor", {'sensor_type' : 'total_consumption',
-            #                                 'itm': dev})
-            # if SENSOR_TOTAL_RETURNED in sensor_cfg or \
-            #     SENSOR_CONSUMPTION in sensor_cfg or \
-            #     SENSOR_POWER in sensor_cfg: #POWER deprecated
-            #     self.add_device("sensor", {'sensor_type' : 'total_returned',
-            #                                 'itm': dev})
         elif dev.device_type == 'SWITCH':
             sensor_cfg = self._get_sensor_config(dev.id, dev.block.id)
             if SENSOR_SWITCH in sensor_cfg:
@@ -652,6 +642,8 @@ class ShellyInstance():
             self.add_device("binary_sensor", dev)
         elif dev.device_type in ["LIGHT", "DIMMER", "RGBLIGHT"]:
             self.add_device("light", dev)
+        elif dev.device_type == 'TRV':
+            self.add_device("climate", dev)
         else:
             _LOGGER.error("Unknown device type, %s", dev.device_type)
 

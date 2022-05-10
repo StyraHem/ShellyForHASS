@@ -36,16 +36,6 @@ _LOGGER = logging.getLogger(__name__)
 SUPPORT_SHELLYRGB_COLOR = (SUPPORT_BRIGHTNESS | SUPPORT_COLOR)
 SUPPORT_SHELLYRGB_WHITE = (SUPPORT_BRIGHTNESS)
 
-# def setup_platform(hass, _config, add_devices, discovery_info=None):
-#     """Setup Shelly Light platform."""
-#     dev = get_device_from_hass(hass, discovery_info)
-#     if dev.device_type == "RELAY":
-#         add_devices([ShellyLightRelay(dev, hass)])
-#     elif dev.device_type == "DIMMER":
-#         add_devices([ShellyDimmer(dev, hass)])
-#     else:
-#         add_devices([ShellyRGB(dev, hass)])
-
 async def async_setup_entry(hass, config_entry, async_add_entities):
     """Set up Shelly light sensors dynamically."""
     async def async_discover_light(dev, instance):
