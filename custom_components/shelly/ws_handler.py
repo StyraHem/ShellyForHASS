@@ -20,14 +20,15 @@ async def setup_ws(instance):
     websocket_api.async_register_command(hass, shelly_convert)
 
 @websocket_api.async_response
-@websocket_api.websocket_command({vol.Required("type"): "s4h/get_config", vol.Required("language"): cv.string})
+@websocket_api.websocket_command({vol.Required("type"): "s4h/get_config", vol.Required("language", default="en"): cv.string})
 async def shelly_get_config(hass, connection, msg):
     resources = await async_get_translations(
-        hass,
-        msg["language"],
-        'frontend',
-        'shelly'
+        hass=hass,
+        language=msg["language"],
+        category='frontend',
+        integrations=['shelly'],
     )
+
     #print("GET CONFIG*****************")
     """Handle get config command."""
     content = {}
