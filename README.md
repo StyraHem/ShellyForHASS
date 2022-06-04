@@ -82,6 +82,7 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Shelly Plug US
 - Shelly RGBW2 (rgb or 4 channels)
 - Shelly RGBWW
+- Shelly TRV
 - Shelly UNI
 - Shelly Vintage (0.1.8)
 
@@ -100,7 +101,6 @@ If you have any problems please see the [troubleshooting guide](https://github.c
 - Shelly Pro 4PM
 
 ### Comming soon
-- Shelly TRV
 - Shelly Plus H&T
 
 ## Firmware
