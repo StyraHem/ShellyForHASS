@@ -13,6 +13,7 @@ import os
 import logging
 import asyncio
 import voluptuous as vol
+from awesomeversion import AwesomeVersion
 
 if os.getenv("SHELLY_DEBUGPY"):
     import debugpy
@@ -23,7 +24,8 @@ if os.getenv("SHELLY_DEBUGPY"):
 
 from homeassistant.const import (
     CONF_DEVICES, CONF_DISCOVERY, CONF_ID, CONF_PASSWORD,
-    CONF_SCAN_INTERVAL, CONF_USERNAME, EVENT_HOMEASSISTANT_STOP)
+    CONF_SCAN_INTERVAL, CONF_USERNAME, EVENT_HOMEASSISTANT_STOP,
+    __version__ as HAVERSION )    
 from homeassistant import config_entries
 from homeassistant.helpers import discovery
 from homeassistant.helpers.dispatcher import async_dispatcher_send
@@ -59,7 +61,7 @@ from .frontend import setup_frontend
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "1.0.0-b1"
+__version__ = "1.0.0"
 VERSION = __version__
 
 async def async_setup(hass, config):
@@ -80,7 +82,7 @@ async def async_setup_entry(hass, config_entry):
     _LOGGER.info("Starting shelly, %s", __version__)
 
     if not DOMAIN in hass.data:
-        hass.data[DOMAIN] = {}
+        hass.data[DOMAIN] = ShellyApp(hass)
 
     if config_entry.source == "import":
         if config_entry.options: #config.yaml
@@ -107,26 +109,33 @@ async def async_setup_entry(hass, config_entry):
         if conf.get(CONF_UPTIME_SENSOR) and SENSOR_UPTIME not in conf[CONF_SENSORS]:
             conf[CONF_SENSORS].append(SENSOR_UPTIME)
 
-    hass.data[DOMAIN][config_entry.entry_id] = \
+    hass.data[DOMAIN].instances[config_entry.entry_id] =  \
         ShellyInstance(hass, config_entry, conf)
 
     return True
 
 async def async_unload_entry(hass, config_entry):
     """Unload a config entry."""
-    instance = hass.data[DOMAIN][config_entry.entry_id]
+    instance = hass.data[DOMAIN].instances[config_entry.entry_id]
     await instance.stop()
     await instance.clean()
     return True
 
 async def async_remove_config_entry_device(hass, config_entry, device_entry):    
-    instance = hass.data[DOMAIN][config_entry.entry_id]
-    return True
-
+    instance = hass.data[DOMAIN].instances[config_entry.entry_id]
+    return True    
+class ShellyApp():
+    def __init__(self, hass):
+        self.hass = hass
+        self.instances = {}
+        self.ha_version = AwesomeVersion(HAVERSION)
+    def is_ver(self, ver):
+        return self.ha_version >= AwesomeVersion(ver)
+        
 class ShellyInstance():
     """Config instance of Shelly"""
     def __init__(self, hass, config_entry, conf):
-        self.hass = hass
+        self.hass = hass        
         self.cancel_update_listener = config_entry.add_update_listener(self.update_listener)
         self.config_entry = config_entry
         self.entry_id = self.config_entry.entry_id
@@ -632,16 +641,6 @@ class ShellyInstance():
                 SENSOR_CONSUMPTION in sensor_cfg or \
                 SENSOR_POWER in sensor_cfg: #POWER deprecated
                 self.add_device("sensor", dev)
-            # if SENSOR_TOTAL_CONSUMPTION in sensor_cfg or \
-            #     SENSOR_CONSUMPTION in sensor_cfg or \
-            #     SENSOR_POWER in sensor_cfg: #POWER deprecated
-            #     self.add_device("sensor", {'sensor_type' : 'total_consumption',
-            #                                 'itm': dev})
-            # if SENSOR_TOTAL_RETURNED in sensor_cfg or \
-            #     SENSOR_CONSUMPTION in sensor_cfg or \
-            #     SENSOR_POWER in sensor_cfg: #POWER deprecated
-            #     self.add_device("sensor", {'sensor_type' : 'total_returned',
-            #                                 'itm': dev})
         elif dev.device_type == 'SWITCH':
             sensor_cfg = self._get_sensor_config(dev.id, dev.block.id)
             if SENSOR_SWITCH in sensor_cfg:
@@ -652,6 +651,8 @@ class ShellyInstance():
             self.add_device("binary_sensor", dev)
         elif dev.device_type in ["LIGHT", "DIMMER", "RGBLIGHT"]:
             self.add_device("light", dev)
+        elif dev.device_type == 'TRV':
+            self.add_device("climate", dev)
         else:
             _LOGGER.error("Unknown device type, %s", dev.device_type)
 

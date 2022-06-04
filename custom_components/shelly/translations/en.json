@@ -37,7 +37,9 @@
             "total_work_time": "Total work time",
             "latest_beta_fw_version": "Latest beta version",            
             "mqtt": "MQTT connected",
-            "cloud": "Cloud status"
+            "cloud": "Cloud status",
+            "position": "Position",
+            "target_temperature" : "Target temperature"
         },
         "config" : {
             "groups" : {

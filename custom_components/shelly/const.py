@@ -174,6 +174,8 @@ DEFAULT_SETTINGS = \
     'battery': {CONF_UNIT:'%'},
     'ppm': {CONF_UNIT:'PPM'},
     'total_work_time': DEFAULT_TIME,
+    'position': {CONF_UNIT:'%'},
+    'target_temperature': {CONF_UNIT:'°C', CONF_DECIMALS:1}
 }
 
 SHELLY_DEVICE_ID = 'device_id'
@@ -220,6 +222,7 @@ ATTRIBUTE_ILLUMINANCE = 'illuminance'
 ATTRIBUTE_PPM = 'ppm'
 ATTRIBUTE_SENSOR = 'sensor'
 ATTRIBUTE_TOTAL_WORK_TIME = 'total_work_time'
+ATTRIBUTE_POSITION = 'position'
 
 ALL_ATTRIBUTES = {
     ATTRIBUTE_IP_ADDRESS,
@@ -256,7 +259,8 @@ ALL_ATTRIBUTES = {
     ATTRIBUTE_ILLUMINANCE,
     ATTRIBUTE_PPM,
     ATTRIBUTE_SENSOR,
-    ATTRIBUTE_TOTAL_WORK_TIME
+    ATTRIBUTE_TOTAL_WORK_TIME,
+    ATTRIBUTE_POSITION
 }
 
 EXTRA_ATTRIBUTES = {
@@ -290,7 +294,8 @@ DEFAULT_ATTRIBUTES = {
     ATTRIBUTE_ILLUMINANCE,
     ATTRIBUTE_PPM,
     ATTRIBUTE_SENSOR,
-    ATTRIBUTE_TOTAL_WORK_TIME
+    ATTRIBUTE_TOTAL_WORK_TIME,
+    ATTRIBUTE_POSITION
 }
 
 SENSOR_ALL = 'all'
@@ -324,6 +329,8 @@ SENSOR_HUMIDITY = 'humidity'
 SENSOR_ILLUMINANCE = 'illuminance'
 SENSOR_PPM = 'ppm'
 SENSOR_TOTAL_WORK_TIME = 'total_work_time'
+SENSOR_POSITION = 'position'
+SENSOR_TARGET_TEMP = 'target_temperature'
 
 ALL_SENSORS = {
     SENSOR_RSSI: {'attr':'rssi'},
@@ -350,7 +357,9 @@ ALL_SENSORS = {
     SENSOR_HUMIDITY : {'attr':'humidity'},
     SENSOR_ILLUMINANCE : {'attr':'illuminance'},
     SENSOR_PPM : {'attr':'ppm'},
-    SENSOR_TOTAL_WORK_TIME : {'attr':'total_work_time'}
+    SENSOR_TOTAL_WORK_TIME : {'attr':'total_work_time'},
+    SENSOR_POSITION : {'attr':'position'},
+    SENSOR_TARGET_TEMP: {'attr':'target_temperature'},
 }
 
 EXTRA_SENSORS = {
@@ -365,7 +374,8 @@ EXTRA_SENSORS = {
 DEFAULT_SENSORS = [
     SENSOR_CURRENT_CONSUMPTION,
     SENSOR_TOTAL_CONSUMPTION,
-    SENSOR_SWITCH
+    SENSOR_SWITCH,
+    SENSOR_POSITION
 ]
 
 SENSOR_TYPE_TEMPERATURE = 'temperature'
@@ -398,6 +408,8 @@ SENSOR_TYPE_PPM = 'ppm'
 SENSOR_TYPE_TOTAL_WORK_TIME = 'total_work_time'
 SENSOR_TYPE_EXT_SWITCH = 'external_switch'
 SENSOR_TYPE_MOTION = 'motion'
+SENSOR_TYPE_POSITION = 'position'
+SENSOR_TYPE_TARGET_TEMP = 'target_temperature'
 
 SENSOR_TYPES_CFG = {
     SENSOR_TYPE_DEFAULT:
@@ -461,5 +473,10 @@ SENSOR_TYPES_CFG = {
         ['External switch', '', 'mdi:electric-switch', None, 'bool'],
     SENSOR_TYPE_MOTION:
         ['Motion', '', 'mdi:motion-sensor', DEVICE_CLASS_MOTION, 'bool'],
+    SENSOR_TYPE_POSITION:
+        ['Position', '', 'mdi:percent', None, None],
+    SENSOR_TYPE_TARGET_TEMP:
+        ['Target temperature', TEMP_CELSIUS, "mdi:target-variant", None, None],
+
 }
 
