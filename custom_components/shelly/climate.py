@@ -10,7 +10,7 @@ import logging
 from homeassistant.components.climate import ClimateEntity
 from homeassistant.const import (
     ATTR_TEMPERATURE,
-    PRECISION_WHOLE,
+    PRECISION_TENTHS,
     TEMP_CELSIUS
 )
 try:
@@ -54,7 +54,7 @@ class ShellyClimate(ShellyDevice, ClimateEntity):
     _attr_max_temp = 30
     _attr_min_temp = 5
     _attr_supported_features = FEATURES
-    _attr_target_temperature_step = PRECISION_WHOLE
+    _attr_target_temperature_step = PRECISION_TENTHS
     _attr_temperature_unit = TEMP_CELSIUS
 
     """Representation of an Shelly Switch."""
