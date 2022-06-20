@@ -56,8 +56,9 @@ class ShellyBlock(RestoreEntity):
 
     def _remove_handler(self):
         self._is_removed = True
-        self._block.cb_updated.remove(self._updated)
-        if hasattr(self, 'ukey'):
+        if self._updated in self._block.cb_updated:
+            self._block.cb_updated.remove(self._updated)
+        if hasattr(self, 'ukey') and self.ukey in self.instance.block_sensors:
             self.instance.block_sensors.remove(self.ukey)
 
     @property
