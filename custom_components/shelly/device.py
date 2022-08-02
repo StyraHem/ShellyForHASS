@@ -59,7 +59,8 @@ class ShellyDevice(RestoreEntity):
 
     def _remove_handler(self):
         self._is_removed = True
-        self._dev.cb_updated.remove(self._updated)
+        if self._updated in self._dev.cb_updated:
+            self._dev.cb_updated.remove(self._updated)
         self._dev.lazy_load = True
 
     def _update_ha_state(self):
