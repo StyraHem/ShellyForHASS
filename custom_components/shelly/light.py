@@ -11,9 +11,7 @@ from homeassistant.const import (
 )
 from homeassistant.components.light import (
     ATTR_BRIGHTNESS, ATTR_COLOR_TEMP, ATTR_EFFECT, ATTR_HS_COLOR, 
-    ATTR_WHITE_VALUE,
-    SUPPORT_BRIGHTNESS, SUPPORT_COLOR, SUPPORT_COLOR_TEMP, SUPPORT_EFFECT,
-    SUPPORT_WHITE_VALUE,
+    SUPPORT_BRIGHTNESS, SUPPORT_COLOR, SUPPORT_COLOR_TEMP, SUPPORT_EFFECT
 )
 from functools import partial
 from homeassistant.helpers import config_validation as cv, entity_platform, service
@@ -231,8 +229,8 @@ class ShellyRGB(ShellyDevice, LightEntity):
             features = features | SUPPORT_COLOR_TEMP
         if self._dev.effects_list is not None:
             features = features | SUPPORT_EFFECT
-        if self._dev.support_white_value:
-            features = features | SUPPORT_WHITE_VALUE
+        #if self._dev.support_white_value:
+        #    features = features | SUPPORT_WHITE_VALUE
         return features
 
     @property
@@ -287,9 +285,9 @@ class ShellyRGB(ShellyDevice, LightEntity):
             brightness = round(kwargs[ATTR_BRIGHTNESS] / 2.55)
             self._brightness = brightness
 
-        if ATTR_WHITE_VALUE in kwargs:
-            white_value = int(kwargs[ATTR_WHITE_VALUE])
-            self._white_value = white_value
+        #if ATTR_WHITE_VALUE in kwargs:
+        #    white_value = int(kwargs[ATTR_WHITE_VALUE])
+        #    self._white_value = white_value
 
         if ATTR_HS_COLOR in kwargs:
             red, green, blue = \
