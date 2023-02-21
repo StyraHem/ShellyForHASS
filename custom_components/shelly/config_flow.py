@@ -48,7 +48,7 @@ class ShellyFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             title = user_input["id_prefix"] 
         return self.async_create_entry(
             title=title,
-            data=user_input
+            data=user_input or {}
         )
 
     async def async_step_import(self, user_input):

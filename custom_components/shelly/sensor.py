@@ -183,7 +183,10 @@ class ShellyInfoSensor(ShellyBlock):
 
     @property
     def capability_attributes(self):
-        return {"state_class": self.state_class}
+        res = {}
+        if (state_class := self.state_class):
+            res["state_class"] = state_class
+        return res
 
 class ShellyVersion(Entity):
     """Representation of a Shelly version sensor."""

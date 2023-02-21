@@ -61,7 +61,7 @@ from .frontend import setup_frontend
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "1.0.2"
+__version__ = "1.0.3.beta.1"
 VERSION = __version__
 
 async def async_setup(hass, config):
@@ -193,7 +193,7 @@ class ShellyInstance():
         await self.update_config()
 
         entity_reg = \
-            await self.hass.helpers.entity_registry.async_get_registry()
+            self.hass.helpers.entity_registry.async_get(self.hass)
         for entity in self.entities:
                 if hasattr(entity, 'config_updated'):
                     entity.config_updated()
@@ -231,7 +231,8 @@ class ShellyInstance():
             self.config_entry, options=options)
 
     def update_config_list(self, type, id, value):
-        options = self.config_entry.options.copy()
+        #options = self.config_entry.options.copy()
+        options = self.conf.copy()
         list = options[type] = options.get(type, []).copy()
         if value:
             if not id in list:
@@ -261,7 +262,7 @@ class ShellyInstance():
         if not conf.get(CONF_VERSION) and self.version_added:
             self.version_added = False
             entity_reg = \
-                await self.hass.helpers.entity_registry.async_get_registry()
+                self.hass.helpers.entity_registry.async_get(self.hass)
             entity_id = "sensor." + slugify(conf.get(CONF_OBJECT_ID_PREFIX)) + "_version"
             entity_reg.async_remove(entity_id)
 
@@ -353,7 +354,7 @@ class ShellyInstance():
             self.add_device("sensor", attr)
 
         entity_reg = \
-            await self.hass.helpers.entity_registry.async_get_registry()
+            self.hass.helpers.entity_registry.async_get(self.hass)
         entities_to_remove = []
         entities_to_fix_attr = []
         restore_expired = dt_util.as_utc(datetime.now()) - timedelta(hours=12)
@@ -420,7 +421,7 @@ class ShellyInstance():
         """Stop Shelly."""
         _LOGGER.info("Shutting down Shelly")
         entity_reg = \
-            await self.hass.helpers.entity_registry.async_get_registry()
+            self.hass.helpers.entity_registry.async_get(self.hass)
         # entities_to_remove = []
         # for entity in entity_reg.entities.values():
         #     if entity.platform == "shelly":
@@ -554,7 +555,7 @@ class ShellyInstance():
 
             #block_key = _get_block_key(block)
             #entity_reg = \
-            #    await self.hass.helpers.entity_registry.async_get_registry()
+            #    await self.hass.helpers.entity_registry.async_get(self.hass)
             info_values = block.info_values.copy()
             for key, _value in info_values.items():
                 ukey = block.id + '-' + key
@@ -595,7 +596,7 @@ class ShellyInstance():
                 = self._get_specific_config_root(CONF_UNAVALABLE_AFTER_SEC,
                                             block.id)
 
-        # dev_reg = await self.hass.helpers.device_registry.async_get_registry()
+        # dev_reg = await self.hass.helpers.device_registry.async_get()
         # dev_reg.async_get_or_create(
         #     config_entry_id=block.id,
         #     identifiers={(DOMAIN, block.id)},
