@@ -31,7 +31,7 @@
     "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-serve": "^1.1.0",
     "rollup-plugin-styles": "^3.14.1",
-    "rollup-plugin-typescript2": "^0.30.0",
+    "rollup-plugin-typescript2": "^0.34.1",
     "rollup-plugin-visualizer": "^5.5.2",
     "sass": "^1.43.4",
     "styled-components": "^5.3.3",
