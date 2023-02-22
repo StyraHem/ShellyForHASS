@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import ShellyConfigEntry from '../components/ConfigEntry'
 import { Card, Col, Row } from "react-bootstrap";
 //import Masonry from "react-masonry-component";
+import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import YamlInfo from "../components/YamlInfo"
 
 interface Props {
@@ -22,7 +23,10 @@ export default class ShellyConfigPanel extends Component<Props> {
       <div className="configpanel">
         <h2>Config</h2>
         <YamlInfo instance={instance} />
-        
+        <ResponsiveMasonry
+                columnsCountBreakPoints={{320: 1, 640: 2, 1150: 3, 1470: 4, 1800: 5}}
+            >
+                <Masonry>
         {groups.map( group => (
           <div className="group">
               <div className="title">{group}</div>
@@ -37,6 +41,8 @@ export default class ShellyConfigPanel extends Component<Props> {
               ))}
             </div>
           ))}
+          </Masonry>
+          </ResponsiveMasonry>
       </div>
     </>);   
   }

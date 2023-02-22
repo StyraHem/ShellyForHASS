@@ -5,8 +5,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 import typescript from "rollup-plugin-typescript2";
 import { visualizer } from 'rollup-plugin-visualizer';
-//import styles from "rollup-plugin-styles";
-import scss from 'rollup-plugin-scss'
+import postcss from 'rollup-plugin-postcss'
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -29,36 +28,16 @@ export default {
        presets: ["@babel/preset-react"] //, "@babel/preset-flow"],
     }),
     commonjs(),
-    scss({
-      importer: function importer(url, prev){
-          var regex = /^~/;
-          if (url.match(regex)) {            
-            var cssImportRegex = /^((\/\/)|(http:\/\/)|(https:\/\/))/;
-            // if we don't escape this, then it's breaking the normal css @import
-            if (url.match(cssImportRegex)) {
-              return {file: '\'' + url + '\''};
-            }
-            
-            url = "node_modules/" + url.substring(1);
-            return {file: url};
-          }
-      }
+    postcss({
+      inject:  (css, id) => 
+      `
+          var e = document.createElement("style");
+          e.setAttribute("type", "text/css");
+          e.appendChild(document.createTextNode(${css}))
+          var pnl = document.querySelector("home-assistant").shadowRoot.querySelector("home-assistant-main").shadowRoot;
+          pnl.append(e)
+        `      
     }),
-    // styles({
-    //   mode: ["inject", (css, id) => `
-    //     var e = document.createElement("style");
-    //     e.setAttribute("type", "text/css");
-    //     e.appendChild(document.createTextNode(css))
-    //     var pnl = document.querySelector("home-assistant").shadowRoot.querySelector("home-assistant-main").shadowRoot;
-    //     pnl.append(e)
-    //   `],
-    // }),
-    //   mode: [
-    //     "inject",
-    //     { container: ".ShellyPanel", singleTag: true, prepend: true, attributes: { id: "global" } },
-    //   ]
-    // }),
-    //postcss(),
     visualizer(),
     /*serve({
       open: true,
