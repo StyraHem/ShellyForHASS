@@ -8,8 +8,6 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-  },
   "devDependencies": {
     "@babel/core": "^7.15.8",
     "@babel/preset-react": "^7.14.5",
@@ -28,10 +26,11 @@
     "react-router-dom": "^6.0.0",
     "rollup": "^3.17.2",
     "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-scss": "^3.0.0",
     "rollup-plugin-serve": "^2.0.2",
     "rollup-plugin-typescript2": "^0.34.1",
     "rollup-plugin-visualizer": "^5.5.2",
-    "sass": "^1.43.4",
+    "sass": "^1.58.3",
     "styled-components": "^5.3.3",
     "typescript": "^4.4.4"
   }

@@ -11,6 +11,10 @@ $card-bg : var(--secondary-background-color);
 // Required
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/maps";
+
+//$theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
+
 @import "~bootstrap/scss/root";
 
 // Optional Bootstrap components here
