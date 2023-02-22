@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
-import type { History, InitialEntry, Location, Path, To } from "history";
+//import type { History, InitialEntry, Location, Path, To } from "history";
 import {
   Link,
   useLocation

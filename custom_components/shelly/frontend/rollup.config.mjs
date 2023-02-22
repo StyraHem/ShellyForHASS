@@ -5,7 +5,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 import typescript from "rollup-plugin-typescript2";
 import { visualizer } from 'rollup-plugin-visualizer';
-import styles from "rollup-plugin-styles";
+//import styles from "rollup-plugin-styles";
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -28,16 +28,15 @@ export default {
        presets: ["@babel/preset-react"] //, "@babel/preset-flow"],
     }),
     commonjs(),
-    styles({
-      mode: ["inject", (css, id) => `
-        var e = document.createElement("style");
-        e.setAttribute("type", "text/css");
-        e.appendChild(document.createTextNode(css))  
-        e.setAttribute("hej", "tarra");
-        var pnl = document.querySelector("home-assistant").shadowRoot.querySelector("home-assistant-main").shadowRoot;
-        pnl.append(e)
-      `],
-    }),
+    // styles({
+    //   mode: ["inject", (css, id) => `
+    //     var e = document.createElement("style");
+    //     e.setAttribute("type", "text/css");
+    //     e.appendChild(document.createTextNode(css))
+    //     var pnl = document.querySelector("home-assistant").shadowRoot.querySelector("home-assistant-main").shadowRoot;
+    //     pnl.append(e)
+    //   `],
+    // }),
     //   mode: [
     //     "inject",
     //     { container: ".ShellyPanel", singleTag: true, prepend: true, attributes: { id: "global" } },

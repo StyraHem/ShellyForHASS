@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Checkbox from '../components/setting/Checkbox'
 import TextField from '../components/setting/TextField'
 import { Card } from "react-bootstrap";
-import Masonry from "react-masonry-component";
+//import Masonry from "react-masonry-component";
 import YamlInfo from "../components/YamlInfo"
 interface Props {
   app?: App,
