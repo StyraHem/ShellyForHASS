@@ -429,22 +429,22 @@ SENSOR_TYPES_CFG = {
     SENSOR_TYPE_BATTERY:
         ['Battery', '%', None, DEVICE_CLASS_BATTERY, None],
     SENSOR_TYPE_OVER_POWER:
-        ['Over power', '', 'mdi:flash-alert', None, 'bool'],
+        ['Over power', None, 'mdi:flash-alert', None, 'bool'],
     SENSOR_TYPE_OVER_VOLTAGE:
-        ['Over voltage', '', 'mdi:flash-alert', None, 'bool'],
+        ['Over voltage', None, 'mdi:flash-alert', None, 'bool'],
     SENSOR_TYPE_DEVICE_TEMP:
         ['Device temperature', TEMP_CELSIUS, "mdi:oil-temperature", None, None],
     SENSOR_TYPE_OVER_TEMP:
-        ['Over temperature', '', 'mdi:alert', None, 'bool'],
+        ['Over temperature', None, 'mdi:alert', None, 'bool'],
     SENSOR_TYPE_CLOUD_STATUS:
-        ['Cloud status', '', 'mdi:cloud-question', None, None],
+        ['Cloud status', None, 'mdi:cloud-question', None, None],
     SENSOR_TYPE_MQTT_CONNECTED:
-        ['MQTT connected', '', 'mdi:transit-connection-variant',
+        ['MQTT connected', None, 'mdi:transit-connection-variant',
          DEVICE_CLASS_CONNECTIVITY, 'bool'],
     SENSOR_TYPE_FLOOD:
-        ['Flood', '', 'mdi:water', None, 'bool'],
+        ['Flood', None, 'mdi:water', None, 'bool'],
     SENSOR_TYPE_DOOR_WINDOW:
-        ['Door/Window', '', 'mdi:door', 'window', 'bool'],
+        ['Door/Window', None, 'mdi:door', 'window', 'bool'],
     SENSOR_TYPE_ILLUMINANCE:
         ['Illuminance', 'lux', None, DEVICE_CLASS_ILLUMINANCE, None],
     SENSOR_TYPE_TOTAL_CONSUMPTION:
@@ -456,23 +456,23 @@ SENSOR_TYPES_CFG = {
     SENSOR_TYPE_VOLTAGE:
         ['Voltage', 'V', 'mdi:alpha-v-circle-outline', None, None],
     SENSOR_TYPE_POWER_FACTOR:
-        ['Power factor', ' ', 'mdi:flash', None, None],
+        ['Power factor', '', 'mdi:flash', None, None],
     SENSOR_TYPE_CURRENT:
         ['Current', 'A', 'mdi:alpha-i-circle-outline', None, None],
     SENSOR_TYPE_CLICK_TYPE:
-        ['Click type', '', 'mdi:light-switch', None, None],
+        ['Click type', None, 'mdi:light-switch', None, None],
     SENSOR_TYPE_TILT:
         ['Tilt', '', 'mdi:angle-acute', None, None],
     SENSOR_TYPE_VIBRATION:
-        ['Vibration', '', 'mdi:vibrate', None, 'bool'],
+        ['Vibration', None, 'mdi:vibrate', None, 'bool'],
     SENSOR_TYPE_PPM:
         ['Concentration', 'PPM', 'mdi:gauge', None, None],
     SENSOR_TYPE_TOTAL_WORK_TIME:
         ['Total work time', 's', 'mdi:briefcase-clock', None, None],
     SENSOR_TYPE_EXT_SWITCH:
-        ['External switch', '', 'mdi:electric-switch', None, 'bool'],
+        ['External switch', None, 'mdi:electric-switch', None, 'bool'],
     SENSOR_TYPE_MOTION:
-        ['Motion', '', 'mdi:motion-sensor', DEVICE_CLASS_MOTION, 'bool'],
+        ['Motion', None, 'mdi:motion-sensor', DEVICE_CLASS_MOTION, 'bool'],
     SENSOR_TYPE_POSITION:
         ['Position', '', 'mdi:percent', None, None],
     SENSOR_TYPE_TARGET_TEMP:

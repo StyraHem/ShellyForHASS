@@ -37,7 +37,7 @@ async def shelly_get_config(hass, connection, msg):
     instances = []
     for entity_id, instance in app.instances.items():
         options = {}
-        options['yaml'] = instance.config_entry.source and not instance.config_entry.options
+        options['yaml'] = instance.config_entry.source=='import' and not instance.config_entry.options
         options['name'] = instance.config_entry.title
         options['instance_id'] = entity_id
         #options['conf'] = json.dumps(instance.conf, sort_keys=True,
