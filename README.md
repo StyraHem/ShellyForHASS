@@ -1,3 +1,7 @@
+# Discontinuation of ShellyForHass
+ShellyForHass will no longer receive further development updates. This decision stems from the fact that its features and functionality have been seamlessly integrated into Home Assistant, making it redundant to maintain a separate plugin.
+
+
 # Shelly smart home platform for Home Assistant
 
 [![founder-wip](https://img.shields.io/badge/founder-Håkan_Åkerberg@StyraHem.se-green.svg?style=for-the-badge)](https://www.styrahem.se)
