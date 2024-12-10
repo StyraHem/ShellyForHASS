@@ -16,6 +16,16 @@ export default {
     format: "iife",
     sourcemap: true,
   },
+  watch: {
+    skipWrite: false,
+    clearScreen: false,
+    include: 'src/**/*',
+    //exclude: 'node_modules/**',
+    // chokidar: {exit
+    //     paths: 'src/**/*',
+    //     usePolling: false
+    // }
+  },
   plugins: [
     typescript(),
     nodeResolve({
@@ -38,14 +48,15 @@ export default {
           pnl.append(e)
         `      
     }),
-    visualizer(),
+    //visualizer(),
     /*serve({
       open: true,
       verbose: true, 
       contentBase: ["", "public"],
       host: "localhost",
       port: 3000,
-    }),*/
-    !production && livereload({ watch: "dist" }),
+    }),
+    !production && livereload({ watch: "src" }),
+    */
   ]
 };

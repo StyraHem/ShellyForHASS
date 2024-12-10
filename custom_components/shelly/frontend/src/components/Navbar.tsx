@@ -24,11 +24,12 @@ export default function ShellyNavbar({narrow}) {
           </NavItem>
           : null
         }
-        <Navbar.Brand as={Link} to="/">ShellyForHass</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/">ShellyForHass!</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" >
           <Nav className="me-auto" activeKey={loc.pathname}>
             {/* <Nav.Link as={Link} to="/" eventKey="/">Devices</Nav.Link> */}
+            <Nav.Link as={Link} to="/devices" eventKey="/devices">Devices</Nav.Link>
             <Nav.Link as={Link} to="/config" eventKey="/config">Config</Nav.Link>
             <Nav.Link as={Link} to="/settings" eventKey="/settings">Settings</Nav.Link>
             {/* <Nav.Link as={Link} to="/readme" eventKey="/readme">Readme</Nav.Link> */}

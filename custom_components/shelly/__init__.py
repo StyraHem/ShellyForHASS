@@ -27,7 +27,7 @@ from homeassistant.const import (
     CONF_SCAN_INTERVAL, CONF_USERNAME, EVENT_HOMEASSISTANT_STOP,
     __version__ as HAVERSION )    
 from homeassistant import config_entries
-from homeassistant.helpers import discovery
+from homeassistant.helpers import (discovery, entity_registry as er)
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.restore_state import RestoreStateData
 from homeassistant.helpers.storage import Store
@@ -61,7 +61,7 @@ from .frontend import setup_frontend
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "1.0.5"
+__version__ = "1.0.6"
 VERSION = __version__
 
 async def async_setup(hass, config):
@@ -353,8 +353,7 @@ class ShellyInstance():
                     'extra' : {'ip-addr': pys.host_ip}}
             self.add_device("sensor", attr)
 
-        entity_reg = \
-            self.hass.helpers.entity_registry.async_get(self.hass)
+        entity_reg = er.async_get(self.hass)
         entities_to_remove = []
         entities_to_fix_attr = []
         restore_expired = dt_util.as_utc(datetime.now()) - timedelta(hours=12)

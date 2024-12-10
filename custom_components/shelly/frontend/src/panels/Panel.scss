@@ -58,6 +58,70 @@ $card-bg : var(--secondary-background-color);
             border-radius: 0.4rem;
         }
 
+        .devicepanel {
+            .card {
+                padding: 5px;
+                height: 150px;
+            }
+            .img {
+                width: 50px;
+                float: right;
+            }
+            .card-title {
+                padding: 5px;
+                border-radius: 3px;
+                background-color: rgb(43, 43, 43);
+                color: white;  
+            }
+            .device {
+                display: inline-block;
+                width: 40px;
+                height: 40px;
+                background-color: gray;
+                overflow: hidden;
+
+                &.relay {
+                    border: 1px solid gray;
+                    padding: 7px;
+                    border-radius: 20px;
+                    background-color: white;
+
+                    &.on {
+                        color: green;
+                        background-color: lightgreen;
+                    }
+                }
+
+                &.switch {
+                    border: 1px solid gray;
+                    padding: 7px;
+                    border-radius: 20px;
+                    background-color: white;
+                    &.on {
+                        color: green;
+                    }
+                }
+
+                &.powermeter {
+                    border: 1px solid gray;
+                    width: auto;
+                    padding: 10px;
+                    border-radius: 5px;
+                    background-color: white;
+                    text-align: center;
+                }
+
+                &.sensor {
+                    border: 1px solid gray;
+                    width: 60px;
+                    padding: 7px;
+                    border-radius: 20px;
+                    background-color: white;
+                    text-align: center;
+                }
+            }
+        }
+
         .configpanel {
             .group {
                 width: 19rem;

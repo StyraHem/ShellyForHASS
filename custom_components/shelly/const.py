@@ -3,24 +3,21 @@
 
 from datetime import timedelta
 
+from homeassistant.components.sensor import (
+    SensorDeviceClass
+)
+
+from homeassistant.components.binary_sensor import (
+    BinarySensorDeviceClass
+)
+
 from homeassistant.const import (
-    DEVICE_CLASS_HUMIDITY,
-    DEVICE_CLASS_BATTERY,
-    DEVICE_CLASS_ILLUMINANCE,
-    DEVICE_CLASS_TEMPERATURE,
-    DEVICE_CLASS_ENERGY,
-    TEMP_CELSIUS,
-    POWER_WATT,
-    ENERGY_WATT_HOUR,
+    UnitOfTemperature,
+    UnitOfPower,
+    UnitOfEnergy,
     CONF_NAME,
     CONF_SCAN_INTERVAL,
     CONF_DISCOVERY
-)
-
-DEVICE_CLASS_MOTION = 'motion'
-
-from homeassistant.components.binary_sensor import (
-    DEVICE_CLASS_CONNECTIVITY
 )
 
 DOMAIN = 'shelly'
@@ -393,6 +390,7 @@ SENSOR_TYPE_CLOUD_STATUS = 'cloud_status'
 SENSOR_TYPE_MQTT_CONNECTED = 'mqtt_connected'
 SENSOR_TYPE_SWITCH = 'switch'
 SENSOR_TYPE_FLOOD = 'flood'
+SENSOR_TYPE_SMOKE = 'smoke'
 SENSOR_TYPE_DOOR_WINDOW = 'door_window'
 SENSOR_TYPE_ILLUMINANCE = 'illuminance'
 SENSOR_TYPE_TOTAL_CONSUMPTION = 'total_consumption'
@@ -415,11 +413,11 @@ SENSOR_TYPES_CFG = {
     SENSOR_TYPE_DEFAULT:
         [None, None, None, None, None],
     SENSOR_TYPE_TEMPERATURE:
-        ['Temperature', TEMP_CELSIUS, None, DEVICE_CLASS_TEMPERATURE, None],
+        ['Temperature', UnitOfTemperature.CELSIUS, None, SensorDeviceClass.TEMPERATURE, None],
     SENSOR_TYPE_HUMIDITY:
-        ['Humidity', '%', None, DEVICE_CLASS_HUMIDITY, None],
+        ['Humidity', '%', None, SensorDeviceClass.HUMIDITY, None],
     SENSOR_TYPE_POWER:
-        ['Consumption', POWER_WATT, 'mdi:flash-outline', None, None],
+        ['Consumption', UnitOfPower.WATT, 'mdi:flash-outline', None, None],
     SENSOR_TYPE_RSSI:
         ['RSSI', 'dB', 'mdi:wifi', None, None],
     SENSOR_TYPE_RSSI_LEVEL:
@@ -427,32 +425,34 @@ SENSOR_TYPES_CFG = {
     SENSOR_TYPE_UPTIME:
         ['Uptime', 's', 'mdi:timer-outline', None, None],
     SENSOR_TYPE_BATTERY:
-        ['Battery', '%', None, DEVICE_CLASS_BATTERY, None],
+        ['Battery', '%', None, SensorDeviceClass.BATTERY, None],
     SENSOR_TYPE_OVER_POWER:
         ['Over power', None, 'mdi:flash-alert', None, 'bool'],
     SENSOR_TYPE_OVER_VOLTAGE:
         ['Over voltage', None, 'mdi:flash-alert', None, 'bool'],
     SENSOR_TYPE_DEVICE_TEMP:
-        ['Device temperature', TEMP_CELSIUS, "mdi:oil-temperature", None, None],
+        ['Device temperature', UnitOfTemperature.CELSIUS, "mdi:oil-temperature", None, None],
     SENSOR_TYPE_OVER_TEMP:
         ['Over temperature', None, 'mdi:alert', None, 'bool'],
     SENSOR_TYPE_CLOUD_STATUS:
         ['Cloud status', None, 'mdi:cloud-question', None, None],
     SENSOR_TYPE_MQTT_CONNECTED:
         ['MQTT connected', None, 'mdi:transit-connection-variant',
-         DEVICE_CLASS_CONNECTIVITY, 'bool'],
+         BinarySensorDeviceClass.CONNECTIVITY, 'bool'],
     SENSOR_TYPE_FLOOD:
         ['Flood', None, 'mdi:water', None, 'bool'],
+    SENSOR_TYPE_SMOKE:
+        ['Flood', None, 'mdi:fire', None, 'bool'],
     SENSOR_TYPE_DOOR_WINDOW:
         ['Door/Window', None, 'mdi:door', 'window', 'bool'],
     SENSOR_TYPE_ILLUMINANCE:
-        ['Illuminance', 'lux', None, DEVICE_CLASS_ILLUMINANCE, None],
+        ['Illuminance', 'lux', None, SensorDeviceClass.ILLUMINANCE, None],
     SENSOR_TYPE_TOTAL_CONSUMPTION:
-        ['Total consumption', ENERGY_WATT_HOUR,
-         'mdi:lightning-bolt-circle', DEVICE_CLASS_ENERGY, None],
+        ['Total consumption', UnitOfEnergy.WATT_HOUR,
+         'mdi:lightning-bolt-circle', SensorDeviceClass.ENERGY, None],
     SENSOR_TYPE_TOTAL_RETURNED:
-        ['Total returned', ENERGY_WATT_HOUR,
-         'mdi:lightning-bolt-circle', DEVICE_CLASS_ENERGY, None],
+        ['Total returned', UnitOfEnergy.WATT_HOUR,
+         'mdi:lightning-bolt-circle', SensorDeviceClass.ENERGY, None],
     SENSOR_TYPE_VOLTAGE:
         ['Voltage', 'V', 'mdi:alpha-v-circle-outline', None, None],
     SENSOR_TYPE_POWER_FACTOR:
@@ -472,11 +472,11 @@ SENSOR_TYPES_CFG = {
     SENSOR_TYPE_EXT_SWITCH:
         ['External switch', None, 'mdi:electric-switch', None, 'bool'],
     SENSOR_TYPE_MOTION:
-        ['Motion', None, 'mdi:motion-sensor', DEVICE_CLASS_MOTION, 'bool'],
+        ['Motion', None, 'mdi:motion-sensor', BinarySensorDeviceClass.MOTION, 'bool'],
     SENSOR_TYPE_POSITION:
         ['Position', '', 'mdi:percent', None, None],
     SENSOR_TYPE_TARGET_TEMP:
-        ['Target temperature', TEMP_CELSIUS, "mdi:target-variant", None, None],
+        ['Target temperature', UnitOfTemperature.CELSIUS, "mdi:target-variant", None, None],
 
 }
 

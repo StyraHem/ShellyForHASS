@@ -6,7 +6,23 @@ export interface Instance {
   hass: HomeAssistant,
   instance_id : string,
   settings : Setting[],
-  configs : Config[]
+  configs : Config[],
+  blocks : Blocks[]
+}
+
+export interface Blocks {
+  id : string,
+  name : string
+  room: string,
+  type: string,
+  img: string,
+  devices : Device[]
+}
+
+export interface Device {
+  id : string,
+  name : string,
+  state: string
 }
 
 export interface Config {

@@ -11,8 +11,9 @@ from threading import Timer
 from homeassistant.util import slugify
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
-from homeassistant.const import (DEVICE_CLASS_ENERGY,
-                                 STATE_ON, STATE_OFF)
+from homeassistant.const import (STATE_ON, STATE_OFF)
+from homeassistant.components.sensor import (SensorDeviceClass)
+
 from homeassistant.helpers.entity import Entity
 from homeassistant.core import callback
 
@@ -174,10 +175,10 @@ class ShellyInfoSensor(ShellyBlock):
     @property
     def state_class(self):
         device_class = self.device_class
-        if device_class == DEVICE_CLASS_ENERGY:
+        if device_class == SensorDeviceClass.ENERGY:
             return "total_increasing"
-        if device_class == DEVICE_CLASS_TEMPERATURE or \
-           device_class == DEVICE_CLASS_HUMIDITY:
+        if device_class == SensorDeviceClass.TEMPERATURE or \
+           device_class == SensorDeviceClass.HUMIDITY:
             return "measurement"
         return None
 

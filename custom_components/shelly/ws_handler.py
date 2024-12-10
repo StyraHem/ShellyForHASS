@@ -20,6 +20,12 @@ async def setup_ws(instance):
     websocket_api.async_register_command(hass, shelly_setting)
     websocket_api.async_register_command(hass, shelly_convert)
 
+
+@websocket_api.async_response
+@websocket_api.websocket_command({vol.Required("type"): "s4h/ws", vol.Required("language", default="en"): cv.string})
+async def shelly_ws(hass, connection, msg):
+    x = 5
+    
 @websocket_api.async_response
 @websocket_api.websocket_command({vol.Required("type"): "s4h/get_config", vol.Required("language", default="en"): cv.string})
 async def shelly_get_config(hass, connection, msg):
@@ -104,6 +110,24 @@ async def shelly_get_config(hass, connection, msg):
                     "default" : value.get('def', '')
                 })
         options["configs"]=configs
+        blocks = []
+        for block in instance.pys.blocks.values():
+            devs = []
+            for device in block.devices:
+                devs.append({
+                  "name": device.device_type,
+                  "state": device.state
+                })
+            blk = {
+                "id": block.id,
+                "name": block.friendly_name(),
+                "room": block.room_name(),
+                "type": block.type_name(),
+                "img": block.type_img(),
+                "devices" : devs
+            }            
+            blocks.append(blk)
+        options["blocks"] = blocks
         instances.append(options)
 
     content["instances"] = instances
