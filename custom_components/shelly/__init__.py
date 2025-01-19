@@ -124,6 +124,7 @@ async def async_unload_entry(hass, config_entry):
 async def async_remove_config_entry_device(hass, config_entry, device_entry):    
     instance = hass.data[DOMAIN].instances[config_entry.entry_id]
     return True    
+
 class ShellyApp():
     def __init__(self, hass):
         self.hass = hass
@@ -511,7 +512,7 @@ class ShellyInstance():
         return key in self.conf_attributes
 
     def add_device(self, platform, dev):
-        self.hass.add_job(self._asyncadd_device(platform, dev))
+        self.hass.add_job(self._asyncadd_device, platform, dev)
 
     async def _asyncadd_device(self, platform, dev):
         if platform not in self.platforms:
@@ -523,9 +524,9 @@ class ShellyInstance():
         await self.platforms[platform].wait()
         async_dispatcher_send(self.hass, "shelly_new_" + platform \
                                 , dev, self)
-
+        
     def _block_updated(self, block):
-        self.hass.add_job(self._async_block_updated(block))
+        self.hass.add_job(self._async_block_updated, block)
 
     async def _async_block_updated(self, block):
         hass_data = block.hass_data
@@ -573,7 +574,7 @@ class ShellyInstance():
                                 self.add_device("sensor", attr)
 
     def _block_added(self, block):
-        self.hass.add_job(self._async_block_added(block))
+        self.hass.add_job(self._async_block_added, block)
 
     async def _async_block_added(self, block):
         block.cb_updated.append(self._block_updated)
@@ -616,7 +617,7 @@ class ShellyInstance():
             #                                 config)
 
     def _device_added(self, dev, _code):
-        self.hass.add_job(self._async_device_added(dev, _code))
+        self.hass.add_job(self._async_device_added, dev, _code)
 
     async def _async_device_added(self, dev, _code):
         device_config = self._get_device_config(dev.id, dev.block.id)
