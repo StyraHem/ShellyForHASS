@@ -6,10 +6,16 @@ https://home-assistant.io/components/shelly/
 """
 
 #pylint: disable=import-error
-from homeassistant.components.cover import (ATTR_POSITION,
-                                            SUPPORT_CLOSE,
-                                            SUPPORT_OPEN, SUPPORT_STOP,
-                                            SUPPORT_SET_POSITION)
+from homeassistant.components.cover import ATTR_POSITION
+try:
+    from homeassistant.components.cover import \
+        (SUPPORT_CLOSE, SUPPORT_OPEN, SUPPORT_STOP, SUPPORT_SET_POSITION)
+except:
+    from homeassistant.components.cover import (CoverEntityFeature)
+    SUPPORT_CLOSE = CoverEntityFeature.CLOSE
+    SUPPORT_OPEN = CoverEntityFeature.OPEN
+    SUPPORT_STOP = CoverEntityFeature.STOP
+    SUPPORT_SET_POSITION = CoverEntityFeature.SET_POSITION
 
 try:
     from homeassistant.components.cover import CoverEntity
