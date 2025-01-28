@@ -1,0 +1,275 @@
+{
+    "frontend": {
+        "settings" : {
+            "ip_address": "IP adresa",
+            "shelly_type": "Shelly typ",
+            "shelly_id": "Shelly ID",
+            "ssid": "SSID",
+            "rssi": "RSSI",
+            "rssi_level": "RSSI úroveň",
+            "uptime": "Čas spustenia",
+            "has_firmware_update": "Má firmware update",
+            "latest_fw_version": "Posledná firmware version",
+            "firmware_version": "Aktuálna firmware version",
+            "mqtt_connected": "MQTT pripojené",
+            "cloud_status": "Cloud status",
+            "switch": "Switch stav",
+            "total_consumption": "Celková spotreba",
+            "current_consumption": "Aktuálna spotreba",
+            "over_power": "Nadmerný výkon",
+            "over_voltage": "Prepätie",
+            "device_temp": "Teplota zariadenia",
+            "over_temp": "Prehriatie",
+            "battery": "Úroveň batérie",
+            "voltage": "Napätie",
+            "total_returned": "Celkovo vrátené",
+            "current": "Prúd",
+            "power_factor": "Účinník",
+            "click_type": "Typ kliknutia",
+            "click_count" :"Počet kliknutí",
+            "tilt" :"Náklon",
+            "vibration" : "Vibrácia",
+            "temperature" :"Teplota",
+            "humidity" : "Vlhkosť",
+            "illuminance" : "Intenzita osvetlenia",
+            "ppm": "PPM",
+            "sensor": "Stav snímača",
+            "total_work_time": "Celkový pracovný čas",
+            "latest_beta_fw_version": "Posledná beta verzia",            
+            "mqtt": "MQTT pripojené",
+            "cloud": "Cloud stav",
+            "position": "Pozícia",
+            "target_temperature" : "Cieľová teplota"
+        },
+        "config" : {
+            "groups" : {
+                "name": "Friendly názov",
+                  "general" : "Všeobecné",
+                "mqtt-integrated": "Integrovaný MQTT server",
+                "mqtt-broker": "MQTT broker pripojenie",
+                "discovery": "Objavené",
+                "cloud": "Shelly Cloud"
+            },
+            "additional_information": {
+                "title": "Dodatočné informácie", 
+                "desc": "Dotazovanie zariadení Shelly na ďalšie informácie, ako je teplota zariadenia, varovania, RSSI, čas prevádzky, firmvér atď."
+            },
+            "mdns": {
+                "title": "mDns",
+                "desc": "Povoľte mDns pre zisťovanie, skúste to, ak vaše zariadenie Shelly nebolo objavené"
+            },
+            "version": {
+                "title": "Zobraziť verziu",
+                "desc": "Vytvoriť záznam zobrazujúci aktuálnu verziu ShellyForHass"
+            },
+            "upgrade_switch": {
+                "title": "Zobraziť prepínač aktualizácie",
+                "desc": "Vytvorenie prepínača aktualizácie, keď má zariadenie Shelly nový firmvér"
+            },
+            "upgrade_beta_switch": {
+                "title": "Zobraziť aktualizáciu na prepínač beta",
+                "desc": "Povolenie aktualizácie na prepínač beta verzie"
+            },
+            "igmp_fix": {
+                "title": "IGMP fix",
+                "desc": "Opakovane posielajte IGMP ADD_MEMBER, skúste to, ak sa okamžitá aktualizácia zastaví na niekoľko minút"
+            },
+            "host_ip": {
+                "title": "IP adresa hostiteľa, s ktorou sa má spojiť",
+                "desc": "Ip adresa pre Home Assistant, nastavte na HA, aby ste získali rovnakú IP ako Home Assistant"
+            },
+            "mqtt_port": {
+                "title": "MQTT Port (Integrovaný MQTT server)",
+                "desc": "Tcpip port integrovaného MQTT server"
+            },
+            "scan_interval": {
+                "title": "Dopytový interval (sek)",
+                "desc": "Interval na opýtanie sa Shelly na ďalšie informácie"
+            },
+            "cloud_auth_key": {
+                "title": "Shelly Cloud Autentifikačný kľúč",
+                "desc": "Shelly Cloud kľúč, použitý na pripojenie k Shelly Cloud"
+            },
+            "cloud_server": {
+                "title": "Shelly Cloud Server názov",
+                "desc": "Shelly Cloud Server Host, použitý na pripojenie k Shelly Cloud"
+            },
+            "tmpl_name": {
+                "title": "Friendly Name šablóny",
+                "desc": "Šablóna pre friendly name prijaté z Shelly Cloud"
+            },
+            "username": {
+                "title": "Globálny používateľský názov",
+                "desc": "Meno používateľa, ktoré sa používa na prihlásenie do všetkých zariadení Shelly s obmedzeným prihlasovaním"
+            },
+            "password": {
+                "title": "Globálne heslo",
+                "desc": "Heslo, ktoré sa používa na prihlásenie do zariadení Shelly s obmedzeným prihlasovaním"
+            },
+            "unavailable_after_sec": {
+                "title": "Nedostupný čas",
+                "desc": "Počet sekúnd bez pripojenia pred nastavením zariadenia na nedostupné"
+            },            
+            "mqtt_server_host": {
+                "title": "Hostiteľ alebo IP-adresa sprostredkovateľa MQTT",
+                "desc": "Adresa sprostredkovateľa MQTT, ku ktorému sa má pripojiť"
+            },
+            "mqtt_server_port": {
+                "title": "MQTT broker port",
+                "desc": "Port k MQTT broker "
+            },
+            "mqtt_server_username": {
+                "title": "MQTT broker užívateľské meno",
+                "desc": "Meno používateľa, ktoré sa použije na prihlásenie do sprostredkovateľa MQTT"
+            },
+            "mqtt_server_password": {
+                "title": "MQTT heslo",
+                "desc": "Heslo na prihlásenie do sprostredkovateľa MQTT"
+            },
+            "discovery": {
+                "title": "Zistenie",
+                "desc": "Povolenie automatického zisťovania zariadení"
+            },
+            "show_id_in_name": {
+                "title": "Zobraziť ID v názve",
+                "desc": "Pridanie ID zariadenia na koniec priateľského názvu"
+            }
+        }
+    },
+    "config": {
+        "abort": {
+            "single_instance_allowed": "Je povolená len jedna konfigurácia Shelly."
+        },
+        "step": {
+            "input": {
+                "data": {
+                    "id_prefix": "Predpona pre všetky subjekty",
+                    "discovery": "Povolenie automatického zisťovania"
+                },
+                "description": "Nastavenie integrácie aplikácie Shelly s aplikáciou Home Assistant.",
+                "title": "Inteligentný dom Shelly"
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "config_1": {
+                "data": {
+                    "mdns": "Povoľte mDns pre zisťovanie, skúste to, ak vaše zariadenie Shelly nebolo objavené",
+                    "version": "Vytvoriť záznam zobrazujúci aktuálnu verziu ShellyForHass",
+                    "upgrade_switch": "Vytvorenie prepínača aktualizácie, keď má zariadenie Shelly nový firmvér",
+                    "upgrade_beta_switch": "Povolenie aktualizácie na prepínač beta verzie",
+                    "igmp_fix": "Opakovane posielajte IGMP ADD_MEMBER, skúste to, ak sa okamžitá aktualizácia zastaví na niekoľko minút",
+                    "host_ip": "Ip adresa pre aplikáciu Home Assistant",
+                    "mqtt_port": "Port Tcpip integrovaného servera MQTT"
+                },
+                "title": "Shelly - Nastavenia [1/3]",
+                "description": "Konfigurácia (1/2)"    
+            },
+            "config_2": {
+                "data": {
+                    "additional_information": "Poll Shelly pre ďalšie informácie, ako je teplota zariadenia, varovania, RSSI, čas prevádzky, firmvér atď.",
+                    "scan_interval": "Interval na opýtanie sa Shelly na ďalšie informácie",
+                    "cloud_auth_key": "Kľúč Shelly Cloud, ktorý sa používa na pripojenie k službe Shelly Cloud",
+                    "cloud_server": "Hostiteľ servera Shelly Cloud, ktorý sa používa na pripojenie k službe Shelly Cloud",
+                    "tmpl_name": "Šablóna pre priateľské meno prijatá od Shelly Cloud",
+                    "username": "Prihlasovacie meno používateľa s obmedzením",
+                    "password": "Prihlasovacie heslo s obmedzením",
+                    "unavailable_after_sec": "Počet sekúnd pred nastavením zariadenia na nedostupné"
+                },
+                "title": "Shelly - Nastavenia [1/3]",
+                "description": "Konfigurácia (2/2)"
+            },            
+            "config_mqtt": {
+                "data": {
+                    "mqtt_server_host": "Host alebo ip adresa",
+                    "mqtt_server_port": "Port",
+                    "mqtt_server_username": "Užívateľské meno",
+                    "mqtt_server_password": "Heslo"
+                },
+                "title": "Shelly - Nastavenia [1/3]",
+                "description": "MQTT server pripojenie"
+            },
+            "attributes": {
+                "data": {
+                    "ip_address": "IP adresa",
+                    "shelly_type": "Shelly typ",
+                    "shelly_id": "Shelly ID",
+                    "ssid": "SSID",
+                    "rssi": "RSSI",
+                    "rssi_level": "RSSI úroveň",
+                    "uptime": "Čas spustenia",
+                    "has_firmware_update": "Má firmware update",
+                    "latest_fw_version": "Posledná firmware verzia",
+                    "firmware_version": "Aktuálna firmware verzia",
+                    "mqtt_connected": "MQTT pripojené",
+                    "cloud_status": "Cloud stav",
+                    "switch": "Switch stav",
+                    "total_consumption": "Celková spotreba",
+                    "current_consumption": "Aktuálna spotreba",
+                    "over_power": "Nad výkon",
+                    "over_voltage": "Prepätie",
+                    "device_temp": "Teplota zariadenia",
+                    "over_temp": "Prehriatie",
+                    "battery": "Úroveň batérie",
+                    "voltage": "Napätie",
+                    "total_returned": "Celkovo vrátené",
+                    "current": "Prúd",
+                    "power_factor": "Účinník",
+                    "click_type": "Klik typ",
+                    "click_count" :"Počet klikov",
+                    "tilt" :"Náklon",
+                    "vibration" : "Vibrácia",
+                    "temperature" :"Teplota",
+                    "humidity" : "Vlhkosť",
+                    "illuminance" : "Intenzita osvetlenia",
+                    "ppm": "PPM",
+                    "sensor": "Snímač",
+                    "total_work_time": "Celkový pracovný čas",
+                    "latest_beta_fw_version": "Posledná beta verzia"
+                },
+                "title": "Shelly - Nastavenia [2/3] - Atribúty",
+                "description": "Vyberte atribúty, ktoré sa majú zobraziť pre každú položku Shelly. Buďte opatrní, každý atribút spustí a uloží do databázy ďalšie informácie."
+            },
+            "sensors": {
+                "data": {
+                    "rssi": "RSSI",
+                    "rssi_level": "RSSI úroveň",
+                    "uptime": "Čas spustenia",
+                    "current_consumption": "Aktuálna spotreba",
+                    "total_consumption": "Celková spotreba",
+                    "over_power": "Nad výkon",
+                    "over_voltage": "Prepätie",
+                    "device_temp": "Teplota zariadenia",
+                    "over_temp": "Prehriatie",
+                    "mqtt": "MQTT pripojené",
+                    "cloud": "Cloud stav",
+                    "battery": "Úroveň batérie",
+                    "voltage": "Napätie",
+                    "switch": "Switch stav",
+                    "total_returned": "Celkovo vrátené",
+                    "current": "Prúd",
+                    "power_factor": "Účinník",
+                    "tilt" :"Náklon",
+                    "vibration" : "Vibrácia",
+                    "temperature" :"Teplota",
+                    "humidity" : "Vlhkosť",
+                    "illuminance" : "Intenzita osvetlenia",
+                    "ppm": "PPM",
+                    "sensor": "Snímač",
+                    "total_work_time": "Celkový pracovný čas",
+                    "click_type": "Klik typ"
+                },
+                "title": "Shelly - Nastavenia [3/3] - Snímače",
+                "description": "Vyberte senzory, ktoré chcete vytvoriť pre zariadenia Shelly."
+            },
+            "yaml": {
+                "data": {
+                    "convert": "Začiarknite túto možnosť, ak chcete presunúť konfiguráciu do databázy pre shelly. Ak to urobíte, môžete tu zmeniť nastavenia a nastavenia v config.yaml budú ignorované a môžete ich odstrániť."
+                },
+                "title": "Shelly - config.yaml",
+                "description": "Vaše nastavenia pre ShellyForHass sú uložené v súbore config.yaml."
+            }
+        }
+    }
+}
