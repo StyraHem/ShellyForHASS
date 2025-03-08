@@ -61,7 +61,7 @@ from .frontend import setup_frontend
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "1.0.9"
+__version__ = "1.0.10"
 VERSION = __version__
 
 async def async_setup(hass, config):
@@ -517,8 +517,8 @@ class ShellyInstance():
     async def _asyncadd_device(self, platform, dev):
         if platform not in self.platforms:
             self.platforms[platform] = asyncio.Event()
-            await self.hass.config_entries.async_forward_entry_setup(
-                    self.config_entry, platform)
+            await self.hass.config_entries.async_forward_entry_setups(
+                    self.config_entry, [platform])
             self.platforms[platform].set()
 
         await self.platforms[platform].wait()

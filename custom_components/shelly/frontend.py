@@ -1,5 +1,6 @@
 """Setup frontend for ShellyForHass."""
 from homeassistant.components.http import HomeAssistantView
+from homeassistant.components import frontend
 from aiohttp import web
 import os, sys
 from .ws_handler import setup_ws
@@ -36,7 +37,8 @@ async def setup_frontend(instance):
     config = {}
     config["_panel_custom"] = custom_panel_config
 
-    instance.hass.components.frontend.async_register_built_in_panel(
+    frontend.async_register_built_in_panel(
+        hass = instance.hass,
         component_name="custom",
         sidebar_title="Shelly",
         sidebar_icon="mdi:alpha-s-box",
