@@ -107,9 +107,10 @@ class ShellyDimmer(ShellyDevice, LightEntity):
         self._color_temp_min = None
         self._color_temp_max = None
         self._master_unit = True
+        self._dim_up_down = 1
         self.update()
 
-        self._features = SUPPORT_BRIGHTNESS
+        self._features = SUPPORT_BRIGHTNESS | SUPPORT_EFFECT
         if getattr(dev, "support_color_temp", False):
             self._color_temp_min = dev._color_temp_min
             self._color_temp_max = dev._color_temp_max
@@ -127,6 +128,22 @@ class ShellyDimmer(ShellyDevice, LightEntity):
     def turn_on(self, **kwargs):
         brightness = None
         color_temp = None
+
+        if ATTR_EFFECT in kwargs:
+            dimtype = kwargs[ATTR_EFFECT]
+            if dimtype in ["dim_up_down", "dim_up", "dim_down", "dim_stop"]:
+                if dimtype == "dim_up_down":
+                    if self._dim_up_down == 1:
+                        dimtype = "dim_up"
+                        self._dim_up_down = 0
+                    else:
+                        dimtype = "dim_down"
+                        self._dim_up_down = 1
+
+                self._dev.dimming(dimtype, self._state)
+
+                return
+
         if ATTR_BRIGHTNESS in kwargs:
             brightness = round(kwargs[ATTR_BRIGHTNESS] / 2.55)
             self._brightness = brightness

@@ -9,7 +9,7 @@ from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.util import slugify
 from homeassistant.const import CONF_NAME
 
-from .const import (CONF_OBJECT_ID_PREFIX, CONF_ENTITY_ID, CONF_SHOW_ID_IN_NAME,
+from .const import (CONF_OBJECT_ID_PREFIX, CONF_ENTITY_ID, CONF_MOMENTARY_BUTTON, CONF_SHOW_ID_IN_NAME,
                     ALL_SENSORS, SENSOR_TYPES_CFG, DOMAIN)
 class ShellyDevice(RestoreEntity):
     """Base class for Shelly entities"""
@@ -63,12 +63,25 @@ class ShellyDevice(RestoreEntity):
             self._dev.cb_updated.remove(self._updated)
         self._dev.lazy_load = True
 
+        if hasattr(self._dev, 'kg_momentary_button'):
+            self._dev.kg_momentary_button = instance._get_specific_config(CONF_MOMENTARY_BUTTON, None, dev.id, dev.block.id)
+            
     def _update_ha_state(self):
         self.schedule_update_ha_state(True)
 
     def _updated(self, _block):
         """Receive events when the switch state changed (by mobile,
         switch etc)"""
+
+        if hasattr(self._dev, 'kg_send_event_click_count'):
+            if self._dev.kg_send_event_click_count != 0 or self._dev.kg_send_event_events != "":
+                self.hass.bus.fire('shelly_click', \
+                                {'entity_id' : self.entity_id,
+                                'click_count' : self._dev.kg_send_event_click_count,
+                                'click_events' : self._dev.kg_send_event_events})
+                self._dev.kg_send_event_click_count = 0                   
+                self._dev.kg_send_event_events = ""
+
         disabled = self.registry_entry and self.registry_entry.disabled_by
         if self.entity_id is not None and not self._is_removed and not disabled:
             self._update_ha_state()
